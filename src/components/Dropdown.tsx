@@ -29,7 +29,7 @@ const Dropdown: React.FC<DropdownProps> = ({ title, items, icon }) => {
         onClick={toggleDropdown}
       >
         <span className="font-bold">
-        <i className="fa-solid fa-school me-2"></i>
+          <FontAwesomeIcon icon={icon} className="fa-solid fa-school me-2" />
           {title}</span>
         <span className={`ms-auto transition-transform ${isOpen ? 'rotate-90' : ''}`}>
         <i className="fa-solid fa-angle-right"></i>

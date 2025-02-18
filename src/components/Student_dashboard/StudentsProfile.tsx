@@ -1,75 +1,269 @@
-import React from 'react';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { useForm } from "react-hook-form";
 
-const StudentsProfile = () => {
-  // Sample student data
-  const student = {
-    first_name: "hjgg",
-    last_name: "khan",
-    email: "saasadds@gmail.com",
-    password: "gjghj",
-    role: 3,
-    subrole: 17,
-    imageUrl: "https://letsenhance.io/static/73136da51c245e80edc6ccfe44888a99/1015f/MainBefore.jpg" // Placeholder image URL
+interface Student {
+  id: number;
+  batch: string;
+  first_name: string;
+  last_name: string;
+  email: string;
+  mobile_no: string;
+  gender: string;
+  qualification: string;
+  address: string;
+  date_of_birth: string;
+  user_profile: string;
+}
+
+const StudentsProfile: React.FC = () => {
+  const [student, setStudent] = useState<Student | null>(null);
+  const [editMode, setEditMode] = useState(false);
+  const [image, setImage] = useState<File | null>(null);
+
+  const { register, handleSubmit, reset } = useForm<Student>();
+
+  useEffect(() => {
+    axios
+      .get<Student[]>("https://gl8tx74f-8000.inc1.devtunnels.ms/auth/Students/")
+      .then((response) => {
+        const studentData = response.data[6]; // Adjust index as needed
+        setStudent(studentData);
+        reset(studentData); // Pre-fill the form
+      })
+      .catch((error) => {
+        console.error("Error fetching student data:", error);
+      });
+  }, [reset]);
+
+  const onSubmit = async (data: Student) => {
+    if (!student) return;
+
+    const formData = new FormData();
+    formData.append("first_name", data.first_name);
+    formData.append("last_name", data.last_name);
+    formData.append("email", data.email);
+    formData.append("mobile_no", data.mobile_no);
+    formData.append("gender", data.gender);
+    formData.append("qualification", data.qualification);
+    formData.append("address", data.address);
+    formData.append("date_of_birth", data.date_of_birth);
+
+    if (image) {
+      formData.append("user_profile", image);
+    }
+
+    try {
+      await axios.put(
+        `https://gl8tx74f-8000.inc1.devtunnels.ms/auth/Students/${student.id}/`,
+        formData,
+        { headers: { "Content-Type": "multipart/form-data" } }
+      );
+
+      alert("Profile updated successfully!");
+      setEditMode(false);
+      setStudent({ ...data, user_profile: student.user_profile });
+      window.location.reload();
+    } catch (error) {
+      console.error("Error updating profile:", error);
+    }
   };
+
+  if (!student) {
+    return <div className="text-center mt-5">Loading...</div>;
+  }
 
   return (
     <div className="container mt-5">
       <div className="row">
-        {/* Left Column: Profile Card */}
+        {/* Profile Card */}
         <div className="col-md-4">
           <div className="card shadow-sm">
             <img
-              src={student.imageUrl}
+              src={`https://gl8tx74f-8000.inc1.devtunnels.ms/auth${student.user_profile}`}
               className="card-img-top rounded-circle mx-auto mt-4"
               alt="Student"
-              style={{ width: '150px', height: '150px', objectFit: 'cover' }}
+              style={{ width: "150px", height: "150px", objectFit: "cover" }}
             />
             <div className="card-body text-center">
-              <h4 className="card-title mb-2">
+              <h4 className="card-title mb-2 text-black">
                 {student.first_name} {student.last_name}
               </h4>
-              <p className="text-muted mb-3">{student.email}</p>
+              <p className="text-muted mb-3 text-black">{student.email}</p>
+              <p className="text-muted mb-3 text-black">
+                <strong>Batch:</strong> {student.batch}
+              </p>
               <div className="d-grid gap-2">
-                <button className="btn btn-primary btn-sm">Edit Profile</button>
-                <button className="btn btn-outline-secondary btn-sm">
-                  Change Password
+                <button
+                  className="btn btn-primary btn-sm"
+                  onClick={() => setEditMode(true)}
+                >
+                  Edit Profile
                 </button>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Right Column: Details Section */}
+        {/* Student Details or Form */}
         <div className="col-md-8">
-          <div className="card shadow-sm">
-            <div className="card-header bg-white">
-              <h4 className="mb-0">Student Details</h4>
+          {editMode ? (
+            // Edit Form
+            <div className="card shadow-sm">
+              <div className="card-header bg-white">
+                <h4 className="mb-0 font-bold text-2xl text-black">
+                  Edit Student Details
+                </h4>
+              </div>
+              <div className="card-body">
+                <form onSubmit={handleSubmit(onSubmit)}>
+                  <div className="mb-3">
+                    <label className="form-label fw-bold">First Name</label>
+                    <input
+                      className="form-control"
+                      {...register("first_name")}
+                    />
+                  </div>
+
+                  <div className="mb-3">
+                    <label className="form-label fw-bold">Last Name</label>
+                    <input
+                      className="form-control"
+                      {...register("last_name")}
+                    />
+                  </div>
+
+                  <div className="mb-3">
+                    <label className="form-label fw-bold">Email</label>
+                    <input
+                      className="form-control"
+                      {...register("email")}
+                      type="email"
+                    />
+                  </div>
+
+                  <div className="mb-3">
+                    <label className="form-label fw-bold">Mobile No</label>
+                    <input
+                      className="form-control"
+                      {...register("mobile_no")}
+                    />
+                  </div>
+
+                  <div className="mb-3">
+                    <label className="form-label fw-bold">Gender</label>
+                    <select className="form-control" {...register("gender")}>
+                      <option value="Male">Male</option>
+                      <option value="Female">Female</option>
+                    </select>
+                  </div>
+
+                  <div className="mb-3">
+                    <label className="form-label fw-bold">Qualification</label>
+                    <input
+                      className="form-control"
+                      {...register("qualification")}
+                    />
+                  </div>
+
+                  <div className="mb-3">
+                    <label className="form-label fw-bold">Address</label>
+                    <input className="form-control" {...register("address")} />
+                  </div>
+
+                  <div className="mb-3">
+                    <label className="form-label fw-bold">Date of Birth</label>
+                    <input
+                      className="form-control"
+                      {...register("date_of_birth")}
+                      type="date"
+                    />
+                  </div>
+
+                  <div className="mb-3">
+                    <label className="form-label fw-bold">Profile Image</label>
+                    <input
+                      className="form-control"
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => setImage(e.target.files?.[0] || null)}
+                    />
+                  </div>
+
+                  <button type="submit" className="btn btn-success me-2">
+                    Save Changes
+                  </button>
+                  <button
+                    className="btn btn-secondary"
+                    onClick={() => setEditMode(false)}
+                  >
+                    Cancel
+                  </button>
+                </form>
+              </div>
             </div>
-            <div className="card-body">
-              <ul className="list-group list-group-flush">
-                <li className="list-group-item d-flex justify-content-between align-items-center">
-                  <span className="fw-bold">First Name</span>
-                  <span>{student.first_name}</span>
-                </li>
-                <li className="list-group-item d-flex justify-content-between align-items-center">
-                  <span className="fw-bold">Last Name</span>
-                  <span>{student.last_name}</span>
-                </li>
-                <li className="list-group-item d-flex justify-content-between align-items-center">
-                  <span className="fw-bold">Email</span>
-                  <span>{student.email}</span>
-                </li>
-                <li className="list-group-item d-flex justify-content-between align-items-center">
-                  <span className="fw-bold">Role</span>
-                  <span>{student.role}</span>
-                </li>
-                <li className="list-group-item d-flex justify-content-between align-items-center">
-                  <span className="fw-bold">Subrole</span>
-                  <span>{student.subrole}</span>
-                </li>
-              </ul>
+          ) : (
+            // Student Details View
+            <div className="card shadow-sm">
+              <div className="card-header bg-white">
+                <h4 className="mb-0 font-bold text-2xl text-black">
+                  Student Details
+                </h4>
+              </div>
+              <div className="card-body">
+                <ul className="list-group list-group-flush">
+                  <li className="list-group-item d-flex justify-content-between align-items-center">
+                    <span className="fw-bold text-black font-bold">Batch</span>
+                    <span className="text-black">{student.batch}</span>
+                  </li>
+                  <li className="list-group-item d-flex justify-content-between align-items-center">
+                    <span className="fw-bold text-black font-bold">
+                      First Name
+                    </span>
+                    <span className="text-black">{student.first_name}</span>
+                  </li>
+                  <li className="list-group-item d-flex justify-content-between align-items-center">
+                    <span className="fw-bold text-black font-bold">
+                      Last Name
+                    </span>
+                    <span className="text-black">{student.last_name}</span>
+                  </li>
+                  <li className="list-group-item d-flex justify-content-between align-items-center">
+                    <span className="fw-bold text-black font-bold">Email</span>
+                    <span className="text-black">{student.email}</span>
+                  </li>
+                  <li className="list-group-item d-flex justify-content-between align-items-center">
+                    <span className="fw-bold text-black font-bold">
+                      Mobile No
+                    </span>
+                    <span className="text-black">{student.mobile_no}</span>
+                  </li>
+                  <li className="list-group-item d-flex justify-content-between align-items-center">
+                    <span className="fw-bold text-black font-bold">Gender</span>
+                    <span className="text-black">{student.gender}</span>
+                  </li>
+                  <li className="list-group-item d-flex justify-content-between align-items-center">
+                    <span className="fw-bold text-black font-bold">
+                      Qualification
+                    </span>
+                    <span className="text-black">{student.qualification}</span>
+                  </li>
+                  <li className="list-group-item d-flex justify-content-between align-items-center">
+                    <span className="fw-bold text-black font-bold">
+                      Address
+                    </span>
+                    <span className="text-black">{student.address}</span>
+                  </li>
+                  <li className="list-group-item d-flex justify-content-between align-items-center">
+                    <span className="fw-bold text-black font-bold">
+                      Date of Birth
+                    </span>
+                    <span className="text-black">{student.date_of_birth}</span>
+                  </li>
+                </ul>
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
     </div>
