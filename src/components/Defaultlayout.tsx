@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
 import { Outlet } from "react-router-dom";
 import Header from "./Header";
-import { faSchool } from "@fortawesome/free-solid-svg-icons";
+import { faSchool , faChalkboardUser } from "@fortawesome/free-solid-svg-icons";
 
 import { Sidebar } from "primereact/sidebar";
 import { Button } from "primereact/button";
@@ -30,7 +30,10 @@ const Defaultlayout = () => {
 
   const StudentsItems = [
     { path: "/Students_profile", label: "PROFILE" },
-    { path: "/Students_batches", label: "BATCHES" },
+    { path: "/Students_batches", label: "BATCH" },
+  ];
+  const TrainerItems = [
+    { path: "/Trainer_profile", label: "PROFILE" }
   ];
 
   if (!isSidebarOpen) return null;
@@ -48,7 +51,9 @@ const Defaultlayout = () => {
             </span>
             <div className="sidebarHeaderContainer">
               <span className="sidebarName">{loggedInUser[0].name}</span>
-              <span className="sidebarRole text-muted">{loggedInUser[0].role}</span>
+              <span className="sidebarRole text-muted">
+                {loggedInUser[0].role}
+              </span>
             </div>
             <div className="sidebarHeaderContainer d-none">
               <span className="sidebarName">User</span>
@@ -63,19 +68,9 @@ const Defaultlayout = () => {
           icon={faSchool}
         />
         <Dropdown
-          title="Student Dashboard"
-          items={StudentsItems}
-          icon={faSchool}
-        />
-        <Dropdown
-          title="Student Dashboard"
-          items={StudentsItems}
-          icon={faSchool}
-        />
-        <Dropdown
-          title="Student Dashboard"
-          items={StudentsItems}
-          icon={faSchool}
+          title="Trainer Dashboard"
+          items={TrainerItems}
+          icon={faChalkboardUser}
         />
 
         <div className="authFuncCont">
