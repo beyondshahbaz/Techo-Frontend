@@ -6,21 +6,26 @@ import Feature from "../feature";
 import AuthFeature from "../authFeature";
 import Login from "../auth/login/login-3";
 import Register3 from "../auth/register/register-3";
-import StudentFeature from "../studentFeature";
+import StudentFeature from "../studentFeature"
 import Defaultlayout from "../../components/Defaultlayout";
 import { all_routes } from "./all_routes";
 import StudentsProfile from "../../components/Student_dashboard/StudentsProfile";
+import { Landing_page } from "../../components/Landing_Page/Landing_page";
+
+
 
 const ALLRoutes: React.FC = () => {
   const routes = all_routes;
   return (
     <>
       <Routes>
-        <Route path="/" element={<Defaultlayout />}>
-          <Route path={routes.login3} element={<Login />} />
-          <Route path={routes.register3} element={<Register3 />} />
-          <Route path="/Students_profile" element={<StudentsProfile />} />
+        <Route path="/" element = {<Defaultlayout/>} >
+         <Route path="" element={<Landing_page/>} />
+         <Route path={routes.login3} element={<Login/>} />
+         <Route path={routes.register3} element={<Register3/>}/>
+         <Route path="/Students_profile" element={<StudentsProfile/>}/>
         </Route>
+        
 
         <Route element={<Feature />}>
           {publicRoutes.map((route, idx) => (
@@ -36,10 +41,11 @@ const ALLRoutes: React.FC = () => {
 
         {/* ------------------ Students routes --------------- */}
         <Route element={<StudentFeature />}>
-          {Student.map((route, idx) => (
+        {Student.map((route, idx) => (
             <Route path={route.path} element={route.element} key={idx} />
           ))}
         </Route>
+
       </Routes>
     </>
   );
