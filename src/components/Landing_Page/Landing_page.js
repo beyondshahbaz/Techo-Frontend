@@ -1,0 +1,44 @@
+import { Footer } from "./Footer";
+import { Centers } from "./Centers";
+import { Technologies } from "./Technologies";
+import { Trainers } from "./Trainers";
+import { Projects } from "./Projects";
+import { Testimonials } from "./Testimonials";
+import { Carausel } from "./Carausel";
+
+export const Landing_page = () => {
+  return (
+    <div>
+      <Carausel/>
+      <div className="row mx-2 my-3">
+        <div class="text-primary">
+          <hr />
+        </div>
+        <h1>Our Centers</h1>
+          <Centers/>
+        <div class="text-primary">
+          <hr />
+        </div>
+        <h1>Technologies we teach</h1>
+        <Technologies/>
+        <div class="text-primary">
+          <hr />
+        </div>
+        <h1>Our Trainers</h1>
+        <Trainers/>
+
+        <div class="text-primary">
+          <hr />
+        </div>
+        <h1>Our Projects</h1>
+        <Projects/>
+        <div class="text-primary">
+          <hr />
+        </div>
+        <h1>Testimonials</h1>
+        <Testimonials/>
+      </div>                    
+      <Footer/>
+    </div>
+  );
+};

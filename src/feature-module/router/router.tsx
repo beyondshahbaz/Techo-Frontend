@@ -10,12 +10,14 @@ import StudentFeature from "../studentFeature";
 import Defaultlayout from "../../components/Defaultlayout";
 import { all_routes } from "./all_routes";
 import StudentsProfile from "../../components/Student_dashboard/StudentsProfile";
+import { Landing_page } from "../../components/Landing_Page/Landing_page";
 import StudentsBatches from "../../components/Student_dashboard/StudentsBatches";
 import TrainerProfile from "../../components/Trainer_dashboard/TrainerProfile";
 import AdmissionTable from "../../components/Admission_dashboard/Admission_table";
 
 const ALLRoutes: React.FC = () => {
   const routes = all_routes;
+
   return (
     <>
       <Routes>
@@ -28,27 +30,28 @@ const ALLRoutes: React.FC = () => {
           <Route path="/Admission_table" element={<AdmissionTable/>}/>
         </Route>
 
-        <Route element={<Feature />}>
-          {publicRoutes.map((route, idx) => (
-            <Route path={route.path} element={route.element} key={idx} />
-          ))}
-        </Route>
+      {/* Public Routes */}
+      <Route element={<Feature />}>
+        {publicRoutes.map((route, idx) => (
+          <Route path={route.path} element={route.element} key={idx} />
+        ))}
+      </Route>
 
-        <Route element={<AuthFeature />}>
-          {authRoutes.map((route, idx) => (
-            <Route path={route.path} element={route.element} key={idx} />
-          ))}
-        </Route>
+      {/* Authenticated Routes */}
+      <Route element={<AuthFeature />}>
+        {authRoutes.map((route, idx) => (
+          <Route path={route.path} element={route.element} key={idx} />
+        ))}
+      </Route>
 
-        {/* ------------------ Students routes --------------- */}
-        <Route element={<StudentFeature />}>
-          {Student.map((route, idx) => (
-            <Route path={route.path} element={route.element} key={idx} />
-          ))}
-        </Route>
-      </Routes>
-    </>
+      {/* Student Routes */}
+      <Route element={<StudentFeature />}>
+        {Student.map((route, idx) => (
+          <Route path={route.path} element={route.element} key={idx} />
+        ))}
+      </Route>
+    </Routes>
   );
 };
 
-export default ALLRoutes;
+export default ALLRoutes

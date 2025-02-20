@@ -111,7 +111,7 @@ const Defaultlayout = () => {
         <div className="col-xxl-12 col-xl-12 col-md-12 sticky-header-top">
           <Header setVisible={setVisible} toggleSidebar={toggleSidebar} />
         </div>
-        <div className="col-xxl-12 col-xl-12 col-md-12">
+        <div className="col-xxl-12 col-xl-12 col-md-12 px-0">
           <Outlet />
         </div>
       </div>
