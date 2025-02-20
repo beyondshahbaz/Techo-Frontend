@@ -11,7 +11,7 @@ const Register3 = () => {
 
   // CONTEXT API
 
-  const { RegisterUser } = useContext(AuthContext);
+  const { RegisterUser, newSubrole,  fetchNewSubrole} = useContext(AuthContext);
 
   // STATE MANAGEMENT STARTS
   const [firstName, setFirstName] = useState("");
@@ -19,7 +19,6 @@ const Register3 = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [newSelectedRole, setNewSelectedRole] = useState("ENABLER");
-  const [newSubrole, setNewSubRole] = useState([]);
   const [selectedSubrole, setSelectedSubrole] = useState("Choose Your Subrole");
   const [mobileNumber, setMobileNumber] = useState("");
   const [profileImage, setProfileImage] = useState("");
@@ -46,18 +45,6 @@ const Register3 = () => {
     setNewSelectedRole(role);
   };
 
-  const fetchNewSubrole = async () => {
-    try {
-      const response = await axios.get(
-        "https://gl8tx74f-8000.inc1.devtunnels.ms/auth/SubRole/"
-      );
-      if (response.status === 200) {
-        setNewSubRole(response.data);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   const fetchIdType = async () => {
     try {
@@ -146,6 +133,8 @@ const Register3 = () => {
     }
   };
   
+  
+
 
   
   

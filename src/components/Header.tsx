@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import { all_routes } from "../feature-module/router/all_routes";
 import { Button } from "primereact/button";
+import { AuthContext } from "../contexts/authContext";
 
 interface HeaderProps {
   toggleSidebar: () => void;
@@ -10,23 +11,27 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ toggleSidebar, setVisible }) => {
   const routes = all_routes;
+  const { userLoggedIN } = useContext(AuthContext);
   return (
     <header className="row classHeader">
       <div className="col-xxl-4 col-xl-6 col-md-6">
         <div className="row align-items-center resRow">
-          <div className="col-xxl-auto col-xl-auto col-md-2 col-sm-6">
-            <Button
-              icon="pi pi-bars"
-              onClick={() => setVisible(true)}
-              style={{
-                backgroundColor: "#fff",
-                color: "#05a6f0",
-                borderRadius: "8px"
-              }}
-            />
-          </div>
+          {userLoggedIN && (
+            <div className="col-xxl-auto col-xl-auto col-md-2 col-sm-6">
+              <Button
+                icon="pi pi-bars"
+                onClick={() => setVisible(true)}
+                style={{
+                  backgroundColor: "#fff",
+                  color: "#05a6f0",
+                  borderRadius: "8px",
+                }}
+              />
+            </div>
+          )}
+
           <div className="col-xxl-auto col-xl-auto col-md col-sm">
-            <Link to={routes.login3}>
+            <Link to={""}>
               <h1>
                 LGS <span className="txt-primary">TechnoHub</span>
               </h1>
