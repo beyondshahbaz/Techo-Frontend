@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
 import { Outlet } from "react-router-dom";
 import Header from "./Header";
-import { faSchool , faChalkboardUser } from "@fortawesome/free-solid-svg-icons";
+import { faSchool , faChalkboardUser , faTicket } from "@fortawesome/free-solid-svg-icons";
 
 import { Sidebar } from "primereact/sidebar";
 import { Button } from "primereact/button";
@@ -34,6 +34,9 @@ const Defaultlayout = () => {
   ];
   const TrainerItems = [
     { path: "/Trainer_profile", label: "PROFILE" }
+  ];
+  const Admission = [
+    { path: "/Admission_table", label: "INTERVIEWS" }
   ];
 
   if (!isSidebarOpen) return null;
@@ -71,6 +74,11 @@ const Defaultlayout = () => {
           title="Trainer Dashboard"
           items={TrainerItems}
           icon={faChalkboardUser}
+        />
+        <Dropdown
+          title="Admission Process"
+          items={Admission}
+          icon={faTicket}
         />
 
         <div className="authFuncCont">
