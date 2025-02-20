@@ -21,37 +21,40 @@ const ALLRoutes: React.FC = () => {
   return (
     <>
       <Routes>
-        <Route path="/" element={<Defaultlayout/>}>
-          <Route path={routes.login3} element={<Login/>}/>
-          <Route path={routes.register3} element={<Register3 />}/>
-          <Route path="/Students_profile" element={<StudentsProfile />}/>
-          <Route path="/Students_batches" element={<StudentsBatches/>}/>
-          <Route path="/Trainer_profile" element={<TrainerProfile/>}/>
-          <Route path="/Admission_table" element={<AdmissionTable/>}/>
+        <Route path="/" element={<Defaultlayout />}>
+          <Route path="" element={<Landing_page />} />
+          <Route path={routes.login3} element={<Login />} />
+          <Route path={routes.register3} element={<Register3 />} />
+          <Route path="/Students_profile" element={<StudentsProfile />} />
+          <Route path="/Students_batches" element={<StudentsBatches />} />
+          <Route path="/Trainer_profile" element={<TrainerProfile />} />
+          <Route path="/Admission_table" element={<AdmissionTable />} />
+          <Route path="/Admission_table" element={<AdmissionTable />} />
         </Route>
 
-      {/* Public Routes */}
-      <Route element={<Feature />}>
-        {publicRoutes.map((route, idx) => (
-          <Route path={route.path} element={route.element} key={idx} />
-        ))}
-      </Route>
+        {/* Public Routes */}
+        <Route element={<Feature />}>
+          {publicRoutes.map((route, idx) => (
+            <Route path={route.path} element={route.element} key={idx} />
+          ))}
+        </Route>
 
-      {/* Authenticated Routes */}
-      <Route element={<AuthFeature />}>
-        {authRoutes.map((route, idx) => (
-          <Route path={route.path} element={route.element} key={idx} />
-        ))}
-      </Route>
+        {/* Authenticated Routes */}
+        <Route element={<AuthFeature />}>
+          {authRoutes.map((route, idx) => (
+            <Route path={route.path} element={route.element} key={idx} />
+          ))}
+        </Route>
 
-      {/* Student Routes */}
-      <Route element={<StudentFeature />}>
-        {Student.map((route, idx) => (
-          <Route path={route.path} element={route.element} key={idx} />
-        ))}
-      </Route>
-    </Routes>
+        {/* Student Routes */}
+        <Route element={<StudentFeature />}>
+          {Student.map((route, idx) => (
+            <Route path={route.path} element={route.element} key={idx} />
+          ))}
+        </Route>
+      </Routes>
+    </>
   );
 };
 
-export default ALLRoutes
+export default ALLRoutes;
