@@ -1,4 +1,7 @@
 export const all_routes = {
+  // landing page
+
+  landingPage : "/landing-page",
   // dashboard routes
   adminDashboard: "/index",
   parentDashboard: "/parent-dashboard",
