@@ -22,7 +22,7 @@
 
 /* Arsalan CSS STARTS */
 .classHeader {
-  padding: 15px 18px;
+  padding: 8px 10px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -167,10 +167,6 @@
 
 /* TEXT COLORS STARTS */
 
-.txt-primary {
-  color: #05a6f0 !important;
-  text-decoration: underline;
-}
 /* TEXT COLORS ENDS */
 
 /* SIDEBAR CSS STARTS */
@@ -200,7 +196,7 @@
 ==========================**/
 
 .text_avatar {
-  background: #3b80f2;
+  background: #05a6f0;
   border-radius: 50%;
   color: #fff;
   text-transform: uppercase;
@@ -237,7 +233,7 @@
 }
 
 .text_avatar_48 {
-  background: #ffc600;
+  background: linear-gradient(to bottom right, #5dc1b9, #05a6f0);
   border-radius: 50%;
   color: #fff;
   text-transform: uppercase;
@@ -254,10 +250,6 @@
   border: 1px solid white;
 }
 
-.sidebarName {
-  color: white !important;
-}
-
 .sidebarHeaderContainer {
   display: flex;
   align-items: flex-start;
@@ -270,14 +262,11 @@
 }
 
 .sidebarRole {
-  font-size: 14px;
+  font-size: 16px;
+  color: white;
 }
 .bgHomeCard {
-  background: linear-gradient(
-    to bottom right,
-    #5dc1b9,
-    #05a6f0
-  ); /* Teal Gradient */
+  background: linear-gradient(to bottom right, #5dc1b9, #05a6f0);
   color: white;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
@@ -326,9 +315,6 @@
   .btn.btn-primary.ms-auto {
     width: auto !important;
     float: right;
-  }
-  .toggle-passwordsSignup {
-    top: 222px !important;
   }
 }
 
@@ -650,15 +636,187 @@ input[type="file"]::file-selector-button {
 
 /* LandingPage CSS Ends */
 
-
 /* LOGIN SCREEN STARTS*/
 
-.bgLoginScreen{
+.bgLoginScreen {
   background-color: #ace1fa;
+  background: linear-gradient(-90deg, #003366, #ace1fa);
 }
-.loginImg{
+.loginImg {
   height: 656px;
-  width: 100%;  
+  width: 100%;
+}
+
+.loginBtn {
+  width: 100%;
+  justify-content: center;
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+.loginLoader {
+  position: absolute;
+  right: 38%;
 }
 /* LOGIN SCREEN ENDS*/
 
+/* LOGO CSS STARTS */
+.logoHeading {
+  color: #05a6f0;
+  padding: 10px 15px;
+  font-weight: bold !important;
+  font-family: "Poppins", "Helvetica Neue", Arial, sans-serif;
+  font-size: 28px !important;
+  background: linear-gradient(90deg, #05a6f0, #0c7bb3, #00334c);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+}
+
+.logoHeading span {
+}
+
+.txt-primary {
+  color: #05a6f0 !important;
+  background-color: #003366;
+  /* text-decoration: underline; */
+}
+
+a {
+  text-decoration: none !important;
+}
+
+.resRow {
+  position: relative !important;
+}
+
+.resRow .p-button {
+  background-color: #05a6f0 !important;
+  color: white !important;
+  border-radius: 8px;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+}
+
+/* Navbar container */
+.navbar {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  padding-right: 60px;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #ddd;
+}
+
+/* Logo styling */
+.navbar-logo .logoHeading {
+  font-size: 1.5rem;
+  margin: 0;
+}
+
+.navbar-logo .txt-primary {
+  color: #05a6f0;
+}
+
+/* Navbar links container */
+.navbar-links {
+  display: flex;
+  align-items: center;
+  gap: 3rem;
+  justify-content: space-between;
+}
+
+/* Center section for Home link */
+.navbar-center {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+/* Right-aligned links */
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* Individual link styling */
+.navbar-link {
+  text-decoration: none;
+  color: #333;
+  font-size: 16px !important;
+  font-weight: 700 !important;
+}
+
+.navbar-link:hover {
+  color: #05a6f0;
+}
+
+/* Settings button styling */
+.navbar-settings {
+  position: absolute;
+  right: 10px;
+  background-color: transparent !important;
+  color: #05a6f0 !important;
+  border: none !important;
+}
+
+/* Hamburger menu for mobile */
+.navbar-toggle {
+  display: none;
+  background-color: transparent !important;
+  color: #05a6f0 !important;
+  border: none !important;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .navbar {
+    position: static;
+    padding: 5px;
+  }
+  .navbar-settings {
+    position: static;
+  }
+  .navbar-links {
+    display: none;
+    flex-direction: row;
+    position: absolute;
+    top: 60px;
+    right: 0;
+    background-color: #f8f9fa;
+    width: 100%;
+    padding: 1rem;
+    border-bottom: 1px solid #ddd;
+    gap: 1rem;
+  }
+
+  .navbar-links.active {
+    display: flex;
+  }
+
+  .navbar-toggle {
+    display: block;
+  }
+
+  .navbar-center,
+  .navbar-right {
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+  }
+}
+/* LOGO CSS ENDS */
+
+.dropdownLoader {
+  position: relative;
+}
+
+.dropdownLoader .loginLoader {
+  position: absolute;
+  left: 75px;
+  top: 12px;
+}

@@ -15,7 +15,7 @@ export const LGS = () => {
       },
     },
     labels: ["Batches", "Students"],
-    colors: ["#ffc600", "#05a6f0"],
+    colors: ["#66CCFF", "#003366"], 
     legend: {
       position: "bottom",
     },

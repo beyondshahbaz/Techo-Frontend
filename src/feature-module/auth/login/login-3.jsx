@@ -7,22 +7,27 @@ import { baseURL } from "../../../utils/axios";
 import { Card } from "primereact/card";
 import { AuthContext } from "../../../contexts/authContext";
 import login from "../../../assets/images/login/login.png";
+import ClipLoader from "react-spinners/ClipLoader";
+import PropagateLoader from "react-spinners/PropagateLoader";
+import BeatLoader from "react-spinners/BeatLoader";
 
 const Login3 = () => {
   const routes = all_routes;
   const navigation = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { LoginUser } = useContext(AuthContext);
+  const { LoginUser, loading } = useContext(AuthContext);
 
   const [passwordVisibility, setPasswordVisibility] = useState({
     password: false,
   });
 
-  const togglePasswordVisibility = (field) => {
+  // STATE MANAGEMENT ENDS
+
+  const togglePasswordVisibility = () => {
     setPasswordVisibility((prevState) => ({
       ...prevState,
-      [field]: !prevState[field],
+      password: !prevState.password,
     }));
   };
 
@@ -41,7 +46,7 @@ const Login3 = () => {
   };
 
   return (
-    <div className="row h-fullscreen bgLoginScreen">
+    <div className="row bgLoginScreen m-0">
       <div className="col-xxl-7 col-xl-6 col-md-12 d-none">
         <div className="card ">
           <div className="card-header">
@@ -117,13 +122,13 @@ const Login3 = () => {
           </div>
         </div>
       </div>
-      <div className="col-xxl-7 col-xl-6 col-md-12">
-        <img src={login} alt="..." className="loginImg"/>
+      <div className="col-xxl-8 col-xl-8 col-md-8">
+        <img src={login} alt="..." className="loginImg" />
       </div>
 
-      <div className="col-xxl-5 col-xl-6 col-md-12 ms-auto pt-5">
-        <form className="me-3">
-          <div className="card min-h-loginPage">
+      <div className="col-xxl-4 col-xl-4 col-md-4 d-flex align-items-center">
+        <form>
+          <div className="card">
             <div className="card-body">
               <h1 className="mt-5">Welcome</h1>
               <p className="txt-gray mb-5">
@@ -138,6 +143,7 @@ const Login3 = () => {
                     placeholder="Enter Your Email"
                     id="emailAddress"
                     type="email"
+                    required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                   />
@@ -149,6 +155,7 @@ const Login3 = () => {
                   </label>
                   <input
                     id="password"
+                    required
                     placeholder="Enter Your Password"
                     type={passwordVisibility.password ? "text" : "password"}
                     value={password}
@@ -172,13 +179,16 @@ const Login3 = () => {
 
                 <div className="col-xxl-12 col-xl-12 col-md-12 mb-3">
                   <div className="mb-3">
-                    <button
+                    <Link
                       type="submit"
-                      className="btn btn-primary w-100"
+                      to={""}
+                      className="btn btn-primary loginBtn"
                       onClick={loginUser}
                     >
-                      Sign In
-                    </button>
+                      <span>Sign In</span>
+                      <ClipLoader color="#fff" size={18} speedMultiplier={0.5} loading={loading} className="loginLoader"/>
+                      
+                    </Link>
                   </div>
                 </div>
 
@@ -186,7 +196,7 @@ const Login3 = () => {
                   <div className="text-center">
                     <h6 className="fw-normal text-dark mb-0">
                       Don’t have an account?{" "}
-                      <Link to={routes.register3} className="hover-a ">
+                      <Link to={routes.register3} className="hover-a">
                         {" "}
                         Create Account
                       </Link>
