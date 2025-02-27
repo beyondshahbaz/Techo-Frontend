@@ -28,9 +28,11 @@
   padding: 15px 18px;
   display: flex;
   align-items: center;
-  justify-content: center;
-  box-shadow: 0 0 10px #e9e9e9;
+  justify-content: center;  
+  /* box-shadow: 0 0 10px #e9e9e9; */
   background-color: #fff;
+  border-bottom: 1px solid rgba(128, 128, 128, 0.2);
+  /* background-color: gold; */
 }
 
 .headerLinks{
@@ -628,3 +630,76 @@ input[type="file"]::file-selector-button {
   }
 }
 /* Interview button End by Hasnen */
+
+
+/* LandingPage CSS Starts */
+.carouselImg{
+  max-height: 600px;
+  width: 100%;
+  filter: blur(3px);
+  -webkit-filter: blur(3px);
+}
+
+.mainTitleCarousel{
+  color: goldenrod;
+  font-size: 3.5rem;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+.stick{
+  font-size: 36px;
+  font-weight: bold;
+  color: gold;
+}
+
+.arrowTriangle{
+  font-size: 1.5rem;
+  color: red;
+}
+
+.scrollbar-wrappercenter{
+  max-height: 100vh;
+  overflow: auto;
+}
+
+.cardImage{
+  height: 350px;
+  padding: 1rem;
+  border-radius: 20px;
+}
+
+.min-bodyHeight{
+  min-height: 260px;
+}
+
+.trainer-skills{
+  color: #666D80;
+}
+
+.card-text{
+  font-size: 16px !important;
+  margin-bottom: 0px !important;
+  margin-top: 5px;
+}
+
+.footerBg{
+  padding: 3rem;
+  background-color: #00334c;
+}
+.footerBg h6{
+  color: white;
+  margin-bottom: 1rem;
+}
+.footerBg h6 span{
+
+}
+.dashboardFooterHeading{
+  color: goldenrod;
+  font-size: 2rem;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  margin-bottom: 1rem;
+
+}
+
+/* LandingPage CSS Ends */
+
