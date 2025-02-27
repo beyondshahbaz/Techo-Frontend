@@ -1,5 +1,5 @@
 import React from "react";
-import { Navigate, Route, Routes } from "react-router";
+import { Route, Routes } from "react-router";
 import { authRoutes, publicRoutes } from "./router.link";
 import { Student } from "./student_routes";
 import Feature from "../feature";
@@ -49,6 +49,7 @@ const ALLRoutes: React.FC = () => {
         ))}
       </Route>
     </Routes>
+
   );
 };
 

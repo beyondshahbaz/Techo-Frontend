@@ -3,6 +3,9 @@ import { Outlet, useNavigate } from "react-router-dom";
 import Header from "./Header";
 import { faSchool, faChalkboardUser } from "@fortawesome/free-solid-svg-icons";
 
+import { faSchool , faChalkboardUser , faTicket } from "@fortawesome/free-solid-svg-icons";
+
+
 import { Sidebar } from "primereact/sidebar";
 import { Button } from "primereact/button";
 import { Avatar } from "primereact/avatar";
@@ -36,6 +39,10 @@ const Defaultlayout = () => {
     { path: "/Students_batches", label: "BATCH" },
   ];
   const TrainerItems = [{ path: "/Trainer_profile", label: "PROFILE" }];
+
+  const Admission = [
+    { path: "/Admission_table", label: "INTERVIEWS" }
+  ];
 
   const handleLogout =()=>{
     setVisible(false);
@@ -76,6 +83,11 @@ const Defaultlayout = () => {
           title="Trainer Dashboard"
           items={TrainerItems}
           icon={faChalkboardUser}
+        />
+        <Dropdown
+          title="Admission Process"
+          items={Admission}
+          icon={faTicket}
         />
 
         <div className="authFuncCont d-none">
