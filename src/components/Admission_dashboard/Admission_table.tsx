@@ -1,42 +1,74 @@
-import React from "react";
-import "bootstrap/dist/css/bootstrap.min.css"; // Import Bootstrap CSS
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import "bootstrap/dist/css/bootstrap.min.css";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
+import { Button } from "primereact/button";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 
-// Define the type for the data
 interface AdmissionData {
+  id: string;
   email: string;
   mobile_no: string;
   name: string;
+  role: string;
+  subrole: string;
+  gender: string | null;
+  batch: string | null;
+  eng_comm_skills: number;
+  humble_background: string;
+  laptop: string;
+  profession: string;
+  selected_status: string;
+  level: number;
+  source: string;
+  remarks: string;
 }
 
 const AdmissionTable: React.FC = () => {
-  const data: AdmissionData[] = [
-    {
-      email: "3www@gmail.com",
-      mobile_no: "9300937158",
-      name: "Hasnen Ali",
-    },
-    {
-      email: "example@gmail.com",
-      mobile_no: "9876543210",
-      name: "John Doe",
-    },
-  ];
+  const [data, setData] = useState<AdmissionData[]>([]);
+  const navigate = useNavigate(); // Initialize useNavigate
 
-  // Function to style the name column
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          "https://187gwsw1-8000.inc1.devtunnels.ms/auth/Learner/"
+        );
+        setData(response.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   const nameTemplate = (rowData: AdmissionData) => (
     <span style={{ color: "blue", fontWeight: "bold" }}>{rowData.name}</span>
   );
 
-  // Function to style the email column
   const emailTemplate = (rowData: AdmissionData) => (
     <span style={{ color: "green" }}>{rowData.email}</span>
   );
 
-  // Function to style the mobile_no column
   const mobileTemplate = (rowData: AdmissionData) => (
     <span style={{ color: "red", fontWeight: "bold" }}>{rowData.mobile_no}</span>
+  );
+
+  const handleEdit = (rowData: AdmissionData) => {
+    console.log("Editing row:", rowData);
+    // Navigate to InterviewCandidate with the entire rowData as state
+    navigate(`/interview-candidate/${rowData.id}`, { state: { candidateData: rowData } });
+  };
+
+  const editTemplate = (rowData: AdmissionData) => (
+    <Button
+      label="Select for interview"
+      icon="pi pi-pencil"
+      className="p-button-sm custom-edit-button"
+      onClick={() => handleEdit(rowData)}
+    />
   );
 
   return (
@@ -45,10 +77,11 @@ const AdmissionTable: React.FC = () => {
         INTERVIEWS RECORD
       </h2>
       <div className="card">
-        <DataTable value={data} stripedRows paginator rows={5}>
+        <DataTable value={data} stripedRows paginator rows={15}>
           <Column field="name" header="Name" body={nameTemplate} sortable></Column>
           <Column field="email" header="Email" body={emailTemplate} sortable></Column>
           <Column field="mobile_no" header="Mobile No" body={mobileTemplate} sortable></Column>
+          <Column header="Actions" body={editTemplate}></Column>
         </DataTable>
       </div>
     </div>

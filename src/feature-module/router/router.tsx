@@ -1,5 +1,5 @@
 import React from "react";
-import { Navigate, Route, Routes } from "react-router";
+import { Route, Routes } from "react-router";
 import { authRoutes, publicRoutes } from "./router.link";
 import { Student } from "./student_routes";
 import Feature from "../feature";
@@ -13,6 +13,7 @@ import StudentsProfile from "../../components/Student_dashboard/StudentsProfile"
 import StudentsBatches from "../../components/Student_dashboard/StudentsBatches";
 import TrainerProfile from "../../components/Trainer_dashboard/TrainerProfile";
 import AdmissionTable from "../../components/Admission_dashboard/Admission_table";
+import InterviewCandidate from "../../components/Admission_dashboard/InterviewCandidate";
 
 const ALLRoutes: React.FC = () => {
   const routes = all_routes;
@@ -26,6 +27,7 @@ const ALLRoutes: React.FC = () => {
           <Route path="/Students_batches" element={<StudentsBatches/>}/>
           <Route path="/Trainer_profile" element={<TrainerProfile/>}/>
           <Route path="/Admission_table" element={<AdmissionTable/>}/>
+          <Route path="/interview-candidate/:id" element={<InterviewCandidate />} />
         </Route>
 
         <Route element={<Feature />}>
