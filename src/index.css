@@ -569,6 +569,68 @@ input[type="file"]::file-selector-button {
 
 /* SIDEBAR BG END */
 
+/* Admistion button by Hasnen START */
+.custom-edit-button {
+  background: linear-gradient(45deg, #7361ff, #ff8a65);
+  border: none;
+  border-radius: 50px;
+  color: white;
+  padding: 0.5rem 1rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: background 0.3s, transform 0.2s;
+}
+
+.custom-edit-button:hover {
+  background: linear-gradient(45deg, #ff8a65, #ff6f61);
+  transform: translateY(-2px);
+}
+/* Admistion button by Hasnen End */
+
+/* Interview button start by Hasnen */
+.custom-button-interview {
+  background-color: #338dee;
+  color: white;
+  width: 100%; /* Full width by default */
+  padding: 12px 24px;
+  font-size: 16px;
+  border-radius: 8px;
+  font-weight: bold;
+  transition: 0.3s ease;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  border: none;
+}
+
+.custom-button-interview:hover {
+  background-color: #0056b3;
+}
+
+/* Responsive adjustments */
+@media (min-width: 576px) {
+  .custom-button-interview {
+    width: 50%; /* Adjust width for small screens */
+  }
+}
+
+@media (min-width: 768px) {
+  .custom-button-interview {
+    width: 40%; /* Adjust width for medium screens */
+  }
+}
+
+@media (min-width: 992px) {
+  .custom-button-interview {
+    width: 30%; /* Adjust width for large screens */
+  }
+}
+
+@media (min-width: 1200px) {
+  .custom-button-interview {
+    width: 20%; /* Adjust width for extra-large screens */
+  font-size: 18px; /* Increase font size for better readability */
+  }
+}
+/* Interview button End by Hasnen */
+
 
 /* LandingPage CSS Starts */
 .carouselImg{
@@ -640,3 +702,4 @@ input[type="file"]::file-selector-button {
 }
 
 /* LandingPage CSS Ends */
+
