@@ -7,7 +7,6 @@ import { Sidebar } from "primereact/sidebar";
 import { Button } from "primereact/button";
 import { Avatar } from "primereact/avatar";
 import { Ripple } from "primereact/ripple";
-import { StyleClass } from "primereact/styleclass";
 
 import Dropdown from "./Dropdown";
 import { Link } from "react-router-dom";
