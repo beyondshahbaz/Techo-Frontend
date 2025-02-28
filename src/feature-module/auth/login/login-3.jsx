@@ -1,28 +1,31 @@
-import React, { useContext, useState } from "react";
+import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { all_routes } from "../../router/all_routes";
-import ImageWithBasePath from "../../../core/common/imageWithBasePath";
-import axios from "axios";
-import { baseURL } from "../../../utils/axios";
-import { Card } from "primereact/card";
 import { AuthContext } from "../../../contexts/authContext";
 import login from "../../../assets/images/login/login.png";
 import ClipLoader from "react-spinners/ClipLoader";
-import PropagateLoader from "react-spinners/PropagateLoader";
-import BeatLoader from "react-spinners/BeatLoader";
 
 const Login3 = () => {
   const routes = all_routes;
   const navigation = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { LoginUser, loading } = useContext(AuthContext);
+  const { LoginUser, loading, loginError} = useContext(AuthContext);
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
 
   const [passwordVisibility, setPasswordVisibility] = useState({
     password: false,
   });
 
-  // STATE MANAGEMENT ENDS
+  const validateEmail = (email) => {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(String(email).toLowerCase());
+  };
+
+  const validatePassword = (password) => {
+    return password >= 6;
+  };
 
   const togglePasswordVisibility = () => {
     setPasswordVisibility((prevState) => ({
@@ -33,13 +36,39 @@ const Login3 = () => {
 
   const loginUser = async (e) => {
     e.preventDefault();
-    console.log("login");
+
+    setEmailError("");
+    setPasswordError("");
+
+    let isValid = true;
+
+    if (!email) {
+      setEmailError("Email is required");
+      isValid = false;
+    } else if (!validateEmail) {
+      setEmailError("Enter a Valid Email Address");
+      isValid = false;
+    }
+
+    if (!password) {
+      setPasswordError("Password is Required");
+      isValid = false;
+    } else if (!validatePassword) {
+      setPasswordError("Enter a Valid Password");
+      isValid = false;
+    }
+
+    if (!isValid) {
+      return;
+    }
+
     try {
       let userData = {
         email,
         password,
       };
       await LoginUser(userData);
+      navigation("/");
     } catch (error) {
       console.log(error);
     }
@@ -47,81 +76,6 @@ const Login3 = () => {
 
   return (
     <div className="row bgLoginScreen m-0">
-      <div className="col-xxl-7 col-xl-6 col-md-12 d-none">
-        <div className="card ">
-          <div className="card-header">
-            <h1>What We Teach</h1>
-          </div>
-          <div className="card-body scrollbar-wrapper">
-            <div className="card mb-1">
-              <Card className="bgHomeCard">
-                <h6>Web Developemt</h6>
-                <p className="m-0">
-                  Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                  Inventore sed consequuntur error repudiandae numquam deserunt
-                  quisquam repellat libero asperiores earum nam nobis, culpa
-                  ratione quam perferendis esse, cupiditate neque quas!
-                </p>
-              </Card>
-            </div>
-            <div className="card mb-1">
-              <Card className="bgHomeCard">
-                <h6>AI/ML</h6>
-                <p className="m-0">
-                  Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                  Inventore sed consequuntur error repudiandae numquam deserunt
-                  quisquam repellat libero asperiores earum nam nobis, culpa
-                  ratione quam perferendis esse, cupiditate neque quas!
-                </p>
-              </Card>
-            </div>
-            <div className="card mb-1">
-              <Card className="bgHomeCard">
-                <h6>AI/ML</h6>
-                <p className="m-0">
-                  Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                  Inventore sed consequuntur error repudiandae numquam deserunt
-                  quisquam repellat libero asperiores earum nam nobis, culpa
-                  ratione quam perferendis esse, cupiditate neque quas!
-                </p>
-              </Card>
-            </div>
-            <div className="card mb-1">
-              <Card className="bgHomeCard">
-                <h6>AI/ML</h6>
-                <p className="m-0">
-                  Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                  Inventore sed consequuntur error repudiandae numquam deserunt
-                  quisquam repellat libero asperiores earum nam nobis, culpa
-                  ratione quam perferendis esse, cupiditate neque quas!
-                </p>
-              </Card>
-            </div>
-            <div className="card mb-1">
-              <Card className="bgHomeCard">
-                <h6>AI/ML</h6>
-                <p className="m-0">
-                  Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                  Inventore sed consequuntur error repudiandae numquam deserunt
-                  quisquam repellat libero asperiores earum nam nobis, culpa
-                  ratione quam perferendis esse, cupiditate neque quas!
-                </p>
-              </Card>
-            </div>
-            <div className="card mb-1">
-              <Card className="bgHomeCard">
-                <h6>AI/ML</h6>
-                <p className="m-0">
-                  Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                  Inventore sed consequuntur error repudiandae numquam deserunt
-                  quisquam repellat libero asperiores earum nam nobis, culpa
-                  ratione quam perferendis esse, cupiditate neque quas!
-                </p>
-              </Card>
-            </div>
-          </div>
-        </div>
-      </div>
       <div className="col-xxl-8 col-xl-8 col-md-8">
         <img src={login} alt="..." className="loginImg" />
       </div>
@@ -146,7 +100,11 @@ const Login3 = () => {
                     required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
+                    className="mb-0"
                   />
+                  {emailError && (
+                    <span className="text-danger">{emailError}</span>
+                  )}
                 </div>
 
                 <div className="col-xxl-12 col-xl-12 col-md-12 mb-3 posRel">
@@ -154,6 +112,7 @@ const Login3 = () => {
                     Password
                   </label>
                   <input
+                    className="mb-0"
                     id="password"
                     required
                     placeholder="Enter Your Password"
@@ -167,6 +126,9 @@ const Login3 = () => {
                     }`}
                     onClick={togglePasswordVisibility}
                   ></span>
+                  {passwordError && (
+                    <span className="text-danger">{passwordError}</span>
+                  )}
                 </div>
 
                 <div className="col-xxl-12 col-xl-12 col-md-12 mb-3">
@@ -181,14 +143,19 @@ const Login3 = () => {
                   <div className="mb-3">
                     <Link
                       type="submit"
-                      to={""}
                       className="btn btn-primary loginBtn"
                       onClick={loginUser}
                     >
                       <span>Sign In</span>
-                      <ClipLoader color="#fff" size={18} speedMultiplier={0.5} loading={loading} className="loginLoader"/>
-                      
+                      <ClipLoader
+                        color="#fff"
+                        size={18}
+                        speedMultiplier={0.5}
+                        loading={loading}
+                        className="loginLoader"
+                      />
                     </Link>
+                    {loginError && <span className="text-danger">{loginError}</span>}
                   </div>
                 </div>
 

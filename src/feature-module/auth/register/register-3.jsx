@@ -51,7 +51,7 @@ const Register3 = () => {
   const fetchIdType = async () => {
     try {
       const response = await axios.get(
-        "https://gl8tx74f-8000.inc1.devtunnels.ms/auth/idtypes/"
+        "https://techie01.pythonanywhere.com/auth/idtypes/"
       );
       if (response.status === 200) {
         setIdType(response.data);

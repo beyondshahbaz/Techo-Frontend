@@ -12,9 +12,10 @@
     const [newSubrole, setNewSubRole] = useState([]);
     const [loading, setLoading] = useState(false);
 
+    const [loginError, setLoginError] = useState("");
 
 
-    const API_BASE_URL = "https://gl8tx74f-8000.inc1.devtunnels.ms/auth";
+    const API_BASE_URL = "https://techie01.pythonanywhere.com/auth/";
 
 
     useEffect(() => {
@@ -51,6 +52,7 @@
     };
 
     const LoginUser = async (userData) => {
+      setLoginError("");
       setLoading(true);
       try {
         const response = await axios.post(`${API_BASE_URL}/login/`, userData, {
@@ -69,7 +71,8 @@
           return response.data;
         }
       } catch (error) {
-        console.error("Login Error:", error.response?.data || error.message);
+        console.log('error', error.response.data.non_field_errors[0]);
+        setLoginError(error.response.data.non_field_errors[0]);
         throw error;
       } finally {
         setLoading(false);
@@ -141,7 +144,8 @@
           userLoggedIN,
           setUserLoggedIN,
           loading,
-          LogoutUser
+          LogoutUser,
+          loginError
         }}
       >
         {children}
