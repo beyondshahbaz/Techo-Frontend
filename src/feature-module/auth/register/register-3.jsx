@@ -31,6 +31,8 @@ const Register3 = () => {
   const [proposerNumber, setProposerNumber] = useState("");
   const [selectedIdType, setSelectedIdType] = useState("Select an ID");
 
+  const [errorFirstName, setErrorFirstname] = useState("");
+
   const [passwordVisibility, setPasswordVisibility] = useState({
     password: false,
   });
