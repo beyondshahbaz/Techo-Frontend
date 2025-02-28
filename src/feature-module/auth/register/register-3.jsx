@@ -4,6 +4,8 @@ import { useForm } from "react-hook-form";
 import { all_routes } from "../../router/all_routes";
 import axios from "axios";
 import { AuthContext } from "../../../contexts/authContext";
+import ClipLoader from "react-spinners/ClipLoader";
+import BeatLoader from "react-spinners/BeatLoader";
 
 const Register3 = () => {
   const routes = all_routes;
@@ -11,7 +13,8 @@ const Register3 = () => {
 
   // CONTEXT API
 
-  const { RegisterUser } = useContext(AuthContext);
+  const { RegisterUser, newSubrole, fetchNewSubrole, loading } =
+    useContext(AuthContext);
 
   // STATE MANAGEMENT STARTS
   const [firstName, setFirstName] = useState("");
@@ -19,7 +22,6 @@ const Register3 = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [newSelectedRole, setNewSelectedRole] = useState("ENABLER");
-  const [newSubrole, setNewSubRole] = useState([]);
   const [selectedSubrole, setSelectedSubrole] = useState("Choose Your Subrole");
   const [mobileNumber, setMobileNumber] = useState("");
   const [profileImage, setProfileImage] = useState("");
@@ -46,19 +48,6 @@ const Register3 = () => {
     setNewSelectedRole(role);
   };
 
-  const fetchNewSubrole = async () => {
-    try {
-      const response = await axios.get(
-        "https://gl8tx74f-8000.inc1.devtunnels.ms/auth/SubRole/"
-      );
-      if (response.status === 200) {
-        setNewSubRole(response.data);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   const fetchIdType = async () => {
     try {
       const response = await axios.get(
@@ -77,30 +66,26 @@ const Register3 = () => {
     fetchIdType();
   }, []);
 
-  
-
-
-
   const onRegisterUser = async (e) => {
     e.preventDefault();
-  
+
     let userData = {
       first_name: firstName,
       last_name: lastName,
       email,
       password,
     };
-  
+
     const subroleMapping = {
-      "APPLICANT": 1,
-      "INTERVIEWEE": 2,
-      "STUDENT": 3,
-      "SPONSOR": 4,
-      "TRAINER": 5,
-      "RECRUITER": 6,
-      "GUEST LECTURER": 7
+      APPLICANT: 1,
+      INTERVIEWEE: 2,
+      STUDENT: 3,
+      SPONSOR: 4,
+      TRAINER: 5,
+      RECRUITER: 6,
+      "GUEST LECTURER": 7,
     };
-  
+
     // Convert file to Base64 if a file is selected
     const convertToBase64 = (file) => {
       return new Promise((resolve, reject) => {
@@ -110,20 +95,20 @@ const Register3 = () => {
         reader.onerror = (error) => reject(error);
       });
     };
-  
+
     try {
       let base64Image = null;
-      
+
       if (profileImage) {
         base64Image = await convertToBase64(profileImage); // Convert file
       }
-  
+
       if (newSelectedRole === "LEARNER") {
         userData = {
           ...userData,
           role: 2,
           mobileNumber,
-          profileImage: base64Image,  // Send as Base64
+          profileImage: base64Image, // Send as Base64
           idType: selectedIdType,
           identity,
           proposerEmail,
@@ -136,21 +121,17 @@ const Register3 = () => {
           subrole: subroleMapping[selectedSubrole] || null,
         };
       }
-      
+
       await RegisterUser(userData);
 
       console.log(userData);
-  
     } catch (error) {
       console.error("Registration Error:", error);
     }
   };
-  
 
-  
-  
   return (
-    <div className="card mt-5">
+    <div className="card mt-5 mx-2">
       <div className="card-header">
         <h2>Register</h2>
         <p>Please enter your details to register</p>
@@ -264,7 +245,7 @@ const Register3 = () => {
                 </button>
                 <ul className="dropdown-menu w-100">
                   {newSubrole.length > 0 ? (
-                    newSubrole.slice(3,7).map((subrole) => (
+                    newSubrole.slice(3, 7).map((subrole) => (
                       <li
                         className="dropdown-item c-pointer"
                         key={subrole.id}
@@ -274,7 +255,15 @@ const Register3 = () => {
                       </li>
                     ))
                   ) : (
-                    <li className="dropdown-item">Loading...</li>
+                    <li className="dropdown-item dropdownLoader">
+                      Loading{" "}
+                      <BeatLoader                
+                        size={5}
+                        speedMultiplier={0.5}
+                        loading={loading}
+                        className="loginLoader"
+                      />
+                    </li>
                   )}
                 </ul>
               </div>
@@ -311,7 +300,7 @@ const Register3 = () => {
                 // value={profileImage}
                 accept="image/*"
                 onChange={(e) => setProfileImage(e.target.files?.[0] || null)}
-                />
+              />
             </div>
 
             <div className="col-xxl-4 col-xl-4 col-md-4">
@@ -337,7 +326,15 @@ const Register3 = () => {
                       </li>
                     ))
                   ) : (
-                    <li className="dropdown-item">Loading...</li>
+                    <li className="dropdown-item dropdownLoader">
+                    Loading{" "}
+                    <BeatLoader                
+                      size={5}
+                      speedMultiplier={0.5}
+                      loading={loading}
+                      className="loginLoader"
+                    />
+                  </li>
                   )}
                 </ul>
               </div>
@@ -387,8 +384,18 @@ const Register3 = () => {
           <div className="row justify-content-center">
             <div className="col-xxl-5 col-xl-5 col-md-5">
               <div className="mb-3">
-                <button type="submit" className="btn btn-primary w-100">
-                  Sign Up
+                <button
+                  type="submit"
+                  className="btn btn-primary w-100 loginBtn"
+                >
+                  Sign Up{" "}
+                  <ClipLoader
+                    color="#fff"
+                    size={18}
+                    speedMultiplier={0.5}
+                    loading={loading}
+                    className="loginLoader"
+                  />
                 </button>
               </div>
               <div className="text-center">
