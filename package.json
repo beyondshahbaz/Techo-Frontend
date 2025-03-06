@@ -22,7 +22,7 @@
     "@testing-library/user-event": "^13.5.0",
     "@types/jest": "^27.5.2",
     "antd": "^5.15.3",
-    "apexcharts": "^3.54.1",
+    "apexcharts": "^4.5.0",
     "autoprefixer": "^10.4.20",
     "axios": "^1.7.8",
     "bootstrap": "^5.3.3",

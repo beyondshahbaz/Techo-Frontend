@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import Header from "./Header";
-import { faSchool, faChalkboardUser } from "@fortawesome/free-solid-svg-icons";
+// import { faSchool, faChalkboardUser } from "@fortawesome/free-solid-svg-icons";
 
 import { faSchool , faChalkboardUser , faTicket } from "@fortawesome/free-solid-svg-icons";
 
