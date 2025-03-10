@@ -4822,11 +4822,7 @@ body.mini-sidebar.expand-menu .sidebar .sidebar-menu > ul > li ul > li.active a 
   border-color: #E41F07;
 }
 
-.btn-check:checked + .btn, .btn.active, .btn.show, .btn:first-child:active, :not(.btn-check) + .btn:active {
-  background-color: #E41F07;
-  border-color: #E41F07;
-  color: #FFF;
-}
+
 
 .modal .card {
   border: 0;

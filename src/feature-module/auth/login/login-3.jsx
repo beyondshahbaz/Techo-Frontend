@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { all_routes } from "../../router/all_routes";
 import { AuthContext } from "../../../contexts/authContext";
@@ -7,16 +7,29 @@ import ClipLoader from "react-spinners/ClipLoader";
 
 const Login3 = () => {
   const routes = all_routes;
+  const { LoginUser, loading, loginError, responseSubrole, userLoggedIN, setLoginError} = useContext(AuthContext);
+
   const navigation = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { LoginUser, loading, loginError} = useContext(AuthContext);
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
 
   const [passwordVisibility, setPasswordVisibility] = useState({
     password: false,
   });
+  useEffect(() => {
+    if (userLoggedIN && responseSubrole === "SPONSOR") {
+      navigation("/Students_SponserDashboard");
+    }
+    if (userLoggedIN && responseSubrole === "STUDENT") {
+      navigation("/Students_batches");
+    }
+    if (userLoggedIN && responseSubrole === "TRAINER") {
+      navigation("/Trainer_profile");
+    }
+  }, [userLoggedIN, responseSubrole, navigation]);
+
 
   const validateEmail = (email) => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -24,7 +37,7 @@ const Login3 = () => {
   };
 
   const validatePassword = (password) => {
-    return password >= 6;
+    return password >= 8;
   };
 
   const togglePasswordVisibility = () => {
@@ -68,7 +81,7 @@ const Login3 = () => {
         password,
       };
       await LoginUser(userData);
-      navigation("/");
+      console.log('responsesubrole', responseSubrole);
     } catch (error) {
       console.log(error);
     }
@@ -91,7 +104,7 @@ const Login3 = () => {
               <div className="row mt-3">
                 <div className="col-xxl-12 col-xl-12 col-md-12 mb-3">
                   <label htmlFor="emailAddress" className="form-label">
-                    Email Address
+                    Email Address <span className="text-danger">*</span>
                   </label>
                   <input
                     placeholder="Enter Your Email"
@@ -99,7 +112,12 @@ const Login3 = () => {
                     type="email"
                     required
                     value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    onChange={(e) => {
+                      setEmail(e.target.value);
+                      setEmailError("");
+                      setLoginError("");
+                    }
+                    }
                     className="mb-0"
                   />
                   {emailError && (
@@ -109,7 +127,7 @@ const Login3 = () => {
 
                 <div className="col-xxl-12 col-xl-12 col-md-12 mb-3 posRel">
                   <label htmlFor="password" className="form-label">
-                    Password
+                    Password <span className="text-danger">*</span>
                   </label>
                   <input
                     className="mb-0"
@@ -118,7 +136,7 @@ const Login3 = () => {
                     placeholder="Enter Your Password"
                     type={passwordVisibility.password ? "text" : "password"}
                     value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    onChange={(e) => {setPassword(e.target.value); setPasswordError(""); setLoginError("");}}
                   />
                   <span
                     className={`ti toggle-passwordsSignup ${

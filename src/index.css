@@ -905,3 +905,225 @@ a {
   background-color: #0c7bb3 !important;
 
 }
+
+/* Sponser Dashboard CSS starts */
+.bgSponserDashobard{
+  display: flex;
+  justify-content: center;
+  padding: 10px 25px;
+  background: linear-gradient(135deg, #002147, #0072c6);
+}
+.innerContainerSponsor{
+  display: flex;
+  width: 80% !important; 
+  padding: 30px;
+  max-width: 1000px;
+  background: rgba(255, 255, 255, 0.1);
+  width: 500px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  border-radius: 20px;
+
+
+}
+.bgSponserDashobard h1{
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+  font-family: 'Times New Roman', Times, serif;
+  color: goldenrod;
+}
+.bgSponserDashobard p{
+  font-size: 1.2rem;
+  line-height: 1.6;
+  opacity: 0.9;
+  color: white;
+}
+
+
+.sponserImgDashboard{
+  height: 300px;
+  width: 300px;
+}
+
+.sponserButton {
+  white-space: nowrap;
+  outline: none;
+  border: none;
+  padding: 1rem 1.5rem; 
+  font-size: 14px; 
+  font-weight: 600;
+  border-radius: 30px;
+  background: linear-gradient(45deg, #05a6f0, #003366);
+  color: white;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); 
+  cursor: pointer;
+  transition: all 1s ease;
+}
+
+.sponserButton:hover {
+  background: linear-gradient(45deg, #003366, #05a6f0); 
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3); 
+}
+
+.search-container {
+  position: relative;
+  width: 100%;
+}
+
+.search-input {
+  width: 100%;
+  padding: 0.75rem 2.5rem 0.75rem 1rem; 
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 25px;
+  outline: none;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+
+.search-icon {
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #95a1b1; 
+  cursor: pointer;
+}
+
+.student-card {
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  margin-bottom: 1.5rem;
+}
+
+.student-card:hover {
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.student-card h3 {
+  font-size: 1.5rem;
+  margin-bottom: 0.75rem;
+  color: #333;
+}
+
+.student-card p {
+  font-size: 1rem;
+  color: #666;
+  margin: 0.5rem 0;
+}
+
+.sponsor-button {
+  background: linear-gradient(45deg, #05a6f0, #003366);
+  color: white;
+  border: none;
+  padding: 0.5rem;
+  border-radius: 25px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  margin-top: 1rem;
+  width: 100%;
+}
+
+.sponsor-button:hover {
+  background: linear-gradient(45deg, #003366, #05a6f0);
+}
+
+.studentDashboardContainer .btn.show{
+  color: #1e2432 !important;
+}
+
+.sponsornowHeading {
+  text-align: center;
+  font-size: 2.5rem;
+  font-weight: bold; 
+  color: #2c3e50; 
+  margin-bottom: 20px; 
+  text-transform: uppercase; 
+  letter-spacing: 2px; 
+  position: relative;
+}
+
+.sponsornowHeading::after {
+  content: '';
+  display: block;
+  width: 60px; 
+  height: 4px; 
+  background-color: #3498db; 
+  margin: 10px auto 0; 
+}
+
+.sponsor-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6; /* Optional: Add some visual indication that the button is disabled */
+}
+
+.sponsorHeader{
+  position: sticky;
+  top: 70px;
+  background: white;
+  padding: 10px;
+  margin-top: 0px;
+  border-bottom: 1px solid rgb(228, 228, 228);
+  z-index: 3;
+}
+
+/* Sponser Dashboard CSS Ends */
+
+
+/* table css starts */
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  margin: 20px 0;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #fff;
+}
+
+thead {
+  background-color: #f8f9fa;
+  border-bottom: 2px solid #dee2e6;
+}
+
+th {
+  padding: 12px 15px;
+  text-align: left;
+  font-weight: 600;
+  color: #495057;
+  border: 1px solid #dee2e6;
+}
+
+tbody tr {
+  border-bottom: 1px solid #dee2e6;
+}
+
+tbody tr:last-child {
+  border-bottom: none;
+}
+
+td {
+  padding: 12px 15px;
+  color: #495057;
+  border: 1px solid #dee2e6;
+}
+
+.form-check-input {
+  margin-right: 10px;
+}
+
+.form-check-label {
+  font-weight: 500;
+}
+
+
+
+
+/* table css ends */
