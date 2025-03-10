@@ -30,8 +30,8 @@ const ALLRoutes: React.FC = () => {
           <Route path="/Students_profile" element={<StudentsProfile />} /> 
           <Route path="/Students_batches" element={<StudentsBatches />} /> 
           <Route path="/Trainer_profile" element={<TrainerProfile />} /> 
-<!--           {<Route path="/Admission_table" element={<AdmissionTable />} /> 
-          <Route path="/interview-candidate/:id" element={<InterviewCandidate />} /> } -->
+{/* <!--           {<Route path="/Admission_table" element={<AdmissionTable />} /> 
+          <Route path="/interview-candidate/:id" element={<InterviewCandidate />} /> } --> */}
         </Route>
 
       {/* Public Routes */}
