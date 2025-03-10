@@ -13,22 +13,25 @@ import StudentsProfile from "../../components/Student_dashboard/StudentsProfile"
 import { Landing_page } from "../../components/Landing_Page/Landing_page";
 import StudentsBatches from "../../components/Student_dashboard/StudentsBatches";
 import TrainerProfile from "../../components/Trainer_dashboard/TrainerProfile";
+import { Students_SponserDashboard } from "../../components/Sponser_Dashboard/Students_SponserDashboard";
 
 const ALLRoutes: React.FC = () => {
   const routes = all_routes;
 
   return (
 
+
       <Routes>
         <Route path="/" element={<Defaultlayout />}>  
           <Route path="" element={<Landing_page />} /> 
+          <Route path="/Students_SponserDashboard" element={<Students_SponserDashboard />} />
           <Route path={routes.login3} element={<Login />} /> 
           <Route path={routes.register3} element={<Register3 />} /> 
           <Route path="/Students_profile" element={<StudentsProfile />} /> 
           <Route path="/Students_batches" element={<StudentsBatches />} /> 
           <Route path="/Trainer_profile" element={<TrainerProfile />} /> 
-          {/* <Route path="/Admission_table" element={<AdmissionTable />} /> 
-          <Route path="/interview-candidate/:id" element={<InterviewCandidate />} />  */}
+<!--           {<Route path="/Admission_table" element={<AdmissionTable />} /> 
+          <Route path="/interview-candidate/:id" element={<InterviewCandidate />} /> } -->
         </Route>
 
       {/* Public Routes */}
