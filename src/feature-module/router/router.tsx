@@ -15,6 +15,9 @@ import StudentsBatches from "../../components/Student_dashboard/StudentsBatches"
 import TrainerProfile from "../../components/Trainer_dashboard/TrainerProfile";
 import AdmissionTable from "../../components/Admission_dashboard/Admission_table";
 import InterviewCandidate from "../../components/Admission_dashboard/InterviewCandidate";
+import AllIntervieweesInformation from "../../components/Admission_dashboard/AllIntervieweesInformation";
+import TrainerBatch from "../../components/Trainer_dashboard/TrainerBatch";
+import TrainerBatchDetail from "../../components/Trainer_dashboard/TrainerBatchDetail";
 
 const ALLRoutes: React.FC = () => {
   const routes = all_routes;
@@ -31,6 +34,9 @@ const ALLRoutes: React.FC = () => {
           <Route path="/Trainer_profile" element={<TrainerProfile />} /> 
           <Route path="/Admission_table" element={<AdmissionTable />} /> 
           <Route path="/interview-candidate/:id" element={<InterviewCandidate />} /> 
+          <Route path="/AllIntervieweesInformation" element={<AllIntervieweesInformation/>} /> 
+          <Route path="/Trainer_batch" element={<TrainerBatch/>} /> 
+          <Route path="/TrainerBatchDetail" element={<TrainerBatchDetail/>} /> 
         </Route>
 
         {/* Public Routes */}

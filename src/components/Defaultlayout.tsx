@@ -33,10 +33,11 @@ const Defaultlayout = () => {
     { path: "/Students_batches", label: "BATCH" },
   ];
   const TrainerItems = [
-    { path: "/Trainer_profile", label: "PROFILE" }
+    { path: "/Trainer_profile", label: "PROFILE" },
+    { path: "/Trainer_batch", label: "BATCH" }
   ];
   const Admission = [
-    { path: "/Admission_table", label: "INTERVIEWS" }
+    { path: "/Admission_table", label: "INTERVIEW" }
   ];
 
   if (!isSidebarOpen) return null;
