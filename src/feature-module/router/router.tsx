@@ -18,15 +18,18 @@ import InterviewCandidate from "../../components/Admission_dashboard/InterviewCa
 import AllIntervieweesInformation from "../../components/Admission_dashboard/AllIntervieweesInformation";
 import TrainerBatch from "../../components/Trainer_dashboard/TrainerBatch";
 import TrainerBatchDetail from "../../components/Trainer_dashboard/TrainerBatchDetail";
+import { Students_SponserDashboard } from "../../components/Sponser_Dashboard/Students_SponserDashboard";
 
 const ALLRoutes: React.FC = () => {
   const routes = all_routes;
 
   return (
-    <>
+
+
       <Routes>
         <Route path="/" element={<Defaultlayout />}>  
           <Route path="" element={<Landing_page />} /> 
+          <Route path="/Students_SponserDashboard" element={<Students_SponserDashboard />} />
           <Route path={routes.login3} element={<Login />} /> 
           <Route path={routes.register3} element={<Register3 />} /> 
           <Route path="/Students_profile" element={<StudentsProfile />} /> 
@@ -37,30 +40,31 @@ const ALLRoutes: React.FC = () => {
           <Route path="/AllIntervieweesInformation" element={<AllIntervieweesInformation/>} /> 
           <Route path="/Trainer_batch" element={<TrainerBatch/>} /> 
           <Route path="/TrainerBatchDetail" element={<TrainerBatchDetail/>} /> 
+
         </Route>
 
-        {/* Public Routes */}
-        <Route element={<Feature />}>
-          {publicRoutes.map((route, idx) => (
-            <Route path={route.path} element={route.element} key={idx} />
-          ))}
-        </Route>
+      {/* Public Routes */}
+      <Route element={<Feature />}>
+        {publicRoutes.map((route, idx) => (
+          <Route path={route.path} element={route.element} key={idx} />
+        ))}
+      </Route>
 
-        {/* Authenticated Routes */}
-        <Route element={<AuthFeature />}>
-          {authRoutes.map((route, idx) => (
-            <Route path={route.path} element={route.element} key={idx} />
-          ))}
-        </Route>
+      {/* Authenticated Routes */}
+      <Route element={<AuthFeature />}>
+        {authRoutes.map((route, idx) => (
+          <Route path={route.path} element={route.element} key={idx} />
+        ))}
+      </Route>
 
-        {/* Student Routes */}
-        <Route element={<StudentFeature />}>
-          {Student.map((route, idx) => (
-            <Route path={route.path} element={route.element} key={idx} />
-          ))}
-        </Route>
-      </Routes>
-    </>
+      {/* Student Routes */}
+      <Route element={<StudentFeature />}>
+        {Student.map((route, idx) => (
+          <Route path={route.path} element={route.element} key={idx} />
+        ))}
+      </Route>
+    </Routes>
+
   );
 };
 

@@ -22,7 +22,7 @@
 
 /* Arsalan CSS STARTS */
 .classHeader {
-  padding: 15px 18px;
+  padding: 8px 10px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -47,6 +47,11 @@
   margin: 0px 10px;
   white-space: nowrap;
 }
+.btn-secondary{
+  background-color: #6b7c94 !important;
+  border: 1px solid #6b7c94 !important;
+  color: #FFF;
+}
 
 .sticky-header-top {
   position: sticky;
@@ -60,7 +65,7 @@
   color: #202c4b !important;
 }
 .h-fullscreen {
-  height: calc(100vh - 69px);
+  height: calc(100vh - 67px);
 }
 /*======= Button-color css starts  ======= */
 @keyframes push {
@@ -165,12 +170,8 @@
 
 /*======= Button-color css end  ======= */
 
-/* TEXT COLORS STARTS */
+/* TEXT COLORS STARTS *
 
-.txt-primary {
-  color: #05a6f0 !important;
-  text-decoration: underline;
-}
 /* TEXT COLORS ENDS */
 
 /* SIDEBAR CSS STARTS */
@@ -200,7 +201,7 @@
 ==========================**/
 
 .text_avatar {
-  background: #3b80f2;
+  background: #05a6f0;
   border-radius: 50%;
   color: #fff;
   text-transform: uppercase;
@@ -237,7 +238,7 @@
 }
 
 .text_avatar_48 {
-  background: #ffc600;
+  background: linear-gradient(to bottom right, #5dc1b9, #05a6f0);
   border-radius: 50%;
   color: #fff;
   text-transform: uppercase;
@@ -254,10 +255,6 @@
   border: 1px solid white;
 }
 
-.sidebarName {
-  color: white !important;
-}
-
 .sidebarHeaderContainer {
   display: flex;
   align-items: flex-start;
@@ -270,14 +267,11 @@
 }
 
 .sidebarRole {
-  font-size: 14px;
+  font-size: 16px;
+  color: white;
 }
 .bgHomeCard {
-  background: linear-gradient(
-    to bottom right,
-    #5dc1b9,
-    #05a6f0
-  ); /* Teal Gradient */
+  background: linear-gradient(to bottom right, #5dc1b9, #05a6f0);
   color: white;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
@@ -326,9 +320,6 @@
   .btn.btn-primary.ms-auto {
     width: auto !important;
     float: right;
-  }
-  .toggle-passwordsSignup {
-    top: 222px !important;
   }
 }
 
@@ -487,7 +478,7 @@ input[type="password"] {
   border: var(--bs-border-width) solid var(--bs-border-color);
   border-radius: var(--bs-border-radius);
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-  margin-bottom: 1rem !important;
+  margin-bottom: 1rem;
 }
 
 /* .form-control[type=file] {
@@ -580,6 +571,7 @@ input[type="file"]::file-selector-button {
 }
 
 /* SIDEBAR BG END */
+
 
 /* Admistion button by Hasnen START */
 .custom-edit-button {
@@ -1281,3 +1273,427 @@ input[type="file"]::file-selector-button {
 }
 
 /* TrainerBatchDetail End by hasnen */
+
+/* LOGIN SCREEN STARTS*/
+
+.bgLoginScreen {
+  background-color: #ace1fa;
+  background: linear-gradient(-90deg, #003366, #ace1fa);
+}
+.loginImg {
+  height: 649px;
+  width: 100%;
+}
+
+.loginBtn {
+  width: 100%;
+  justify-content: center;
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+.loginLoader {
+  position: absolute;
+  right: 38%;
+}
+/* LOGIN SCREEN ENDS*/
+
+/* LOGO CSS STARTS */
+.logoHeading {
+  color: #05a6f0;
+  padding: 10px 15px;
+  font-weight: bold !important;
+  font-family: "Poppins", "Helvetica Neue", Arial, sans-serif;
+  font-size: 28px !important;
+  background: linear-gradient(90deg, #05a6f0, #0c7bb3, #00334c);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+}
+
+.logoHeading span {
+}
+
+.txt-primary {
+  color: #05a6f0 !important;
+  background-color: #003366;
+  /* text-decoration: underline; */
+}
+
+a {
+  text-decoration: none !important;
+}
+
+.resRow {
+  position: relative !important;
+}
+
+.resRow .p-button {
+  background-color: #05a6f0 !important;
+  color: white !important;
+  border-radius: 8px;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+}
+
+/* Navbar container */
+.navbar {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  padding-right: 60px;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #ddd;
+}
+
+/* Logo styling */
+.navbar-logo .logoHeading {
+  font-size: 1.5rem;
+  margin: 0;
+}
+
+.navbar-logo .txt-primary {
+  color: #05a6f0;
+}
+
+/* Navbar links container */
+.navbar-links {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  justify-content: space-between;
+}
+
+/* Center section for Home link */
+.navbar-center {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+/* Right-aligned links */
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* Individual link styling */
+.navbar-link {
+  text-decoration: none;
+  color: #333;
+  font-size: 16px !important;
+  font-weight: 700 !important;
+}
+
+.navbar-link:hover {
+  color: #05a6f0;
+}
+
+/* Settings button styling */
+.navbar-settings {
+  position: absolute;
+  right: 10px;
+  color: #05a6f0 !important;
+  border: none !important;
+  border-radius: 50%;
+  background: white !important;
+  box-shadow: 0px 0px 1px gray !important;
+}
+
+/* Hamburger menu for mobile */
+.navbar-toggle {
+  display: none;
+  background-color: transparent !important;
+  color: #05a6f0 !important;
+  border: none !important;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .navbar {
+    position: static;
+    padding: 5px;
+  }
+  .navbar-settings {
+    position: static;
+  }
+  .navbar-links {
+    display: none;
+    flex-direction: row;
+    position: absolute;
+    top: 60px;
+    right: 0;
+    background-color: #f8f9fa;
+    width: 100%;
+    padding: 1rem;
+    border-bottom: 1px solid #ddd;
+    gap: 1rem;
+  }
+
+  .navbar-links.active {
+    display: flex;
+  }
+
+  .navbar-toggle {
+    display: block;
+  }
+
+  .navbar-center,
+  .navbar-right {
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+  }
+}
+/* LOGO CSS ENDS */
+
+.dropdownLoader {
+  position: relative;
+}
+
+.dropdownLoader .loginLoader {
+  position: absolute;
+  left: 75px;
+  top: 12px;
+}
+
+.btnLogout{
+  color: white;
+  outline: none;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  text-align: left; 
+}
+
+.btn-primary:hover{
+  background-color: #0c7bb3 !important;
+
+}
+
+/* Sponser Dashboard CSS starts */
+.bgSponserDashobard{
+  display: flex;
+  justify-content: center;
+  padding: 10px 25px;
+  background: linear-gradient(135deg, #002147, #0072c6);
+}
+.innerContainerSponsor{
+  display: flex;
+  width: 80% !important; 
+  padding: 30px;
+  max-width: 1000px;
+  background: rgba(255, 255, 255, 0.1);
+  width: 500px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  border-radius: 20px;
+
+
+}
+.bgSponserDashobard h1{
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+  font-family: 'Times New Roman', Times, serif;
+  color: goldenrod;
+}
+.bgSponserDashobard p{
+  font-size: 1.2rem;
+  line-height: 1.6;
+  opacity: 0.9;
+  color: white;
+}
+
+
+.sponserImgDashboard{
+  height: 300px;
+  width: 300px;
+}
+
+.sponserButton {
+  white-space: nowrap;
+  outline: none;
+  border: none;
+  padding: 1rem 1.5rem; 
+  font-size: 14px; 
+  font-weight: 600;
+  border-radius: 30px;
+  background: linear-gradient(45deg, #05a6f0, #003366);
+  color: white;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); 
+  cursor: pointer;
+  transition: all 1s ease;
+}
+
+.sponserButton:hover {
+  background: linear-gradient(45deg, #003366, #05a6f0); 
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3); 
+}
+
+.search-container {
+  position: relative;
+  width: 100%;
+}
+
+.search-input {
+  width: 100%;
+  padding: 0.75rem 2.5rem 0.75rem 1rem; 
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 25px;
+  outline: none;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+
+.search-icon {
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #95a1b1; 
+  cursor: pointer;
+}
+
+.student-card {
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  margin-bottom: 1.5rem;
+}
+
+.student-card:hover {
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.student-card h3 {
+  font-size: 1.5rem;
+  margin-bottom: 0.75rem;
+  color: #333;
+}
+
+.student-card p {
+  font-size: 1rem;
+  color: #666;
+  margin: 0.5rem 0;
+}
+
+.sponsor-button {
+  background: linear-gradient(45deg, #05a6f0, #003366);
+  color: white;
+  border: none;
+  padding: 0.5rem;
+  border-radius: 25px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  margin-top: 1rem;
+  width: 100%;
+}
+
+.sponsor-button:hover {
+  background: linear-gradient(45deg, #003366, #05a6f0);
+}
+
+.studentDashboardContainer .btn.show{
+  color: #1e2432 !important;
+}
+
+.sponsornowHeading {
+  text-align: center;
+  font-size: 2.5rem;
+  font-weight: bold; 
+  color: #2c3e50; 
+  margin-bottom: 20px; 
+  text-transform: uppercase; 
+  letter-spacing: 2px; 
+  position: relative;
+}
+
+.sponsornowHeading::after {
+  content: '';
+  display: block;
+  width: 60px; 
+  height: 4px; 
+  background-color: #3498db; 
+  margin: 10px auto 0; 
+}
+
+.sponsor-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6; /* Optional: Add some visual indication that the button is disabled */
+}
+
+.sponsorHeader{
+  position: sticky;
+  top: 70px;
+  background: white;
+  padding: 10px;
+  margin-top: 0px;
+  border-bottom: 1px solid rgb(228, 228, 228);
+  z-index: 3;
+}
+
+/* Sponser Dashboard CSS Ends */
+
+
+/* table css starts */
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  margin: 20px 0;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #fff;
+}
+
+thead {
+  background-color: #f8f9fa;
+  border-bottom: 2px solid #dee2e6;
+}
+
+th {
+  padding: 12px 15px;
+  text-align: left;
+  font-weight: 600;
+  color: #495057;
+  border: 1px solid #dee2e6;
+}
+
+tbody tr {
+  border-bottom: 1px solid #dee2e6;
+}
+
+tbody tr:last-child {
+  border-bottom: none;
+}
+
+td {
+  padding: 12px 15px;
+  color: #495057;
+  border: 1px solid #dee2e6;
+}
+
+.form-check-input {
+  margin-right: 10px;
+}
+
+.form-check-label {
+  font-weight: 500;
+}
+
+
+
+
+/* table css ends */
+

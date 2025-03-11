@@ -1,17 +1,26 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useForm } from "react-hook-form";
 import { all_routes } from "../../router/all_routes";
 import axios from "axios";
 import { AuthContext } from "../../../contexts/authContext";
+import ClipLoader from "react-spinners/ClipLoader";
+import BeatLoader from "react-spinners/BeatLoader";
+import { Tooltip } from "primereact/tooltip";
+import { Badge } from "primereact/badge";
 
 const Register3 = () => {
   const routes = all_routes;
   const navigate = useNavigate();
 
   // CONTEXT API
-
-  const { RegisterUser } = useContext(AuthContext);
+  const {
+    RegisterUser,
+    newSubrole,
+    fetchNewSubrole,
+    loading,
+    userCreatedSuccessfully,
+    emailAlreadyCreated,
+  } = useContext(AuthContext);
 
   // STATE MANAGEMENT STARTS
   const [firstName, setFirstName] = useState("");
@@ -19,7 +28,6 @@ const Register3 = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [newSelectedRole, setNewSelectedRole] = useState("ENABLER");
-  const [newSubrole, setNewSubRole] = useState([]);
   const [selectedSubrole, setSelectedSubrole] = useState("Choose Your Subrole");
   const [mobileNumber, setMobileNumber] = useState("");
   const [profileImage, setProfileImage] = useState("");
@@ -29,11 +37,39 @@ const Register3 = () => {
   const [proposerNumber, setProposerNumber] = useState("");
   const [selectedIdType, setSelectedIdType] = useState("Select an ID");
 
+  const [errorFirstName, setErrorFirstName] = useState("");
+  const [errorLastName, setErrorLastName] = useState("");
+  const [errorEmail, setErrorEmail] = useState("");
+  const [errorPassword, setErrorPassword] = useState("");
+  const [errorSelectedRole, setErrorSelectedRole] = useState("");
+  const [errorSelectedSubRole, setErrorSelectedSubsRole] = useState("");
+  const [mobilenumberError, setMobileNumberError] = useState("");
+  const [userProfileError, setUserProfileError] = useState("");
+  const [idTypeError, setSelectedIdTypeError] = useState("");
+  const [idNumberError, setIdNumberError] = useState("");
+  const [proposerEmailError, setProposerEmailError] = useState("");
+  const [proposerMobileError, setproposerMobileError] = useState("");
+
+  const [emailExistsError, setEmailExistsError] = useState("");
   const [passwordVisibility, setPasswordVisibility] = useState({
     password: false,
   });
 
-  // STATE MANAGEMENT ENDS
+  const validatePassword = (password) => {
+    const strongPasswordRegex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    return strongPasswordRegex.test(password);
+  };
+
+  const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const validateMobileNumber = (number) => {
+    const mobileRegex = /^[0-9]{10}$/;
+    return mobileRegex.test(number);
+  };
 
   const togglePasswordVisibility = () => {
     setPasswordVisibility((prevState) => ({
@@ -44,25 +80,13 @@ const Register3 = () => {
 
   const handleSelectRole = (role) => {
     setNewSelectedRole(role);
-  };
-
-  const fetchNewSubrole = async () => {
-    try {
-      const response = await axios.get(
-        "https://gl8tx74f-8000.inc1.devtunnels.ms/auth/SubRole/"
-      );
-      if (response.status === 200) {
-        setNewSubRole(response.data);
-      }
-    } catch (error) {
-      console.log(error);
-    }
+    setErrorSelectedRole("");
   };
 
   const fetchIdType = async () => {
     try {
       const response = await axios.get(
-        "https://gl8tx74f-8000.inc1.devtunnels.ms/auth/idtypes/"
+        "https://techie01.pythonanywhere.com/auth/idtypes/"
       );
       if (response.status === 200) {
         setIdType(response.data);
@@ -76,81 +100,162 @@ const Register3 = () => {
     fetchNewSubrole();
     fetchIdType();
   }, []);
-
-  
-
-
-
   const onRegisterUser = async (e) => {
     e.preventDefault();
+    setErrorFirstName("");
+    setErrorLastName("");
+    setErrorEmail("");
+    setErrorPassword("");
+    setErrorSelectedRole("");
+    setErrorSelectedSubsRole("");
+    setMobileNumberError("");
+    setUserProfileError("");
+    setSelectedIdTypeError("");
+    setIdNumberError("");
+    setProposerEmailError("");
+    setproposerMobileError("");
+    setEmailExistsError(""); // Reset email existence error
+    let isValid = true;
   
-    let userData = {
-      first_name: firstName,
-      last_name: lastName,
-      email,
-      password,
-    };
+    if (!firstName) {
+      setErrorFirstName("First Name is Required");
+      isValid = false;
+    }
   
-    const subroleMapping = {
-      "APPLICANT": 1,
-      "INTERVIEWEE": 2,
-      "STUDENT": 3,
-      "SPONSOR": 4,
-      "TRAINER": 5,
-      "RECRUITER": 6,
-      "GUEST LECTURER": 7
-    };
+    if (!lastName) {
+      setErrorLastName("Last Name is Required");
+      isValid = false;
+    }
   
-    // Convert file to Base64 if a file is selected
-    const convertToBase64 = (file) => {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => resolve(reader.result); // Base64 string
-        reader.onerror = (error) => reject(error);
-      });
-    };
+    if (!email) {
+      setErrorEmail("Email is Required");
+      isValid = false;
+    } else if (!validateEmail(email)) {
+      setErrorEmail("Invalid Email Format");
+      isValid = false;
+    }
   
-    try {
-      let base64Image = null;
-      
-      if (profileImage) {
-        base64Image = await convertToBase64(profileImage); // Convert file
+    if (!password) {
+      setErrorPassword("Password is Required");
+      isValid = false;
+    } else if (!validatePassword(password)) {
+      setErrorPassword(
+        "Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, one number, and one special character"
+      );
+      isValid = false;
+    }
+  
+    if (!newSelectedRole) {
+      setErrorSelectedRole("Select a Role");
+      isValid = false;
+    }
+  
+    if (newSelectedRole === "ENABLER") {
+      if (!selectedSubrole || selectedSubrole === "Choose Your Subrole") {
+        setErrorSelectedSubsRole("Select a subrole");
+        isValid = false;
       }
-  
-      if (newSelectedRole === "LEARNER") {
-        userData = {
-          ...userData,
-          role: 2,
-          mobileNumber,
-          profileImage: base64Image,  // Send as Base64
-          idType: selectedIdType,
-          identity,
-          proposerEmail,
-          proposerNumber,
-        };
-      } else if (newSelectedRole === "ENABLER") {
-        userData = {
-          ...userData,
-          role: 3,
-          subrole: subroleMapping[selectedSubrole] || null,
-        };
+    } else if (newSelectedRole === "LEARNER") {
+      if (!mobileNumber) {
+        setMobileNumberError("Mobile Number is Required");
+        isValid = false;
+      } else if (!validateMobileNumber(mobileNumber)) {
+        setMobileNumberError("Invalid Mobile Number");
+        isValid = false;
       }
-      
-      await RegisterUser(userData);
-
-      console.log(userData);
+      if (!profileImage) {
+        setUserProfileError("Profile Image is Required");
+        isValid = false;
+      }
+      if (!selectedIdType || selectedIdType === "Select an ID") {
+        setSelectedIdTypeError("Id Type is Required");
+        isValid = false;
+      }
+      if (!identity) {
+        setIdNumberError("ID Number is Required");
+        isValid = false;
+      }
+      if (!proposerEmail) {
+        setProposerEmailError("Proposer Email is Required");
+        isValid = false;
+      } else if (!validateEmail(proposerEmail)) {
+        setProposerEmailError("Invalid Proposer Email Format");
+        isValid = false;
+      }
+      if (!proposerNumber) {
+        setproposerMobileError("Proposer Mobile Number is Required");
+        isValid = false;
+      } else if (!validateMobileNumber(proposerNumber)) {
+        setproposerMobileError("Invalid Proposer Mobile Number");
+        isValid = false;
+      }
+    }
   
-    } catch (error) {
-      console.error("Registration Error:", error);
+    if (isValid) {
+      let userData = {
+        first_name: firstName,
+        last_name: lastName,
+        email,
+        password,
+      };
+  
+      const subroleMapping = {
+        APPLICANT: 1,
+        INTERVIEWEE: 2,
+        STUDENT: 3,
+        SPONSOR: 4,
+        TRAINER: 5,
+        RECRUITER: 6,
+        "GUEST LECTURER": 7,
+      };
+  
+      const convertToBase64 = (file) => {
+        return new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.readAsDataURL(file);
+          reader.onload = () => resolve(reader.result);
+          reader.onerror = (error) => reject(error);
+        });
+      };
+  
+      try {
+        let base64Image = null;
+  
+        if (profileImage) {
+          base64Image = await convertToBase64(profileImage);
+        }
+  
+        if (newSelectedRole === "LEARNER") {
+          userData = {
+            ...userData,
+            role: 2,
+            mobileNumber,
+            profileImage: base64Image,
+            idType: selectedIdType,
+            identity,
+            subrole: 3,
+            proposerEmail,
+            proposerNumber,
+          };
+        } else if (newSelectedRole === "ENABLER") {
+          userData = {
+            ...userData,
+            role: 3,
+            subrole: subroleMapping[selectedSubrole] || null,
+          };
+        }
+  
+        await RegisterUser(userData);
+        console.log(userData);
+      } catch (error) {
+        if (emailAlreadyCreated) {
+          setEmailExistsError("This email is already registered. Please use a different email.");
+        }
+      }
     }
   };
-  
-
-  
-  
   return (
-    <div className="card mt-5">
+    <div className="card mt-5 mx-2">
       <div className="card-header">
         <h2>Register</h2>
         <p>Please enter your details to register</p>
@@ -158,55 +263,93 @@ const Register3 = () => {
       <div className="card-body">
         <form onSubmit={onRegisterUser}>
           <div className="row">
-            <div className="col-xxl-6 col-xl-6 col-md-6">
-              <label for="firstName" className="form-label">
-                First Name
+            <div className="col-xxl-6 col-xl-6 col-md-6 mb-3">
+              <label htmlFor="firstName" className="form-label">
+                First Name <span className="text-danger">*</span>
               </label>
               <input
                 id="firstName"
                 placeholder="Enter Your First Name"
                 type="text"
                 value={firstName}
-                onChange={(e) => setFirstName(e.target.value)}
+                onChange={(e) => {
+                  setFirstName(e.target.value);
+                  setErrorFirstName("");
+                }}
+                className="mb-0"
               />
+              {errorFirstName && (
+                <span className="text-danger">{errorFirstName}</span>
+              )}
             </div>
 
-            <div className="col-xxl-6 col-xl-6 col-md-6">
-              <label for="lastName" className="form-label">
-                Last Name
+            <div className="col-xxl-6 col-xl-6 col-md-6 mb-3">
+              <label htmlFor="lastName" className="form-label">
+                Last Name <span className="text-danger">*</span>
               </label>
               <input
+                className="mb-0"
                 id="lastName"
                 placeholder="Enter Your Last Name"
                 type="text"
                 value={lastName}
-                onChange={(e) => setLastName(e.target.value)}
+                onChange={(e) => {
+                  setLastName(e.target.value);
+                  setErrorLastName("");
+                }}
               />
+              {errorLastName && (
+                <span className="text-danger">{errorLastName}</span>
+              )}
             </div>
 
-            <div className="col-xxl-6 col-xl-6 col-md-6">
-              <label for="emailAddress" className="form-label">
-                Email Address
+            <div className="col-xxl-6 col-xl-6 col-md-6 mb-3">
+              <label htmlFor="emailAddress" className="form-label">
+                Email Address <span className="text-danger">*</span>
               </label>
               <input
                 placeholder="Enter Your Email"
                 id="emailAddress"
                 type="email"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  setErrorEmail("");
+                  setEmailExistsError(""); 
+                }}
+                className="mb-0"
               />
+              {errorEmail && <span className="text-danger">{errorEmail}</span>}
+              {emailExistsError && (
+                <span className="text-danger">{emailExistsError}</span>
+              )}
             </div>
 
-            <div className="col-xxl-6 col-xl-6 col-md-6 posRel">
-              <label for="password" className="form-label">
-                Password
+            <div className="col-xxl-6 col-xl-6 col-md-6 posRel mb-3">
+              <label htmlFor="password" className="form-label">
+                Password <span className="text-danger">*</span>
               </label>
+              <Tooltip target=".custom-target-icon" />
+
+              {/* Icon with tooltip */}
+              <i
+                className="custom-target-icon pi pi-info-circle p-text-secondary ms-5"
+                data-pr-tooltip="Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, one number, and one special character"
+                data-pr-position="right"
+                data-pr-at="right+5 top"
+                data-pr-my="left center-2"
+                style={{ fontSize: "1rem", cursor: "pointer" }}
+              ></i>
               <input
                 id="password"
                 placeholder="Enter Your Password"
                 type={passwordVisibility.password ? "text" : "password"}
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                className="mb-0"
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  setErrorPassword("");
+                }}
               />
               <span
                 className={`ti toggle-passwordsSignup ${
@@ -214,11 +357,14 @@ const Register3 = () => {
                 }`}
                 onClick={togglePasswordVisibility}
               ></span>
+              {errorPassword && (
+                <span className="text-danger">{errorPassword}</span>
+              )}
             </div>
 
-            <div className="col-xxl-6 col-xl-6 col-md-6">
+            <div className="col-xxl-6 col-xl-6 col-md-6 mb-3">
               <label className="form-label" htmlFor="Roles">
-                Select Role
+                Select Role <span className="text-danger">*</span>
               </label>
               <div className="dropdown">
                 <button
@@ -244,14 +390,17 @@ const Register3 = () => {
                   </li>
                 </ul>
               </div>
+              {errorSelectedRole && (
+                <span className="text-danger">{errorSelectedRole}</span>
+              )}
             </div>
             <div
-              className={`col-xxl-6 col-xl-6 col-md-6 ${
+              className={`col-xxl-6 col-xl-6 col-md-6 mb-3 ${
                 newSelectedRole === "LEARNER" ? "d-none" : "d-block"
               }`}
             >
               <label className="form-label" htmlFor="Roles">
-                Select Subrole
+                Select Subrole <span className="text-danger">*</span>
               </label>
               <div className="dropdown">
                 <button
@@ -264,20 +413,42 @@ const Register3 = () => {
                 </button>
                 <ul className="dropdown-menu w-100">
                   {newSubrole.length > 0 ? (
-                    newSubrole.slice(3,7).map((subrole) => (
-                      <li
-                        className="dropdown-item c-pointer"
-                        key={subrole.id}
-                        onClick={() => setSelectedSubrole(subrole.name)}
-                      >
-                        {subrole.name}
-                      </li>
-                    ))
+                    newSubrole
+                      .filter(
+                        (subrole) =>
+                          subrole.name === "SPONSOR" ||
+                          subrole.name === "TRAINER" ||
+                          subrole.name === "RECRUITER" ||
+                          subrole.name === "GUEST LECTURER"
+                      )
+                      .map((subrole) => (
+                        <li
+                          className="dropdown-item c-pointer"
+                          key={subrole.id}
+                          onClick={() => {
+                            setSelectedSubrole(subrole.name);
+                            setErrorSelectedSubsRole("");
+                          }}
+                        >
+                          {subrole.name}
+                        </li>
+                      ))
                   ) : (
-                    <li className="dropdown-item">Loading...</li>
+                    <li className="dropdown-item dropdownLoader">
+                      Loading{" "}
+                      <BeatLoader
+                        size={5}
+                        speedMultiplier={0.5}
+                        loading={loading}
+                        className="loginLoader"
+                      />
+                    </li>
                   )}
                 </ul>
               </div>
+              {errorSelectedSubRole && (
+                <span className="text-danger">{errorSelectedSubRole}</span>
+              )}
             </div>
           </div>
 
@@ -286,36 +457,50 @@ const Register3 = () => {
               newSelectedRole === "ENABLER" ? "d-none" : "d-flex mt-4"
             }`}
           >
-            <div className="col-xxl-4 col-xl-4 col-md-4">
-              <label className="form-label" for="mobileNumber">
-                Mobile Number
+            <div className="col-xxl-4 col-xl-4 col-md-4  mb-3">
+              <label className="form-label" htmlFor="mobileNumber">
+                Mobile Number <span className="text-danger">*</span>
               </label>
               <input
+                className="mb-0"
                 placeholder="Enter Your Number"
                 id="mobileNumber"
                 type="text"
                 value={mobileNumber}
-                onChange={(e) => setMobileNumber(e.target.value)}
+                onChange={(e) => {
+                  setMobileNumber(e.target.value);
+                  setMobileNumberError("");
+                }}
               />
+              {mobilenumberError && (
+                <span className="text-danger">{mobilenumberError}</span>
+              )}
             </div>
 
-            <div className="col-xxl-4 col-xl-4 col-md-4">
-              <label className="form-label" for="user_profile">
-                User Profile Image
+            <div className="col-xxl-4 col-xl-4 col-md-4  mb-3">
+              <label className="form-label" htmlFor="user_profile">
+                User Profile Image <span className="text-danger">*</span>
               </label>
               <input
                 id="user_profile"
                 type="file"
                 name="user_profile"
-                className="form-control"
-                // value={profileImage}
+                className="form-control mb-0"
                 accept="image/*"
-                onChange={(e) => setProfileImage(e.target.files?.[0] || null)}
-                />
+                onChange={(e) => {
+                  setProfileImage(e.target.files?.[0] || null);
+                  setUserProfileError("");
+                }}
+              />
+              {userProfileError && (
+                <span className="text-danger">{userProfileError}</span>
+              )}
             </div>
 
             <div className="col-xxl-4 col-xl-4 col-md-4">
-              <label className="form-label">ID Type</label>
+              <label className="form-label">
+                ID Type <span className="text-danger">*</span>
+              </label>
               <div className="dropdown">
                 <button
                   className="btnDropdown dropdown-toggle form-control"
@@ -330,56 +515,97 @@ const Register3 = () => {
                     idTypes.map((idtype) => (
                       <li
                         key={idtype.idTypeName}
-                        onClick={() => setSelectedIdType(idtype.idTypeName)}
+                        onClick={() => {
+                          setSelectedIdType(idtype.idTypeName);
+                          setSelectedIdTypeError("");
+                        }}
                         className="dropdown-item c-pointer"
                       >
                         {idtype.idTypeName}
                       </li>
                     ))
                   ) : (
-                    <li className="dropdown-item">Loading...</li>
+                    <li className="dropdown-item dropdownLoader">
+                      Loading{" "}
+                      <BeatLoader
+                        size={5}
+                        speedMultiplier={0.5}
+                        loading={loading}
+                        className="loginLoader"
+                      />
+                    </li>
                   )}
                 </ul>
               </div>
+              {idTypeError && (
+                <span className="text-danger">{idTypeError}</span>
+              )}
             </div>
 
-            <div className="col-xxl-4 col-xl-4 col-md-4">
-              <label className="form-label" for="identityNumber">
-                Identity
+            <div className="col-xxl-4 col-xl-4 col-md-4  mb-3">
+              <label
+                className="form-label text-nowrap"
+                htmlFor="identityNumber"
+              >
+                Identity Number <span className="text-danger">*</span>
               </label>
               <input
+                className="mb-0"
                 placeholder="Enter Your ID Number"
                 id="identityNumber"
                 type="text"
-                onChange={(e) => setIdentity(e.target.value)}
+                onChange={(e) => {
+                  setIdentity(e.target.value);
+                  setIdNumberError("");
+                }}
                 value={identity}
               />
+              {idNumberError && (
+                <span className="text-danger">{idNumberError}</span>
+              )}
             </div>
 
-            <div className="col-xxl-4 col-xl-4 col-md-4">
-              <label className="form-label" for="proposerEmail">
-                Proposer Email
+            <div className="col-xxl-4 col-xl-4 col-md-4 mb-3">
+              <label className="form-label text-nowrap" htmlFor="proposerEmail">
+                Proposer Email <span className="text-danger">*</span>
               </label>
               <input
+                className="mb-0"
                 id="proposerEmail"
                 placeholder="Enter Your Proposer Email"
                 type="email"
                 value={proposerEmail}
-                onChange={(e) => setProposerEmail(e.target.value)}
+                onChange={(e) => {
+                  setProposerEmail(e.target.value);
+                  setProposerEmailError("");
+                }}
               />
+              {proposerEmailError && (
+                <span className="text-danger">{proposerEmailError}</span>
+              )}
             </div>
 
-            <div className="col-xxl-4 col-xl-4 col-md-4">
-              <label className="form-label" for="proposerNumber">
-                Proposer Mobile No
+            <div className="col-xxl-4 col-xl-4 col-md-4  mb-3">
+              <label
+                className="form-label text-nowrap"
+                htmlFor="proposerNumber"
+              >
+                Proposer Mobile No <span className="text-danger">*</span>
               </label>
               <input
+                className="mb-0"
                 id="proposerNumber"
                 placeholder="Enter Your Proposer Number"
                 type="text"
                 value={proposerNumber}
-                onChange={(e) => setProposerNumber(e.target.value)}
+                onChange={(e) => {
+                  setProposerNumber(e.target.value);
+                  setproposerMobileError("");
+                }}
               />
+              {proposerMobileError && (
+                <span className="text-danger">{proposerMobileError}</span>
+              )}
             </div>
           </div>
 
@@ -387,8 +613,18 @@ const Register3 = () => {
           <div className="row justify-content-center">
             <div className="col-xxl-5 col-xl-5 col-md-5">
               <div className="mb-3">
-                <button type="submit" className="btn btn-primary w-100">
-                  Sign Up
+                <button
+                  type="submit"
+                  className="btn btn-primary w-100 loginBtn"
+                >
+                  Sign Up{" "}
+                  {/* <ClipLoader
+                    color="#fff"
+                    size={18}
+                    speedMultiplier={0.5}
+                    loading={loading}
+                    className="loginLoader"
+                  /> */}
                 </button>
               </div>
               <div className="text-center">
@@ -401,6 +637,55 @@ const Register3 = () => {
               </div>
             </div>
           </div>
+          {/* Successfully user created modal */}
+          {/* {userCreatedSuccessfully && (
+            <div
+              className="modal fade"
+              id="registerModal"
+              aria-labelledby="registerModalLabel"
+              aria-hidden="true"
+            >
+              <div className="modal-dialog modal-dialog-centered">
+                <div className="modal-content">
+                  <div className="modal-header">
+                    <h3 className="modal-title text-center w-100">
+                      Congratulations!{" "}
+                      <i className="pi pi-check-circle text-success ms-2"></i>
+                    </h3>
+                    <button
+                      type="button"
+                      className="btn-close"
+                      data-bs-dismiss="modal"
+                      aria-label="Close"
+                    ></button>
+                  </div>
+                  <div className="modal-body text-center">
+                    <p className="lead mb-4">
+                      Your account has been successfully created. You can now
+                      log in to access your account.
+                    </p>
+                    <div className="d-flex justify-content-center gap-3">
+                      <button
+                        type="button"
+                        className="btn btn-light w-50"
+                        data-bs-dismiss="modal"
+                      >
+                        Close
+                      </button>
+                      <Link
+                        type="button"
+                        className="btn btn-primary w-50"
+                        onClick={navigate(routes.login3)}
+                        data-bs-dismiss="modal"
+                      >
+                        Go to Login
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )} */}
         </form>
       </div>
     </div>

@@ -21,7 +21,7 @@ import "primereact/resources/primereact.min.css"; // PrimeReact core styles
 import "primeicons/primeicons.css"; // PrimeIcons
 import "primeflex/primeflex.css"; // PrimeFlex
 import "./index.css";
-import AuthProvider from "./contexts/authContext";
+import { AppProvider } from "./contexts/AllProvider";
 
 
 
@@ -31,11 +31,11 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <Provider store={store}>
-      <AuthProvider>
+      <AppProvider>
         <BrowserRouter basename={base_path}>
           <ALLRoutes />
         </BrowserRouter>
-      </AuthProvider>
+      </AppProvider>
     </Provider>
   </React.StrictMode>
 );

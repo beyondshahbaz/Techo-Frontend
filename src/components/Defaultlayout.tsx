@@ -1,37 +1,28 @@
-import React, { useRef, useState } from "react";
-import { Outlet } from "react-router-dom";
+import React, { useContext, useState } from "react";
+import { Outlet, useNavigate, Link } from "react-router-dom";
 import Header from "./Header";
+
+
 import { faSchool , faChalkboardUser , faTicket } from "@fortawesome/free-solid-svg-icons";
 
+
 import { Sidebar } from "primereact/sidebar";
-import { Button } from "primereact/button";
-import { Avatar } from "primereact/avatar";
-import { Ripple } from "primereact/ripple";
-import { StyleClass } from "primereact/styleclass";
-
 import Dropdown from "./Dropdown";
-import { Link } from "react-router-dom";
 import { all_routes } from "../feature-module/router/all_routes";
-
-// import Sidebar from "./Sidebar";
+import { AuthContext } from "../contexts/authContext";
 
 const Defaultlayout = () => {
   const routes = all_routes;
-
+  const navigate = useNavigate();
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-
-  const loggedInUser = [{ name: "Alice Johnson", role: "Student" }];
-
-  const toggleSidebar = () => {
-    setIsSidebarOpen(!isSidebarOpen);
-  };
-
+  const { user, userLoggedIN, LogoutUser } = useContext(AuthContext);
   const [visible, setVisible] = useState(false);
 
   const StudentsItems = [
     { path: "/Students_profile", label: "PROFILE" },
     { path: "/Students_batches", label: "BATCH" },
   ];
+
   const TrainerItems = [
     { path: "/Trainer_profile", label: "PROFILE" },
     { path: "/Trainer_batch", label: "BATCH" }
@@ -39,8 +30,16 @@ const Defaultlayout = () => {
   const Admission = [
     { path: "/Admission_table", label: "INTERVIEW" }
   ];
+        
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
 
-  if (!isSidebarOpen) return null;
+  const handleLogout = () => {
+    setVisible(false);
+    LogoutUser();
+    navigate('/login-3');
+  };
 
   return (
     <>
@@ -51,69 +50,105 @@ const Defaultlayout = () => {
         header={
           <div>
             <span className="text_avatar_48 text-nowrap">
-              {loggedInUser[0].name.charAt(0)}
+              {userLoggedIN && user && user.first_name.charAt(0)}
             </span>
             <div className="sidebarHeaderContainer">
-              <span className="sidebarName">{loggedInUser[0].name}</span>
-              <span className="sidebarRole text-muted">
-                {loggedInUser[0].role}
+              <span className="sidebarRole">WELCOME,</span>
+              <span className="sidebarName text-muted">
+                {userLoggedIN && user && `${user.first_name} ${user.last_name}`}
               </span>
-            </div>
-            <div className="sidebarHeaderContainer d-none">
-              <span className="sidebarName">User</span>
-              <span className="sidebarRole text-muted">{"Subrole"}</span>
             </div>
           </div>
         }
       >
         <Dropdown
+          key="student-dashboard"
           title="Student Dashboard"
           items={StudentsItems}
           icon={faSchool}
         />
         <Dropdown
+          key="trainer-dashboard"
           title="Trainer Dashboard"
           items={TrainerItems}
           icon={faChalkboardUser}
         />
         <Dropdown
+          key="admission-process"
           title="Admission Process"
           items={Admission}
           icon={faTicket}
         />
 
         <div className="authFuncCont">
-          <div className="me-2">
-            <i className="pi pi-user" style={{ fontSize: "2rem" }}></i>
-          </div>
-          <div className="d-flex flex-column">
-            <span className="text-muted">Don't have an account? </span>
-            <Link to={all_routes.register3} className="text-light">
-              Create Account
-            </Link>
-          </div>
-        </div>
-        <div className="authFuncCont d-none">
-          <div className="me-2">
-            <i
-              className="pi pi-sign-out"
-              style={{ fontSize: "2rem", color: "#dc3545" }}
-            ></i>
-          </div>
-          <div className="d-flex flex-column">
-            <span className="text-muted">Ready to leave?</span>
-            <Link className="text-light" to={all_routes.register3}>
-              Logout
-            </Link>
-          </div>
+          {userLoggedIN && (
+            <>
+              <div className="me-2">
+                <i
+                  className="pi pi-sign-out"
+                  style={{ fontSize: "2rem", color: "#dc3545" }}
+                ></i>
+              </div>
+              <div className="d-flex flex-column">
+                <span className="text-muted">Ready to leave?</span>
+                <span
+                  className="btnLogout"
+                  data-bs-toggle="modal"
+                  data-bs-target="#logoutModal"
+                  onClick={() => setVisible(false)}
+                >
+                  Logout
+                </span>
+              </div>
+            </>
+          )}
         </div>
       </Sidebar>
-      <div className="row  mx-0">
-        <div className="col-xxl-12 col-xl-12 col-md-12 sticky-header-top">
+
+      <div className="row mx-0">
+        <div className="col-xxl-12 col-xl-12 col-md-12 sticky-header-top px-0">
           <Header setVisible={setVisible} toggleSidebar={toggleSidebar} />
         </div>
         <div className="col-xxl-12 col-xl-12 col-md-12 px-0">
           <Outlet />
+        </div>
+      </div>
+
+      {/* Logout Modal */}
+      <div
+        className="modal fade"
+        id="logoutModal"
+        aria-labelledby="logoutModalLabel"
+        aria-hidden="true"
+      >
+        <div className="modal-dialog modal-dialog-centered">
+          <div className="modal-content">
+            <div className="modal-body">
+              <h3 className="text-center">Are you sure you want to logout?</h3>
+              <hr />
+              <div className="row">
+                <div className="col-xxl-6 col-xl-6 col-md-6">
+                  <button
+                    type="button"
+                    className="btn btn-light w-100"
+                    data-bs-dismiss="modal"
+                  >
+                    Cancel
+                  </button>
+                </div>
+                <div className="col-xxl-6 col-xl-6 col-md-6">
+                  <button
+                    type="button"
+                    className="btn btn-primary w-100"
+                    onClick={handleLogout}
+                    data-bs-dismiss="modal"
+                  >
+                    Logout
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </>
