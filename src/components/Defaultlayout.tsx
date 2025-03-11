@@ -22,9 +22,15 @@ const Defaultlayout = () => {
     { path: "/Students_profile", label: "PROFILE" },
     { path: "/Students_batches", label: "BATCH" },
   ];
-  const TrainerItems = [{ path: "/Trainer_profile", label: "PROFILE" }];
-  const Admission = [{ path: "/Admission_table", label: "INTERVIEWS" }];
 
+  const TrainerItems = [
+    { path: "/Trainer_profile", label: "PROFILE" },
+    { path: "/Trainer_batch", label: "BATCH" }
+  ];
+  const Admission = [
+    { path: "/Admission_table", label: "INTERVIEW" }
+  ];
+        
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
