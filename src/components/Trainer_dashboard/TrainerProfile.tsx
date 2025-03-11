@@ -197,12 +197,12 @@ const TrainerProfile: React.FC = () => {
               </form>
             ) : (
               <div className="table-responsive">
-                <h3 className="fs-3 text-black">
-                  <span className="font-bold text-primary">Name </span>:{" "}
+                <h3 className="fs-3 text-black pt-3">
+                  <span className="font-bold text-primary px-3">Name </span>:{" "}
                   {trainer.first_name} {trainer.last_name}
                 </h3>
                 <p className="text-black fs-3 font-bold mb-3">
-                  <span className="font-bold text-primary">Job Title </span>:{" "}
+                  <span className="font-bold text-primary px-3">Job Title </span>:{" "}
                   {trainer.job_title}
                 </p>
                 <table className="table table-borderless text-dark bg-light p-3 rounded shadow-sm">
