@@ -1697,3 +1697,228 @@ td {
 
 /* table css ends */
 
+/* StudentBatche component start by hasnen */
+
+.batches-containerHSB {
+  padding: 2rem;
+  background-color: #f0f4f8;
+  min-height: 100vh;
+}
+
+.batches-titleHSB {
+  text-align: center;
+  font-size: 2.5rem;
+  color: #2c3e50;
+  margin-bottom: 2rem;
+  font-weight: 600;
+  letter-spacing: -0.05em;
+  position: relative;
+}
+
+.batches-titleHSB::after {
+  content: "";
+  display: block;
+  width: 100px;
+  height: 4px;
+  background: linear-gradient(135deg, #3498db, #2980b9);
+  margin: 0.5rem auto 0;
+  border-radius: 2px;
+}
+
+.batches-gridHSB {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  padding: 0 1rem;
+}
+
+.batch-cardHSB {
+  background-color: #ffffff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: 1px solid #e0e0e0;
+}
+
+.batch-cardHSB:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.batch-card-headerHSB {
+  background-color: #3498db;
+  color: #ffffff;
+  padding: 1.5rem;
+  text-align: center;
+  border-bottom: 2px solid #2980b9;
+}
+
+.batch-card-headerHSB h2 {
+  margin: 0;
+  font-size: 1.75rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.batch-nameHSB {
+  color: #f3f3f4;
+  background: linear-gradient(135deg, #f3f3f4, #f3f3f4);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 600;
+  font-size: 1.75rem;
+  letter-spacing: -0.02em;
+}
+
+.batch-card-bodyHSB {
+  padding: 1.5rem;
+}
+
+.batch-infoHSB {
+  font-size: 1rem;
+  color: #333;
+  line-height: 1.6;
+}
+
+.batch-infoHSB p {
+  margin: 0.75rem 0;
+  font-size: 1.1rem;
+}
+
+.batch-infoHSB strong {
+  color: #2c3e50;
+  font-weight: 600;
+}
+
+
+@media (max-width: 768px) {
+  .batches-gridHSB {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  }
+
+  .batch-card-headerHSB h2 {
+    font-size: 1.5rem;
+  }
+
+  .batch-infoHSB p {
+    font-size: 1rem;
+  }
+
+  .batches-titleHSB {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .batches-titleHSB {
+    font-size: 1.75rem;
+  }
+
+  .batch-card-headerHSB h2 {
+    font-size: 1.25rem;
+  }
+
+  .batch-infoHSB p {
+    font-size: 0.9rem;
+  }
+}
+
+@keyframes cardHover {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-10px);
+  }
+}
+
+.batch-cardHSB:hover {
+  animation: cardHover 0.3s ease forwards;
+}
+
+.batch-card-headerHSB {
+  background: linear-gradient(135deg, #3498db, #2980b9);
+}
+
+.batches-containerHSB::-webkit-scrollbar {
+  width: 8px;
+}
+
+.batches-containerHSB::-webkit-scrollbar-track {
+  background: #f0f4f8;
+}
+
+.batches-containerHSB::-webkit-scrollbar-thumb {
+  background: #3498db;
+  border-radius: 4px;
+}
+
+.batches-containerHSB::-webkit-scrollbar-thumb:hover {
+  background: #2980b9;
+}
+
+/* StudentBatche component End by hasnen */
+
+/* TrainerProfile Start by hasnen */
+
+.custom-tableHTP {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 10px; /* Adds space between rows */
+  margin-top: 20px;
+}
+
+.custom-tableHTP th,
+.custom-tableHTP td {
+  padding: 12px 15px;
+  text-align: left;
+}
+
+.custom-tableHTP th {
+  background-color: #3498db; /* Primary color for headers */
+  color: white;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  width: 150px; /* Adjust this value as needed */
+  max-width: 150px; /* Ensures the header doesn't exceed this width */
+  white-space: nowrap; /* Prevents text from wrapping */
+  overflow: hidden; /* Hides overflow text */
+  text-overflow: ellipsis; /* Adds ellipsis for overflow text */
+}
+
+.custom-tableHTP td {
+  background-color: #f8f9fa; /* Light background for table cells */
+  border: 1px solid #dee2e6; /* Light border for cells */
+}
+
+.custom-tableHTP tr:hover td {
+  background-color: #e9ecef; /* Hover effect for rows */
+}
+
+.custom-tableHTP th:first-child,
+.custom-tableHTP td:first-child {
+  border-top-left-radius: 8px;
+  border-bottom-left-radius: 8px;
+}
+
+.custom-tableHTP th:last-child,
+.custom-tableHTP td:last-child {
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+
+.profile-headerHTP {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #343a40; /* Dark gray for headers */
+}
+
+.profile-subheaderHTP {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #495057; /* Slightly lighter gray for subheaders */
+}
+
+/* TrainerProfile End by hasnen */
