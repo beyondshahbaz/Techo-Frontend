@@ -30,7 +30,7 @@ const AllIntervieweesInformation = () => {
   }
 
   return (
-    <div className="card custom-table-containerH1">
+    <div className="card custom-table-containerH1 m-2 p-2">
       <DataTable
         value={interviewees}
         className="custom-datatableH1"
