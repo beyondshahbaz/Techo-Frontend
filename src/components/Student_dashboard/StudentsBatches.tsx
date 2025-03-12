@@ -53,6 +53,10 @@ const StudentsBatches: React.FC = () => {
     return techIds.map((id) => techMap[id] || "Unknown").join(", ");
   };
 
+  if (loading) {
+    return <div className="text-center mt-5">Loading...</div>;
+  }
+
   return (
     <div className="batches-containerHSB">
       <h1 className="batches-titleHSB">Students Batch</h1>
@@ -60,7 +64,7 @@ const StudentsBatches: React.FC = () => {
         {batches.map((batch, index) => (
           <div key={index} className="batch-cardHSB">
             <div className="batch-card-headerHSB">
-            <h2 className="batch-nameHSB">{batch.batch_name}</h2>
+              <h2 className="batch-nameHSB">{batch.batch_name}</h2>
             </div>
             <div className="batch-card-bodyHSB">
               <div className="batch-infoHSB">
