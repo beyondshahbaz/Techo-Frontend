@@ -17,6 +17,12 @@ import { Students_SponserDashboard } from "../../components/Sponser_Dashboard/St
 import { AuthContext } from "../../contexts/authContext";
 import { RecruitmentDashboard } from "../../components/RecruitmentDashboard/RecruitmentDashboard";
 
+import AdmissionTable from "../../components/Admission_dashboard/Admission_table";
+import InterviewCandidate from "../../components/Admission_dashboard/InterviewCandidate";
+import AllIntervieweesInformation from "../../components/Admission_dashboard/AllIntervieweesInformation";
+import TrainerBatch from "../../components/Trainer_dashboard/TrainerBatch";
+import TrainerBatchDetail from "../../components/Trainer_dashboard/TrainerBatchDetail";
+
 const ALLRoutes: React.FC = () => {
   const routes = all_routes;
   const {userLoggedIN, accessToken} = useContext(AuthContext);
@@ -33,7 +39,13 @@ const ALLRoutes: React.FC = () => {
         <Route path="/Students_profile" element={<StudentsProfile />} />
         <Route path="/Students_batches" element={<StudentsBatches />} />
         <Route path="/Trainer_profile" element={<TrainerProfile />} />
+        <Route path="/Admission_table" element={<AdmissionTable />} /> 
+          <Route path="/interview-candidate/:id" element={<InterviewCandidate />} /> 
+          <Route path="/AllIntervieweesInformation" element={<AllIntervieweesInformation/>} /> 
+          <Route path="/Trainer_batch" element={<TrainerBatch/>} /> 
+          <Route path="/TrainerBatchDetail" element={<TrainerBatchDetail/>} /> 
       </Route>
+
 
       {/* Public Routes */}
       <Route element={<Feature />}>

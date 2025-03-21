@@ -21,6 +21,7 @@ const AuthProvider = ({ children }) => {
   const API_BASE_URL = "https://gl8tx74f-8000.inc1.devtunnels.ms/auth";
   // const API_BASE_URL = "https://p9777pv7-8000.inc1.devtunnels.ms/auth";
 
+
   useEffect(() => {
     const storedAccessToken = localStorage.getItem("accessToken");
     const storedRefreshToken = localStorage.getItem("refreshToken");
@@ -51,6 +52,7 @@ const AuthProvider = ({ children }) => {
         setEmailAlreadyCreated(true);
       }
       console.log('err', error);
+
       throw error;
     } finally {
       setLoading(false);
@@ -74,10 +76,12 @@ const AuthProvider = ({ children }) => {
         localStorage.setItem("userID", response.data.user_id);
 
         if (response.status === 200) {
+          console.log("responseSubrole", responseSubrole);
           setUserLoggedIN(true);
           return response.data;
         }
       } catch (error) {
+
         setLoginError(error.response.data.non_field_errors[0]);
         throw error;
       } finally {
@@ -87,11 +91,14 @@ const AuthProvider = ({ children }) => {
 
   const GetUser = async () => {
     if (!accessToken) {
+
       return;
     }
     setLoading(true);
     try {
       const response = await axios.get(`${API_BASE_URL}/User/${userID}`);
+     
+      });
       if (response.status === 200) {
         setUser(response.data);
       }
@@ -109,6 +116,7 @@ const AuthProvider = ({ children }) => {
       
       if (response.status === 200) {
         console.log("Subroles fetched successfully:", response.data);
+
 
         setNewSubRole(response.data);
       }
@@ -155,6 +163,7 @@ const AuthProvider = ({ children }) => {
     emailAlreadyCreated,
     setLoginError,
     API_BASE_URL
+
   };
 
   return (

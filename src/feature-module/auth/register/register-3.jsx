@@ -19,6 +19,7 @@ const Register3 = () => {
     newSubrole,
     fetchNewSubrole,
     loading,
+
     emailAlreadyCreated,
   } = useContext(AuthContext);
 
@@ -87,6 +88,7 @@ const Register3 = () => {
     try {
       const response = await axios.get(
         `${API_BASE_URL}/idtypes/`
+
       );
       if (response.status === 200) {
         setIdType(response.data);

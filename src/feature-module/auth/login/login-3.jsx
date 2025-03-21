@@ -39,6 +39,7 @@ const Login3 = () => {
     return re.test(String(email).toLowerCase());
   };
 
+
   const validatePassword = (password) => {
     return password >= 8;
   };
@@ -169,12 +170,14 @@ const Login3 = () => {
                     >
                       <span>Sign In</span>
                       {/* <ClipLoader
+
                         color="#fff"
                         size={18}
                         speedMultiplier={0.5}
                         loading={loading}
                         className="loginLoader"
                       /> */}
+
                     </Link>
                     {loginError && <span className="text-danger">{loginError}</span>}
                   </div>

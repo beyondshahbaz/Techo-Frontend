@@ -21,6 +21,7 @@ export const Students_SponserDashboard = () => {
     const matchesBatch =
       selectedBatchTerm === "Filter Batch" ||
       `${batchName} ${batchId}` === selectedBatchTerm;
+
     return matchesName && matchesBatch;
   });
 
@@ -34,6 +35,7 @@ export const Students_SponserDashboard = () => {
   const handleSelectAll = () => {
     setSelectAll((prev) => !prev);
   };
+
 
   return (
     <div className="row studentDashboardContainer mx-0">
@@ -59,6 +61,7 @@ export const Students_SponserDashboard = () => {
             <div className="dropdown w-100 mb-0">
               <button
                 className="btnDropdown dropdown-toggle form-control bg-primary"
+
                 type="button"
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
@@ -70,6 +73,7 @@ export const Students_SponserDashboard = () => {
                   className="dropdown-item c-pointer"
                   onClick={handleSelectAll}
                 >
+
                   {selectAll ? "Deselect All" : "Select All"}
                 </li>
               </ul>
@@ -92,6 +96,7 @@ export const Students_SponserDashboard = () => {
             <div className="dropdown w-100 mb-0">
               <button
                 className="btnDropdown dropdown-toggle form-control"
+
                 type="button"
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
@@ -105,6 +110,7 @@ export const Students_SponserDashboard = () => {
                 >
                   Filter Batch
                 </li>
+
                 {batchName.map((batches, index) => (
                   <li
                     className="dropdown-item c-pointer"
@@ -116,11 +122,13 @@ export const Students_SponserDashboard = () => {
                     }
                   >
                     {batches.batch_name} {batches.batch_id.toString()}
+
                   </li>
                 ))}
               </ul>
             </div>
           </div>
+
         </div>
         <h1 className="sponsornowHeading" id="studentsSection">
           Students
@@ -129,6 +137,7 @@ export const Students_SponserDashboard = () => {
           filterStudent={filterStudent}
           selectAll={selectAll}
           setSelectAll={setSelectAll}
+
         />
       </div>
     </div>
