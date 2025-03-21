@@ -7,19 +7,20 @@ export const Students_SponserDashboard = () => {
   const { usersDataToSponsor, batchName } = useContext(SponsorContext);
   const [searchStudent, setSearchStudent] = useState("");
   const [selectedBatch, setSelectedBatch] = useState("Filter Batch");
-
-  const [selectAll, setSelectAll] = useState(false); 
-
-
-
+  const [selectAll, setSelectAll] = useState(false);
 
   const filterStudent = usersDataToSponsor.filter((student) => {
-    const matchesName = student.student_name
-      .toLowerCase()
-      .includes(searchStudent.toLowerCase());
+    const studentName = student.student_name
+      ? student.student_name.toLowerCase()
+      : "";
+    const searchTerm = searchStudent ? searchStudent.toLowerCase() : "";
+    const batchName = student.batch_name || "";
+    const batchId = student.batch_id ? student.batch_id.toString() : "";
+    const selectedBatchTerm = selectedBatch || "";
+    const matchesName = studentName.includes(searchTerm);
     const matchesBatch =
-      selectedBatch === "Filter Batch" ||
-      student.batch_name.toLowerCase().includes(selectedBatch.toLowerCase());
+      selectedBatchTerm === "Filter Batch" ||
+      `${batchName} ${batchId}` === selectedBatchTerm;
 
     return matchesName && matchesBatch;
   });
@@ -30,10 +31,10 @@ export const Students_SponserDashboard = () => {
       studentsSection.scrollIntoView({ behavior: "smooth" });
     }
   };
-  const handleSelectAll = () => {
-    setSelectAll((prev) => !prev); 
-  };
 
+  const handleSelectAll = () => {
+    setSelectAll((prev) => !prev);
+  };
 
 
   return (
@@ -56,18 +57,23 @@ export const Students_SponserDashboard = () => {
       </div>
       <div className="col-xxl-12 col-xl-12 col-md-12 ">
         <div className="row g-2 sponsorHeader">
-        <div className="col-xxl-2 col-xl-2 col-xl-2">
-            <div class="dropdown w-100 mb-0">
+          <div className="col-xxl-2 col-xl-2 col-xl-2">
+            <div className="dropdown w-100 mb-0">
               <button
-                class="btnDropdown dropdown-toggle form-control bg-primary"
+                className="btnDropdown dropdown-toggle form-control bg-primary"
+
                 type="button"
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
               >
                 Select Students
               </button>
-              <ul class="dropdown-menu w-100">  
-              <li className="dropdown-item c-pointer" onClick={handleSelectAll}>
+              <ul className="dropdown-menu w-100">
+                <li
+                  className="dropdown-item c-pointer"
+                  onClick={handleSelectAll}
+                >
+
                   {selectAll ? "Deselect All" : "Select All"}
                 </li>
               </ul>
@@ -87,23 +93,36 @@ export const Students_SponserDashboard = () => {
             </div>
           </div>
           <div className="col-xxl-3 col-xl-3 col-xl-3  ms-auto">
-            <div class="dropdown w-100 mb-0">
+            <div className="dropdown w-100 mb-0">
               <button
-                class="btnDropdown dropdown-toggle form-control"
+                className="btnDropdown dropdown-toggle form-control"
+
                 type="button"
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
               >
                 {selectedBatch}
               </button>
-              <ul class="dropdown-menu w-100">
+              <ul className="dropdown-menu w-100">
+                <li
+                  className="dropdown-item c-pointer"
+                  onClick={() => setSelectedBatch("Filter Batch")}
+                >
+                  Filter Batch
+                </li>
+
                 {batchName.map((batches, index) => (
                   <li
                     className="dropdown-item c-pointer"
                     key={index}
-                    onClick={() => setSelectedBatch(batches.batch_name)}
+                    onClick={() =>
+                      setSelectedBatch(
+                        `${batches.batch_name} ${batches.batch_id.toString()}`
+                      )
+                    }
                   >
-                    {batches.batch_name}
+                    {batches.batch_name} {batches.batch_id.toString()}
+
                   </li>
                 ))}
               </ul>
@@ -116,8 +135,8 @@ export const Students_SponserDashboard = () => {
         </h1>
         <Student_Card
           filterStudent={filterStudent}
-          selectAll = {selectAll}
-          setSelectAll = {setSelectAll}
+          selectAll={selectAll}
+          setSelectAll={setSelectAll}
 
         />
       </div>
