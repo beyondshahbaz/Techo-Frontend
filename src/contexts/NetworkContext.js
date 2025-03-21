@@ -1,3 +1,4 @@
+import axios from "axios";
 import {
     createContext,
     useContext,
@@ -9,33 +10,28 @@ import {
   
   export const NetworkProvider = ({ children }) => {
     const [isOnline, setOnline] = useState(navigator.onLine);
+
+    const onlineCheck = async () => {
+      try {
+        const response = await axios.get('https://jsonplaceholder.typicode.com/posts');
+        setOnline(response.status === 200);
+      } catch (error) {
+        setOnline(false);
+      }
+    };
   
     useEffect(() => {
-      const handleOnline = () => {
-        console.log("Online event triggered");
-        setOnline(true);
-      };
+      // Set up the interval to check network status every 5 seconds (5000 milliseconds)
+      const interval = setInterval(() => {
+        onlineCheck();
+      }, 3000);
   
-      const handleOffline = () => {
-        console.log("Offline event triggered");
-        setOnline(false);
-      };
+      // Initial check when the component mounts
+      onlineCheck();
   
-      console.log("Adding event listeners for online/offline");
-      window.addEventListener("online", handleOnline);
-      window.addEventListener("offline", handleOffline);
-  
-      // Manually check the network status every 5 seconds
-    //   const interval = setInterval(() => {
-    //     console.log("Manual check: navigator.onLine =", navigator.onLine);
-    //     setOnline(navigator.onLine);
-    //   }, 1000);
-  
+      // Clean up the interval when the component unmounts
       return () => {
-        console.log("Removing event listeners for online/offline");
-        window.removeEventListener("online", handleOnline);
-        window.removeEventListener("offline", handleOffline);
-        // clearInterval(interval); // Clean up the interval
+        clearInterval(interval);
       };
     }, []);
   
