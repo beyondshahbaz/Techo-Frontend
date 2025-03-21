@@ -1,25 +1,24 @@
 import React, { useContext, useState } from "react";
 import { Outlet, useNavigate, Link } from "react-router-dom";
 import Header from "./Header";
-import { faSchool, faChalkboardUser, faTicket } from "@fortawesome/free-solid-svg-icons";
+
+import { faSchool , faChalkboardUser , faTicket } from "@fortawesome/free-solid-svg-icons";
+
+
 import { Sidebar } from "primereact/sidebar";
 import Dropdown from "./Dropdown";
 import { all_routes } from "../feature-module/router/all_routes";
 import { AuthContext } from "../contexts/authContext";
+import { useNetworkCheck } from "../contexts/NetworkContext";
 
 const Defaultlayout = () => {
   const routes = all_routes;
   const navigate = useNavigate();
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const { user, userLoggedIN, LogoutUser } = useContext(AuthContext);
+  const { isOnline } = useNetworkCheck();
   const [visible, setVisible] = useState(false);
 
-  const StudentsItems = [
-    { path: "/Students_profile", label: "PROFILE" },
-    { path: "/Students_batches", label: "BATCH" },
-  ];
-  const TrainerItems = [{ path: "/Trainer_profile", label: "PROFILE" }];
-  const Admission = [{ path: "/Admission_table", label: "INTERVIEWS" }];
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -44,31 +43,31 @@ const Defaultlayout = () => {
             </span>
             <div className="sidebarHeaderContainer">
               <span className="sidebarRole">WELCOME,</span>
-              <span className="sidebarName text-muted">
+              <span className="sidebarName">
                 {userLoggedIN && user && `${user.first_name} ${user.last_name}`}
               </span>
             </div>
           </div>
         }
       >
-        <Dropdown
+        {/* <Dropdown
           key="student-dashboard"
           title="Student Dashboard"
-          items={StudentsItems}
+          // items={StudentsItems}
           icon={faSchool}
         />
         <Dropdown
           key="trainer-dashboard"
           title="Trainer Dashboard"
-          items={TrainerItems}
+          // items={TrainerItems}
           icon={faChalkboardUser}
         />
         <Dropdown
           key="admission-process"
           title="Admission Process"
-          items={Admission}
+          // items={Admission}
           icon={faTicket}
-        />
+        /> */}
 
         <div className="authFuncCont">
           {userLoggedIN && (

@@ -28,6 +28,9 @@ const Login3 = () => {
     if (userLoggedIN && responseSubrole === "TRAINER") {
       navigation("/Trainer_profile");
     }
+    if (userLoggedIN && responseSubrole === "RECRUITER") {
+      navigation("/ReadyToRecruitDashboard");
+    }
   }, [userLoggedIN, responseSubrole, navigation]);
 
 
@@ -165,13 +168,13 @@ const Login3 = () => {
                       onClick={loginUser}
                     >
                       <span>Sign In</span>
-                      <ClipLoader
+                      {/* <ClipLoader
                         color="#fff"
                         size={18}
                         speedMultiplier={0.5}
                         loading={loading}
                         className="loginLoader"
-                      />
+                      /> */}
                     </Link>
                     {loginError && <span className="text-danger">{loginError}</span>}
                   </div>

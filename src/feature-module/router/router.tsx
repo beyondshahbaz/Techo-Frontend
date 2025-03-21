@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Route, Routes } from "react-router";
 import { authRoutes, publicRoutes } from "./router.link";
 import { Student } from "./student_routes";
@@ -14,15 +14,20 @@ import { Landing_page } from "../../components/Landing_Page/Landing_page";
 import StudentsBatches from "../../components/Student_dashboard/StudentsBatches";
 import TrainerProfile from "../../components/Trainer_dashboard/TrainerProfile";
 import { Students_SponserDashboard } from "../../components/Sponser_Dashboard/Students_SponserDashboard";
+import { AuthContext } from "../../contexts/authContext";
+import { RecruitmentDashboard } from "../../components/RecruitmentDashboard/RecruitmentDashboard";
 
 const ALLRoutes: React.FC = () => {
   const routes = all_routes;
+  const {userLoggedIN, accessToken} = useContext(AuthContext);
 
   return (
     <Routes>
       <Route path="/" element={<Defaultlayout />}>
         <Route path="" element={<Landing_page />} />
-        <Route path="/Students_SponserDashboard" element={<Students_SponserDashboard />} />
+        {userLoggedIN &&  accessToken &&  <Route path="/Students_SponserDashboard" element={<Students_SponserDashboard />} />}
+        {userLoggedIN &&  accessToken && <Route path="/ReadyToRecruitDashboard" element={<RecruitmentDashboard/>} />}
+        
         <Route path={routes.login3} element={<Login />} />
         <Route path={routes.register3} element={<Register3 />} />
         <Route path="/Students_profile" element={<StudentsProfile />} />

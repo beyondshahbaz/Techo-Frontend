@@ -22,20 +22,22 @@ import "primeicons/primeicons.css"; // PrimeIcons
 import "primeflex/primeflex.css"; // PrimeFlex
 import "./index.css";
 import { AppProvider } from "./contexts/AllProvider";
-
-
+import { NetworkProvider } from "./contexts/NetworkContext";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
+
 root.render(
   <React.StrictMode>
     <Provider store={store}>
-      <AppProvider>
-        <BrowserRouter basename={base_path}>
-          <ALLRoutes />
-        </BrowserRouter>
-      </AppProvider>
+      <NetworkProvider>
+        <AppProvider>
+          <BrowserRouter basename={base_path}>
+            <ALLRoutes />
+          </BrowserRouter>
+        </AppProvider>
+      </NetworkProvider>
     </Provider>
   </React.StrictMode>
 );
