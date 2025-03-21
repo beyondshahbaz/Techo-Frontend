@@ -61,7 +61,7 @@ const Defaultlayout = () => {
             </span>
             <div className="sidebarHeaderContainer">
               <span className="sidebarRole">WELCOME,</span>
-              <span className="sidebarName">
+              <span className="sidebarName"></span>
               <span className="sidebarName text-muted">
                 {userLoggedIN && user && `${user.first_name} ${user.last_name}`}
               </span>
