@@ -7,7 +7,7 @@ import ClipLoader from "react-spinners/ClipLoader";
 
 const Login3 = () => {
   const routes = all_routes;
-  const { LoginUser, loading, loginError, responseSubrole, userLoggedIN, setLoginError} = useContext(AuthContext);
+  const { LoginUser, loading, loginError, responseSubrole, userLoggedIN, setLoginError , role } = useContext(AuthContext);
 
   const navigation = useNavigate();
   const [email, setEmail] = useState("");
@@ -28,12 +28,16 @@ const Login3 = () => {
     if (userLoggedIN && responseSubrole === "TRAINER") {
       navigation("/Trainer_profile");
     }
+    if (userLoggedIN && role === "ADMIN") {
+      navigation("/AssessmentTable");
+    }
     if (userLoggedIN && responseSubrole === "RECRUITER") {
       navigation("/ReadyToRecruitDashboard");
     }
-  }, [userLoggedIN, responseSubrole, navigation]);
+    
+  }, [userLoggedIN, responseSubrole,role , navigation]);
 
-
+  console.log(role)
   const validateEmail = (email) => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return re.test(String(email).toLowerCase());

@@ -3,7 +3,7 @@ import { Outlet, useNavigate, Link } from "react-router-dom";
 import Header from "./Header";
 
 
-import { faSchool , faChalkboardUser , faTicket } from "@fortawesome/free-solid-svg-icons";
+import { faSchool , faChalkboardUser , faTicket , faCubes} from "@fortawesome/free-solid-svg-icons";
 
 
 import { Sidebar } from "primereact/sidebar";
@@ -33,6 +33,10 @@ const Defaultlayout = () => {
   ];
   const Admission = [
     { path: "/Admission_table", label: "INTERVIEW" }
+  ];
+
+  const Assessment = [
+    { path: "/AssessmentTable", label: "ASSESSMENT CANDIDATE" }
   ];
         
   const toggleSidebar = () => {
@@ -66,25 +70,31 @@ const Defaultlayout = () => {
           </div>
         }
       >
-        {/* <Dropdown
         <Dropdown
           key="student-dashboard"
           title="Student Dashboard"
-          // items={StudentsItems}
+          items={StudentsItems}
           icon={faSchool}
         />
         <Dropdown
           key="trainer-dashboard"
           title="Trainer Dashboard"
-          // items={TrainerItems}
+          items={TrainerItems}
           icon={faChalkboardUser}
         />
         <Dropdown
           key="admission-process"
           title="Admission Process"
-          // items={Admission}
+          items={Admission}
           icon={faTicket}
-        /> */}
+        />
+        <Dropdown
+          key="assessment-process"
+          title="Assessment Process"
+          items={Assessment}
+          icon={faCubes}
+        />
+       
 
         <div className="authFuncCont">
           {userLoggedIN && (

@@ -1291,6 +1291,37 @@ input[type="file"]::file-selector-button {
   font-weight: 600;
 }
 
+/* trainerBatchDetail checked box designing */
+.checked-designH .p-checkbox-box {
+  background-color: #6a11cb; /* Green background for checked state */
+  border-color: #6a11cb; /* Green border for checked state */
+}
+
+.checked-designH .p-checkbox-icon {
+  color: white; /* White checkmark */
+}
+
+/* Align checkbox column to the end */
+.align-end-columnH {
+  text-align: center;
+}
+/* trainerBatchDetail Submit button designing */
+/* Submit button styling */
+.submit-buttonH {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #6a11cb;
+  color: white;
+  border: none;
+  border-radius: 15px;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.submit-buttonH:hover {
+  background-color: #36046c;
+}
+
 /* TrainerBatchDetail End by hasnen */
 
 /* LOGIN SCREEN STARTS*/

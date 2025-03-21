@@ -22,6 +22,10 @@ import InterviewCandidate from "../../components/Admission_dashboard/InterviewCa
 import AllIntervieweesInformation from "../../components/Admission_dashboard/AllIntervieweesInformation";
 import TrainerBatch from "../../components/Trainer_dashboard/TrainerBatch";
 import TrainerBatchDetail from "../../components/Trainer_dashboard/TrainerBatchDetail";
+import { Students_SponserDashboard } from "../../components/Sponser_Dashboard/Students_SponserDashboard";
+import AssessmentTable from "../../components/Assessment_dashboard/AssessmentTable";
+import AssessmentCandidte from "../../components/Assessment_dashboard/AssessmentCandidte";
+
 
 const ALLRoutes: React.FC = () => {
   const routes = all_routes;
@@ -43,7 +47,9 @@ const ALLRoutes: React.FC = () => {
           <Route path="/interview-candidate/:id" element={<InterviewCandidate />} /> 
           <Route path="/AllIntervieweesInformation" element={<AllIntervieweesInformation/>} /> 
           <Route path="/Trainer_batch" element={<TrainerBatch/>} /> 
-          <Route path="/TrainerBatchDetail" element={<TrainerBatchDetail/>} /> 
+          <Route path="/TrainerBatchDetail/:batchId" element={<TrainerBatchDetail />} />
+          <Route path="/AssessmentTable" element={<AssessmentTable />} />
+          <Route path="/AssessmentCandidte/:id" element={<AssessmentCandidte />} />
       </Route>
 
 
