@@ -22,9 +22,6 @@ const Defaultlayout = () => {
   const [visible, setVisible] = useState(false);
 
 
-
-  const [visible, setVisible] = useState(false);
-
   const StudentsItems = [
     { path: "/Students_profile", label: "PROFILE" },
     { path: "/Students_batches", label: "BATCH" },

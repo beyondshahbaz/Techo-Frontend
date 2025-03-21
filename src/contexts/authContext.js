@@ -98,7 +98,7 @@ const AuthProvider = ({ children }) => {
     try {
       const response = await axios.get(`${API_BASE_URL}/User/${userID}`);
      
-      });
+      
       if (response.status === 200) {
         setUser(response.data);
       }

@@ -185,3 +185,4 @@ export const Student_Card = ({ filterStudent, selectAll, setSelectAll }) => {
         </tfoot>
       </table>
     </div>
+  )}
