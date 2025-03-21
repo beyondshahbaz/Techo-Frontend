@@ -264,6 +264,7 @@
 .sidebarName {
   font-size: 16px !important;
   font-weight: 700 !important;
+  color: #fff;
 }
 
 .sidebarRole {
@@ -446,6 +447,24 @@
   .btn-credentials {
     margin: 0px 3px !important;
   }
+}
+@media screen and (max-width: 650px) {
+  
+  .sponserImgDashboard{
+    display: none;
+  }
+  
+  .studentDashboardContainer h1{
+    font-size: 30px !important;
+  }
+  .studentDashboardContainer p{
+    font-size: 16px !important;
+  }
+
+  .sponserButton{
+    padding: 10px !important;
+  }
+
 }
 
 /* Arsalan Responsive CSS Ends */
@@ -1723,6 +1742,30 @@ td {
   font-weight: 500;
 }
 
+
+.maxhTable{
+  max-height: 400px;
+}
+
+.fixedTableBottom{
+  position: sticky;
+  bottom: -1px;
+  background-color: white;
+  border-top: 1px solid black;
+
+}
+
+/* table css ends */
+
+
+/* Recruiter Page Starts */
+
+.fieldDisabled{
+  background-color: #eeeeee !important;
+
+
+}
+/* Recruiter Page Ends */
 
 
 

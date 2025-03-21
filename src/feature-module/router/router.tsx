@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Route, Routes } from "react-router";
 import { authRoutes, publicRoutes } from "./router.link";
 import { Student } from "./student_routes";
@@ -13,6 +13,10 @@ import StudentsProfile from "../../components/Student_dashboard/StudentsProfile"
 import { Landing_page } from "../../components/Landing_Page/Landing_page";
 import StudentsBatches from "../../components/Student_dashboard/StudentsBatches";
 import TrainerProfile from "../../components/Trainer_dashboard/TrainerProfile";
+import { Students_SponserDashboard } from "../../components/Sponser_Dashboard/Students_SponserDashboard";
+import { AuthContext } from "../../contexts/authContext";
+import { RecruitmentDashboard } from "../../components/RecruitmentDashboard/RecruitmentDashboard";
+
 import AdmissionTable from "../../components/Admission_dashboard/Admission_table";
 import InterviewCandidate from "../../components/Admission_dashboard/InterviewCandidate";
 import AllIntervieweesInformation from "../../components/Admission_dashboard/AllIntervieweesInformation";
@@ -22,30 +26,32 @@ import { Students_SponserDashboard } from "../../components/Sponser_Dashboard/St
 import AssessmentTable from "../../components/Assessment_dashboard/AssessmentTable";
 import AssessmentCandidte from "../../components/Assessment_dashboard/AssessmentCandidte";
 
+
 const ALLRoutes: React.FC = () => {
   const routes = all_routes;
+  const {userLoggedIN, accessToken} = useContext(AuthContext);
 
   return (
-
-
-      <Routes>
-        <Route path="/" element={<Defaultlayout />}>  
-          <Route path="" element={<Landing_page />} /> 
-          <Route path="/Students_SponserDashboard" element={<Students_SponserDashboard />} />
-          <Route path={routes.login3} element={<Login />} /> 
-          <Route path={routes.register3} element={<Register3 />} /> 
-          <Route path="/Students_profile" element={<StudentsProfile />} /> 
-          <Route path="/Students_batches" element={<StudentsBatches />} /> 
-          <Route path="/Trainer_profile" element={<TrainerProfile />} /> 
-          <Route path="/Admission_table" element={<AdmissionTable />} /> 
+    <Routes>
+      <Route path="/" element={<Defaultlayout />}>
+        <Route path="" element={<Landing_page />} />
+        {userLoggedIN &&  accessToken &&  <Route path="/Students_SponserDashboard" element={<Students_SponserDashboard />} />}
+        {userLoggedIN &&  accessToken && <Route path="/ReadyToRecruitDashboard" element={<RecruitmentDashboard/>} />}
+        
+        <Route path={routes.login3} element={<Login />} />
+        <Route path={routes.register3} element={<Register3 />} />
+        <Route path="/Students_profile" element={<StudentsProfile />} />
+        <Route path="/Students_batches" element={<StudentsBatches />} />
+        <Route path="/Trainer_profile" element={<TrainerProfile />} />
+        <Route path="/Admission_table" element={<AdmissionTable />} /> 
           <Route path="/interview-candidate/:id" element={<InterviewCandidate />} /> 
           <Route path="/AllIntervieweesInformation" element={<AllIntervieweesInformation/>} /> 
           <Route path="/Trainer_batch" element={<TrainerBatch/>} /> 
           <Route path="/TrainerBatchDetail/:batchId" element={<TrainerBatchDetail />} />
           <Route path="/AssessmentTable" element={<AssessmentTable />} />
           <Route path="/AssessmentCandidte/:id" element={<AssessmentCandidte />} />
+      </Route>
 
-        </Route>
 
       {/* Public Routes */}
       <Route element={<Feature />}>

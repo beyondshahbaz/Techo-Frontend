@@ -31,6 +31,10 @@ const Login3 = () => {
     if (userLoggedIN && role === "ADMIN") {
       navigation("/AssessmentTable");
     }
+    if (userLoggedIN && responseSubrole === "RECRUITER") {
+      navigation("/ReadyToRecruitDashboard");
+    }
+    
   }, [userLoggedIN, responseSubrole,role , navigation]);
 
   console.log(role)
@@ -38,6 +42,7 @@ const Login3 = () => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return re.test(String(email).toLowerCase());
   };
+
 
   const validatePassword = (password) => {
     return password >= 8;
@@ -168,13 +173,15 @@ const Login3 = () => {
                       onClick={loginUser}
                     >
                       <span>Sign In</span>
-                      <ClipLoader
+                      {/* <ClipLoader
+
                         color="#fff"
                         size={18}
                         speedMultiplier={0.5}
                         loading={loading}
                         className="loginLoader"
-                      />
+                      /> */}
+
                     </Link>
                     {loginError && <span className="text-danger">{loginError}</span>}
                   </div>

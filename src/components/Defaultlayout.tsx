@@ -10,13 +10,17 @@ import { Sidebar } from "primereact/sidebar";
 import Dropdown from "./Dropdown";
 import { all_routes } from "../feature-module/router/all_routes";
 import { AuthContext } from "../contexts/authContext";
+import { useNetworkCheck } from "../contexts/NetworkContext";
+
 
 const Defaultlayout = () => {
   const routes = all_routes;
   const navigate = useNavigate();
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const { user, userLoggedIN, LogoutUser } = useContext(AuthContext);
+  const { isOnline } = useNetworkCheck();
   const [visible, setVisible] = useState(false);
+
 
   const StudentsItems = [
     { path: "/Students_profile", label: "PROFILE" },
@@ -58,6 +62,7 @@ const Defaultlayout = () => {
             </span>
             <div className="sidebarHeaderContainer">
               <span className="sidebarRole">WELCOME,</span>
+              <span className="sidebarName"></span>
               <span className="sidebarName text-muted">
                 {userLoggedIN && user && `${user.first_name} ${user.last_name}`}
               </span>
@@ -89,6 +94,7 @@ const Defaultlayout = () => {
           items={Assessment}
           icon={faCubes}
         />
+       
 
         <div className="authFuncCont">
           {userLoggedIN && (

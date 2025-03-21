@@ -9,6 +9,7 @@ import { Tooltip } from "primereact/tooltip";
 import { Badge } from "primereact/badge";
 
 const Register3 = () => {
+  const {API_BASE_URL} = useContext(AuthContext);
   const routes = all_routes;
   const navigate = useNavigate();
 
@@ -18,7 +19,7 @@ const Register3 = () => {
     newSubrole,
     fetchNewSubrole,
     loading,
-    userCreatedSuccessfully,
+
     emailAlreadyCreated,
   } = useContext(AuthContext);
 
@@ -86,7 +87,8 @@ const Register3 = () => {
   const fetchIdType = async () => {
     try {
       const response = await axios.get(
-        "https://techie01.pythonanywhere.com/auth/idtypes/"
+        `${API_BASE_URL}/idtypes/`
+
       );
       if (response.status === 200) {
         setIdType(response.data);
@@ -99,6 +101,7 @@ const Register3 = () => {
   useEffect(() => {
     fetchNewSubrole();
     fetchIdType();
+    
   }, []);
   const onRegisterUser = async (e) => {
     e.preventDefault();

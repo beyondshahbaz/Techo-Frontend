@@ -18,7 +18,10 @@ const AuthProvider = ({ children }) => {
 
   const [loginError, setLoginError] = useState("");
 
+  // const API_BASE_URL = "https://techie01.pythonanywhere.com/auth";
   const API_BASE_URL = "https://gl8tx74f-8000.inc1.devtunnels.ms/auth";
+  // const API_BASE_URL = "https://p9777pv7-8000.inc1.devtunnels.ms/auth";
+
 
   useEffect(() => {
     const storedAccessToken = localStorage.getItem("accessToken");
@@ -51,6 +54,8 @@ const AuthProvider = ({ children }) => {
       if(error.response?.data?.email[0] == 'user with this email already exists.'){
         setEmailAlreadyCreated(true);
       }
+      console.log('err', error);
+
       throw error;
     } finally {
       setLoading(false);
@@ -81,7 +86,7 @@ const AuthProvider = ({ children }) => {
           return response.data;
         }
       } catch (error) {
-        console.log("error", error.response.data.non_field_errors[0]);
+
         setLoginError(error.response.data.non_field_errors[0]);
         throw error;
       } finally {
@@ -91,14 +96,14 @@ const AuthProvider = ({ children }) => {
 
   const GetUser = async () => {
     if (!accessToken) {
-      console.log("No access token available.");
+
       return;
     }
     setLoading(true);
     try {
-      const response = await axios.get(`${API_BASE_URL}/User/${userID}`, {
-        headers: { Authorization: `Bearer ${accessToken}` },
-      });
+      const response = await axios.get(`${API_BASE_URL}/User/${userID}`);
+     
+      
       if (response.status === 200) {
         setUser(response.data);
       }
@@ -112,8 +117,12 @@ const AuthProvider = ({ children }) => {
   const fetchNewSubrole = async () => {
     setLoading(true);
     try {
-      const response = await axios.get(`${API_BASE_URL}/SubRole`);
+      const response = await axios.get(`${API_BASE_URL}/SubRole/`);
+      
       if (response.status === 200) {
+        console.log("Subroles fetched successfully:", response.data);
+
+
         setNewSubRole(response.data);
       }
     } catch (error) {
@@ -159,7 +168,9 @@ const AuthProvider = ({ children }) => {
     userCreatedSuccessfully,
     responseSubrole,
     emailAlreadyCreated,
-    setLoginError
+    setLoginError,
+    API_BASE_URL
+
   };
 
   return (
