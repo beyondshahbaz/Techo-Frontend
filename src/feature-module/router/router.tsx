@@ -22,7 +22,6 @@ import InterviewCandidate from "../../components/Admission_dashboard/InterviewCa
 import AllIntervieweesInformation from "../../components/Admission_dashboard/AllIntervieweesInformation";
 import TrainerBatch from "../../components/Trainer_dashboard/TrainerBatch";
 import TrainerBatchDetail from "../../components/Trainer_dashboard/TrainerBatchDetail";
-import { Students_SponserDashboard } from "../../components/Sponser_Dashboard/Students_SponserDashboard";
 import AssessmentTable from "../../components/Assessment_dashboard/AssessmentTable";
 import AssessmentCandidte from "../../components/Assessment_dashboard/AssessmentCandidte";
 
