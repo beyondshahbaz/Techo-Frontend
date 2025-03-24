@@ -237,8 +237,8 @@ const Register3 = () => {
             idType: selectedIdType,
             identity,
             subrole: 3,
-            proposerEmail,
-            proposerNumber,
+            proposer_email: proposerEmail,
+            proposer_mobile_no: proposerNumber,
           };
         } else if (newSelectedRole === "ENABLER") {
           userData = {
