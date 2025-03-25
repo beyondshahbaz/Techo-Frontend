@@ -19,6 +19,7 @@ const AuthProvider = ({ children }) => {
   const [loginError, setLoginError] = useState("");
 
   // const API_BASE_URL = "https://techie01.pythonanywhere.com/auth";
+
   const API_BASE_URL = "https://gl8tx74f-8000.inc1.devtunnels.ms/auth";
   
   // const API_BASE_URL = "https://p9777pv7-8000.inc1.devtunnels.ms/auth";
@@ -43,19 +44,37 @@ const AuthProvider = ({ children }) => {
     setLoading(true);
     setUserCreatedSuccessfully(false);
     try {
-      const response = await axios.post(`${API_BASE_URL}/register/`, userData, {
-        headers: { "Content-Type": "application/json" },
-      });
+      // Determine if we're sending FormData (file upload) or JSON
+      const isFormData = userData instanceof FormData;
+      
+      const config = {
+        headers: {
+          'Content-Type': isFormData ? 'multipart/form-data' : 'application/json'
+        }
+      };
+  
+      const response = await axios.post(
+        `${API_BASE_URL}/register/`, 
+        userData, 
+        config
+      );
+  
       if (response.status === 200) {
         setUserCreatedSuccessfully(true); 
         window.alert("User Created Successfully");
       }
       return response.data;
     } catch (error) {
-      if(error.response?.data?.email[0] == 'user with this email already exists.'){
+      if(error.response?.data?.email?.[0] === 'user with this email already exists.'){
         setEmailAlreadyCreated(true);
       }
-      console.log('err', error);
+      console.log('Registration error:', error);
+      
+      // Handle file upload specific errors
+      if (error.response?.status === 400 && error.response?.data?.user_profile) {
+        throw new Error(error.response.data.user_profile.join(', '));
+      }
+      
 
       throw error;
     } finally {
@@ -82,7 +101,8 @@ const AuthProvider = ({ children }) => {
         localStorage.setItem("role", response.data.role);
 
         if (response.status === 200) {
-          console.log("responseSubrole", responseSubrole);
+          console.log('data', response.data);
+
           setUserLoggedIN(true);
           return response.data;
         }

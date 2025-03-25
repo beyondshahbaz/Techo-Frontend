@@ -9,7 +9,7 @@ import { Tooltip } from "primereact/tooltip";
 import { Badge } from "primereact/badge";
 
 const Register3 = () => {
-  const {API_BASE_URL} = useContext(AuthContext);
+  const { API_BASE_URL } = useContext(AuthContext);
   const routes = all_routes;
   const navigate = useNavigate();
 
@@ -23,7 +23,7 @@ const Register3 = () => {
     emailAlreadyCreated,
   } = useContext(AuthContext);
 
-  // STATE MANAGEMENT STARTS
+  // STATE MANAGEMENT
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -31,13 +31,17 @@ const Register3 = () => {
   const [newSelectedRole, setNewSelectedRole] = useState("ENABLER");
   const [selectedSubrole, setSelectedSubrole] = useState("Choose Your Subrole");
   const [mobileNumber, setMobileNumber] = useState("");
-  const [profileImage, setProfileImage] = useState("");
+  const [profileImage, setProfileImage] = useState(null);
   const [idTypes, setIdType] = useState([]);
   const [identity, setIdentity] = useState("");
   const [proposerEmail, setProposerEmail] = useState("");
   const [proposerNumber, setProposerNumber] = useState("");
   const [selectedIdType, setSelectedIdType] = useState("Select an ID");
+  const [imagePreview, setImagePreview] = useState(null);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [isUploading, setIsUploading] = useState(false);
 
+  // Error states
   const [errorFirstName, setErrorFirstName] = useState("");
   const [errorLastName, setErrorLastName] = useState("");
   const [errorEmail, setErrorEmail] = useState("");
@@ -50,12 +54,19 @@ const Register3 = () => {
   const [idNumberError, setIdNumberError] = useState("");
   const [proposerEmailError, setProposerEmailError] = useState("");
   const [proposerMobileError, setproposerMobileError] = useState("");
-
   const [emailExistsError, setEmailExistsError] = useState("");
+
   const [passwordVisibility, setPasswordVisibility] = useState({
     password: false,
   });
 
+  const ID_TYPE_MAPPING = {
+    'PASSPORT': 1,
+    'VOTER_ID': 2,
+    'ADHAARCARD': 3
+  };
+
+  // Validation functions (keep your existing ones)
   const validatePassword = (password) => {
     const strongPasswordRegex =
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
@@ -84,27 +95,57 @@ const Register3 = () => {
     setErrorSelectedRole("");
   };
 
+  // Fetch ID types from API (keep your existing one)
   const fetchIdType = async () => {
     try {
-      const response = await axios.get(
-        `${API_BASE_URL}/idtypes/`
+      const response = await axios.get(`${API_BASE_URL}/idtypes/`);
 
-      );
       if (response.status === 200) {
         setIdType(response.data);
       }
     } catch (error) {
-      console.log(error);
+      console.error("Error fetching ID types:", error);
     }
+  };
+
+  // Enhanced image upload handler
+  const handleImageUpload = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Validate file type
+    const validTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+    if (!validTypes.includes(file.type)) {
+      setUserProfileError("Only JPG, JPEG, or PNG files are allowed");
+      return;
+    }
+
+    // Validate file size (max 2MB)
+    if (file.size > 2 * 1024 * 1024) {
+      setUserProfileError("Image size should be less than 2MB");
+      return;
+    }
+
+    // Create preview
+    const reader = new FileReader();
+    reader.onload = () => {
+      setImagePreview(reader.result);
+    };
+    reader.readAsDataURL(file);
+
+    setProfileImage(file);
+    setUserProfileError("");
   };
 
   useEffect(() => {
     fetchNewSubrole();
     fetchIdType();
-    
   }, []);
+
   const onRegisterUser = async (e) => {
     e.preventDefault();
+    
+    // Reset all errors
     setErrorFirstName("");
     setErrorLastName("");
     setErrorEmail("");
@@ -117,20 +158,23 @@ const Register3 = () => {
     setIdNumberError("");
     setProposerEmailError("");
     setproposerMobileError("");
-    setEmailExistsError(""); // Reset email existence error
+    setEmailExistsError("");
+    setUploadProgress(0);
+  
     let isValid = true;
   
-    if (!firstName) {
+    // Validation checks
+    if (!firstName.trim()) {
       setErrorFirstName("First Name is Required");
       isValid = false;
     }
   
-    if (!lastName) {
+    if (!lastName.trim()) {
       setErrorLastName("Last Name is Required");
       isValid = false;
     }
   
-    if (!email) {
+    if (!email.trim()) {
       setErrorEmail("Email is Required");
       isValid = false;
     } else if (!validateEmail(email)) {
@@ -174,11 +218,11 @@ const Register3 = () => {
         setSelectedIdTypeError("Id Type is Required");
         isValid = false;
       }
-      if (!identity) {
+      if (!identity.trim()) {
         setIdNumberError("ID Number is Required");
         isValid = false;
       }
-      if (!proposerEmail) {
+      if (!proposerEmail.trim()) {
         setProposerEmailError("Proposer Email is Required");
         isValid = false;
       } else if (!validateEmail(proposerEmail)) {
@@ -194,40 +238,47 @@ const Register3 = () => {
       }
     }
   
-    if (isValid) {
-      let userData = {
-        first_name: firstName,
-        last_name: lastName,
-        email,
-        password,
-      };
+    if (!isValid) return;
   
-      const subroleMapping = {
-        APPLICANT: 1,
-        INTERVIEWEE: 2,
-        STUDENT: 3,
-        SPONSOR: 4,
-        TRAINER: 5,
-        RECRUITER: 6,
-        "GUEST LECTURER": 7,
-      };
+    setIsUploading(true);
   
-      const convertToBase64 = (file) => {
-        return new Promise((resolve, reject) => {
-          const reader = new FileReader();
-          reader.readAsDataURL(file);
-          reader.onload = () => resolve(reader.result);
-          reader.onerror = (error) => reject(error);
-        });
-      };
-  
-      try {
-        let base64Image = null;
-  
+    try {
+      const formData = new FormData();
+      
+      // Add all regular fields
+      formData.append('first_name', firstName.trim());
+      formData.append('last_name', lastName.trim());
+      formData.append('email', email.trim());
+      formData.append('password', password);
+      
+      if (newSelectedRole === "LEARNER") {
+        formData.append('role', '2');
+        formData.append('mobile_no', mobileNumber);
+        formData.append('id_type', ID_TYPE_MAPPING[selectedIdType.toUpperCase()]);
+        formData.append('identity', identity.trim());
+        formData.append('subrole', 1);
+        formData.append('proposer_email', proposerEmail.trim());
+        formData.append('proposer_mobile_no', proposerNumber);
+        
+        // Append the file directly with proper filename
         if (profileImage) {
-          base64Image = await convertToBase64(profileImage);
+          formData.append('user_profile', profileImage, profileImage.name);
         }
+      } else if (newSelectedRole === "ENABLER") {
+        formData.append('role', '3');
+        const subroleMapping = {
+          APPLICANT: 1,
+          INTERVIEWEE: 2,
+          STUDENT: 3,
+          SPONSOR: 4,
+          TRAINER: 5,
+          RECRUITER: 6,
+          "GUEST LECTURER": 7,
+        };
+        formData.append('subrole', subroleMapping[selectedSubrole] || '');
+      }
   
+
         if (newSelectedRole === "LEARNER") {
           userData = {
             ...userData,
@@ -248,13 +299,44 @@ const Register3 = () => {
           };
         }
   
-        await RegisterUser(userData);
-        console.log(userData);
-      } catch (error) {
-        if (emailAlreadyCreated) {
-          setEmailExistsError("This email is already registered. Please use a different email.");
+      // Call RegisterUser with progress tracking
+      await RegisterUser(formData, (progressEvent) => {
+        if (progressEvent.lengthComputable) {
+          const percentCompleted = Math.round(
+            (progressEvent.loaded * 100) / progressEvent.total
+          );
+          setUploadProgress(percentCompleted);
         }
+      });
+      
+    } catch (error) {
+      console.error("Registration error:", error);
+      
+      if (emailAlreadyCreated) {
+        setEmailExistsError("This email is already registered. Please use a different email.");
       }
+      
+      // Handle file upload specific errors
+      if (error.response?.data?.user_profile) {
+        setUserProfileError(error.response.data.user_profile.join(', '));
+      } else if (error.message.includes('user_profile')) {
+        setUserProfileError(error.message);
+      }
+      
+      // Handle other API errors
+      if (error.response?.data) {
+        const errors = error.response.data;
+        
+        if (errors.email) {
+          setErrorEmail(errors.email.join(', '));
+        }
+        if (errors.mobileNumber) {
+          setMobileNumberError(errors.mobileNumber.join(', '));
+        }
+        // Add more field-specific error handling as needed
+      }
+    } finally {
+      setIsUploading(false);
     }
   };
   return (
@@ -318,7 +400,7 @@ const Register3 = () => {
                 onChange={(e) => {
                   setEmail(e.target.value);
                   setErrorEmail("");
-                  setEmailExistsError(""); 
+                  setEmailExistsError("");
                 }}
                 className="mb-0"
               />
@@ -480,7 +562,27 @@ const Register3 = () => {
               )}
             </div>
 
-            <div className="col-xxl-4 col-xl-4 col-md-4  mb-3">
+            {/* <div className="col-xxl-4 col-xl-4 col-md-4  mb-3">
+                <label className="form-label" htmlFor="user_profile">
+                  User Profile Image <span className="text-danger">*</span>
+                </label>
+                <input
+                  id="user_profile"
+                  type="file"
+                  name="user_profile"
+                  className="form-control mb-0"
+                  accept="image/*"
+                  onChange={(e) => {
+                    setProfileImage(e.target.files?.[0] || null);
+                    setUserProfileError("");
+                  }}
+                />
+                {userProfileError && (
+                  <span className="text-danger">{userProfileError}</span>
+                )}
+              </div> */}
+
+            <div className="col-xxl-4 col-xl-4 col-md-4 mb-3">
               <label className="form-label" htmlFor="user_profile">
                 User Profile Image <span className="text-danger">*</span>
               </label>
@@ -490,10 +592,7 @@ const Register3 = () => {
                 name="user_profile"
                 className="form-control mb-0"
                 accept="image/*"
-                onChange={(e) => {
-                  setProfileImage(e.target.files?.[0] || null);
-                  setUserProfileError("");
-                }}
+                onChange={handleImageUpload}
               />
               {userProfileError && (
                 <span className="text-danger">{userProfileError}</span>
@@ -511,7 +610,7 @@ const Register3 = () => {
                   data-bs-toggle="dropdown"
                   aria-expanded="false"
                 >
-                  {selectedIdType}
+                  {selectedIdType || "Adhaarcard"}
                 </button>
                 <ul className="dropdown-menu w-100">
                   {idTypes.length > 0 ? (
@@ -622,12 +721,12 @@ const Register3 = () => {
                 >
                   Sign Up{" "}
                   {/* <ClipLoader
-                    color="#fff"
-                    size={18}
-                    speedMultiplier={0.5}
-                    loading={loading}
-                    className="loginLoader"
-                  /> */}
+                      color="#fff"
+                      size={18}
+                      speedMultiplier={0.5}
+                      loading={loading}
+                      className="loginLoader"
+                    /> */}
                 </button>
               </div>
               <div className="text-center">
@@ -642,53 +741,53 @@ const Register3 = () => {
           </div>
           {/* Successfully user created modal */}
           {/* {userCreatedSuccessfully && (
-            <div
-              className="modal fade"
-              id="registerModal"
-              aria-labelledby="registerModalLabel"
-              aria-hidden="true"
-            >
-              <div className="modal-dialog modal-dialog-centered">
-                <div className="modal-content">
-                  <div className="modal-header">
-                    <h3 className="modal-title text-center w-100">
-                      Congratulations!{" "}
-                      <i className="pi pi-check-circle text-success ms-2"></i>
-                    </h3>
-                    <button
-                      type="button"
-                      className="btn-close"
-                      data-bs-dismiss="modal"
-                      aria-label="Close"
-                    ></button>
-                  </div>
-                  <div className="modal-body text-center">
-                    <p className="lead mb-4">
-                      Your account has been successfully created. You can now
-                      log in to access your account.
-                    </p>
-                    <div className="d-flex justify-content-center gap-3">
+              <div
+                className="modal fade"
+                id="registerModal"
+                aria-labelledby="registerModalLabel"
+                aria-hidden="true"
+              >
+                <div className="modal-dialog modal-dialog-centered">
+                  <div className="modal-content">
+                    <div className="modal-header">
+                      <h3 className="modal-title text-center w-100">
+                        Congratulations!{" "}
+                        <i className="pi pi-check-circle text-success ms-2"></i>
+                      </h3>
                       <button
                         type="button"
-                        className="btn btn-light w-50"
+                        className="btn-close"
                         data-bs-dismiss="modal"
-                      >
-                        Close
-                      </button>
-                      <Link
-                        type="button"
-                        className="btn btn-primary w-50"
-                        onClick={navigate(routes.login3)}
-                        data-bs-dismiss="modal"
-                      >
-                        Go to Login
-                      </Link>
+                        aria-label="Close"
+                      ></button>
+                    </div>
+                    <div className="modal-body text-center">
+                      <p className="lead mb-4">
+                        Your account has been successfully created. You can now
+                        log in to access your account.
+                      </p>
+                      <div className="d-flex justify-content-center gap-3">
+                        <button
+                          type="button"
+                          className="btn btn-light w-50"
+                          data-bs-dismiss="modal"
+                        >
+                          Close
+                        </button>
+                        <Link
+                          type="button"
+                          className="btn btn-primary w-50"
+                          onClick={navigate(routes.login3)}
+                          data-bs-dismiss="modal"
+                        >
+                          Go to Login
+                        </Link>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
-          )} */}
+            )} */}
         </form>
       </div>
     </div>

@@ -5,25 +5,9 @@ import { Trainers } from "./Trainers";
 import { Projects } from "./Projects";
 import { Testimonials } from "./Testimonials";
 import { Carausel } from "./Carausel";
-import { useNetworkCheck } from "../../contexts/NetworkContext";
-
 export const Landing_page = () => {
-  const { isOnline } = useNetworkCheck();
-
-  const handleRetry = () => {
-    window.location.reload(); 
-  };
-
   return (
-    <>
-      {!isOnline ? (
-        <div className="alert alert-danger text-center">
-          You are offline! Please check your internet connection.
-          <button className="btn btn-primary ms-3" onClick={handleRetry}>
-            Retry
-          </button>
-        </div>
-      ) : (
+
         <div>
           <Carausel />
           <div className="row mx-2 my-3">
@@ -55,7 +39,6 @@ export const Landing_page = () => {
           </div>
           <Footer />
         </div>
-      )}
-    </>
+
   );
 };
