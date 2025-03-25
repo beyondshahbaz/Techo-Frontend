@@ -39,16 +39,16 @@ const ALLRoutes: React.FC = () => {
         
         <Route path={routes.login3} element={<Login />} />
         <Route path={routes.register3} element={<Register3 />} />
-        <Route path="/Students_profile" element={<StudentsProfile />} />
-        <Route path="/Students_batches" element={<StudentsBatches />} />
-        <Route path="/Trainer_profile" element={<TrainerProfile />} />
-        <Route path="/Admission_table" element={<AdmissionTable />} /> 
-          <Route path="/interview-candidate/:id" element={<InterviewCandidate />} /> 
-          <Route path="/AllIntervieweesInformation" element={<AllIntervieweesInformation/>} /> 
-          <Route path="/Trainer_batch" element={<TrainerBatch/>} /> 
-          <Route path="/TrainerBatchDetail/:batchId" element={<TrainerBatchDetail />} />
-          <Route path="/AssessmentTable" element={<AssessmentTable />} />
-          <Route path="/AssessmentCandidte/:id" element={<AssessmentCandidte />} />
+        {userLoggedIN &&  accessToken  && <Route path="/Students_profile" element={<StudentsProfile />} /> } 
+        {userLoggedIN &&  accessToken  && <Route path="/Students_batches" element={<StudentsBatches />} /> }
+        {userLoggedIN &&  accessToken  && <Route path="/Trainer_profile" element={<TrainerProfile />} /> }
+        {userLoggedIN &&  accessToken  && <Route path="/Admission_table" element={<AdmissionTable />} /> } 
+        {userLoggedIN &&  accessToken  && <Route path="/interview-candidate/:id" element={<InterviewCandidate />} /> } 
+        {userLoggedIN &&  accessToken  && <Route path="/AllIntervieweesInformation" element={<AllIntervieweesInformation/>} /> } 
+        {userLoggedIN &&  accessToken  && <Route path="/Trainer_batch" element={<TrainerBatch/>} /> } 
+        {userLoggedIN &&  accessToken  && <Route path="/TrainerBatchDetail/:batchId" element={<TrainerBatchDetail />} /> }
+        {userLoggedIN &&  accessToken  && <Route path="/AssessmentTable" element={<AssessmentTable />} /> }
+        {userLoggedIN &&  accessToken  && <Route path="/AssessmentCandidte/:id" element={<AssessmentCandidte />} /> }
       </Route>
 
 

@@ -24,12 +24,15 @@ const Login3 = () => {
     }
     if (userLoggedIN && responseSubrole === "STUDENT") {
       navigation("/Students_batches");
+      window.location.reload();
     }
     if (userLoggedIN && responseSubrole === "TRAINER") {
-      navigation("/Trainer_profile");
+      navigation("/Trainer_batch");
+      window.location.reload();
     }
     if (userLoggedIN && role === "ADMIN") {
       navigation("/AssessmentTable");
+      window.location.reload();
     }
     if (userLoggedIN && responseSubrole === "RECRUITER") {
       navigation("/ReadyToRecruitDashboard");
@@ -38,6 +41,7 @@ const Login3 = () => {
   }, [userLoggedIN, responseSubrole,role , navigation]);
 
   console.log(role)
+  console.log(responseSubrole)
   const validateEmail = (email) => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return re.test(String(email).toLowerCase());
