@@ -2,7 +2,8 @@ import React, { useContext, useState } from "react";
 import { Outlet, useNavigate, Link } from "react-router-dom";
 import Header from "./Header";
 
-import { faSchool , faChalkboardUser , faTicket } from "@fortawesome/free-solid-svg-icons";
+
+import { faSchool , faChalkboardUser , faTicket , faCubes} from "@fortawesome/free-solid-svg-icons";
 
 
 import { Sidebar } from "primereact/sidebar";
@@ -11,6 +12,7 @@ import { all_routes } from "../feature-module/router/all_routes";
 import { AuthContext } from "../contexts/authContext";
 import { useNetworkCheck } from "../contexts/NetworkContext";
 import { Offline } from "./Offline/Offline";
+
 
 const Defaultlayout = () => {
   const routes = all_routes;
@@ -21,6 +23,23 @@ const Defaultlayout = () => {
   const [visible, setVisible] = useState(false);
 
 
+  const StudentsItems = [
+    { path: "/Students_profile", label: "PROFILE" },
+    { path: "/Students_batches", label: "BATCH" },
+  ];
+
+  const TrainerItems = [
+    { path: "/Trainer_profile", label: "PROFILE" },
+    { path: "/Trainer_batch", label: "BATCH" }
+  ];
+  const Admission = [
+    { path: "/Admission_table", label: "INTERVIEW" }
+  ];
+
+  const Assessment = [
+    { path: "/AssessmentTable", label: "ASSESSMENT CANDIDATE" }
+  ];
+        
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
@@ -48,6 +67,7 @@ const Defaultlayout = () => {
                 <span className="sidebarRole">WELCOME,</span>
                 <span className="sidebarName">
                   {userLoggedIN && user && `${user.first_name} ${user.last_name}`}
+
                 </span>
               </div>
             </div>

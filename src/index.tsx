@@ -24,6 +24,7 @@ import "./index.css";
 import { AppProvider } from "./contexts/AllProvider";
 import { NetworkProvider } from "./contexts/NetworkContext";
 
+
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
@@ -38,6 +39,7 @@ root.render(
           </BrowserRouter>
         </AppProvider>
       </NetworkProvider>
+
     </Provider>
   </React.StrictMode>
 );

@@ -197,37 +197,38 @@ const TrainerProfile: React.FC = () => {
               </form>
             ) : (
               <div className="table-responsive">
-                <h3 className="fs-3 text-black">
-                  <span className="font-bold text-primary">Name</span>:{" "}
+                <h3 className="profile-headerHTP">
+                  <span className="font-bold text-primary px-3">Name</span>:{" "}
                   {trainer.first_name} {trainer.last_name}
                 </h3>
-                <p className="text-info fs-3 font-bold mb-3">
-                  {trainer.job_title}
+                <p className="profile-subheaderHTP mb-3">
+                  <span className="font-bold text-primary px-3">Job Title</span>
+                  : {trainer.job_title}
                 </p>
-                <table className="table table-borderless text-dark bg-light p-3 rounded shadow-sm">
+                <table className="custom-tableHTP px-2">
                   <tbody>
                     <tr>
-                      <th className="text-primary">Email:</th>
+                      <th>Email:</th>
                       <td>{trainer.email}</td>
                     </tr>
                     <tr>
-                      <th className="text-primary">Mobile:</th>
+                      <th>Mobile:</th>
                       <td>{trainer.mobile_no}</td>
                     </tr>
                     <tr>
-                      <th className="text-primary">Gender:</th>
+                      <th>Gender:</th>
                       <td>{trainer.gender}</td>
                     </tr>
                     <tr>
-                      <th className="text-primary">Qualification:</th>
+                      <th>Qualification:</th>
                       <td>{trainer.qualification}</td>
                     </tr>
                     <tr>
-                      <th className="text-primary">Address:</th>
+                      <th>Address:</th>
                       <td>{trainer.address}</td>
                     </tr>
                     <tr>
-                      <th className="text-primary">Date of Birth:</th>
+                      <th>Date of Birth:</th>
                       <td>{trainer.date_of_birth}</td>
                     </tr>
                   </tbody>
