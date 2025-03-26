@@ -29,7 +29,7 @@ export const Projects = () => {
           </div>
           <div className="col-xxl-4 col-xl-4 col-md-4">
             <div class="card">
-              <img src={ecomMHS} alt="" className="cardImage" />
+              <img src={"ecomMHS"} alt="" className="cardImage" />
               <div class="card-body min-bodyHeight">
                 <h2>Ecomm App {"(MHS)"}</h2>
 
