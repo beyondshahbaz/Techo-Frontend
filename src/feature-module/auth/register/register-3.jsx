@@ -19,7 +19,6 @@ const Register3 = () => {
     newSubrole,
     fetchNewSubrole,
     loading,
-
     emailAlreadyCreated,
   } = useContext(AuthContext);
 
@@ -99,7 +98,6 @@ const Register3 = () => {
   const fetchIdType = async () => {
     try {
       const response = await axios.get(`${API_BASE_URL}/idtypes/`);
-
       if (response.status === 200) {
         setIdType(response.data);
       }
@@ -279,25 +277,6 @@ const Register3 = () => {
       }
   
 
-        if (newSelectedRole === "LEARNER") {
-          userData = {
-            ...userData,
-            role: 2,
-            mobileNumber,
-            profileImage: base64Image,
-            idType: selectedIdType,
-            identity,
-            subrole: 3,
-            proposer_email: proposerEmail,
-            proposer_mobile_no: proposerNumber,
-          };
-        } else if (newSelectedRole === "ENABLER") {
-          userData = {
-            ...userData,
-            role: 3,
-            subrole: subroleMapping[selectedSubrole] || null,
-          };
-        }
   
       // Call RegisterUser with progress tracking
       await RegisterUser(formData, (progressEvent) => {
