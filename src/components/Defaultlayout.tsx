@@ -9,6 +9,7 @@ import {
   faCubes,
 } from "@fortawesome/free-solid-svg-icons";
 
+
 import { Sidebar } from "primereact/sidebar";
 import Dropdown from "./Dropdown";
 import { all_routes } from "../feature-module/router/all_routes";
@@ -53,7 +54,6 @@ const Defaultlayout = () => {
   const Assessment = [
     { path: "/AssessmentTable", label: "ASSESSMENT CANDIDATE" },
   ];
-
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
@@ -153,11 +153,6 @@ const Defaultlayout = () => {
                   onClick={() => setVisible(false)}
                 >
                   Logout
-              <div className="sidebarHeaderContainer">
-                <span className="sidebarRole">WELCOME,</span>
-                <span className="sidebarName">
-                  {userLoggedIN && user && `${user.first_name} ${user.last_name}`}
-</span>
                 </span>
               </div>
             </>
