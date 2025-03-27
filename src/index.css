@@ -685,7 +685,7 @@ input[type="file"]::file-selector-button {
 }
 
 .cardImage {
-  height: 350px;
+  min-height: 350px;
   padding: 1rem;
   border-radius: 20px;
 }
@@ -1778,7 +1778,53 @@ td {
 /* Recruiter Page Ends */
 
 
+/* Container for the offline message */
+.offline-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: white;
+  color: #05a6f0;
+  text-align: center;
+  padding: 20px;
+}
 
+/* Heading style */
+.offline-heading {
+  font-size: 3rem;
+  margin-bottom: 10px;
+}
+
+/* Message style */
+.offline-message {
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+}
+
+
+
+/* Carousel */
+
+.carouselImg {
+  max-height: 600px;
+  -webkit-filter: blur(0px);
+}
+
+.batchesText{
+  font-size: 1.2rem;
+}
+
+.numbersContainer{
+  font-weight: bold;
+}
+
+.bg-navyBlue{
+  background-color: #00334c;
+  color: white !important;
+}
+=======
 /* table css ends */
 
 /* StudentBatche component start by hasnen */

@@ -30,51 +30,35 @@ export const Carausel = () => {
     <div className="carousel-inner">
       <div className="carousel-item active">
         <img
-          src={carouselImg3}
-          class="d-block w-100"
-          alt="..."
-          className="carouselImg"
-        />
-        <div className="carousel-caption d-none d-md-block">
-          <h1 className="mainTitleCarousel">Code Your Future</h1>
-          <p>
-            Join our web development classes to learn essential coding
-            skills, build dynamic websites, and kickstart your tech career.
-            Empower yourself with hands-on projects and expert guidance.
-          </p>
-        </div>
-      </div>
-      <div className="carousel-item">
-        <img
           src={carouselImg1}
           class="d-block w-100"
           alt="..."
           className="carouselImg"
         />
-        <div className="carousel-caption d-none d-md-block">
+        {/* <div className="carousel-caption d-none d-md-block">
           <h1 className="mainTitleCarousel">Code Your Future</h1>
           <p>
             Join our web development classes to learn essential coding
             skills, build dynamic websites, and kickstart your tech career.
             Empower yourself with hands-on projects and expert guidance.
           </p>
-        </div>
+        </div> */}
       </div>
       <div className="carousel-item">
         <img
-          src={carouselImg4}
+          src={carouselImg2}
           class="d-block w-100"
           alt="..."
           className="carouselImg"
         />
-        <div className="carousel-caption d-none d-md-block">
-          <h1 className="mainTitleCarousel">Code Your Future</h1>
-          <p>
-            Join our web development classes to learn essential coding
-            skills, build dynamic websites, and kickstart your tech career.
-            Empower yourself with hands-on projects and expert guidance.
-          </p>
-        </div>
+      </div>
+      <div className="carousel-item">
+        <img
+          src={carouselImg3}
+          class="d-block w-100"
+          alt="..."
+          className="carouselImg"
+        />
       </div>
     </div>
     <button

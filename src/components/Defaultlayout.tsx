@@ -14,6 +14,7 @@ import Dropdown from "./Dropdown";
 import { all_routes } from "../feature-module/router/all_routes";
 import { AuthContext } from "../contexts/authContext";
 import { useNetworkCheck } from "../contexts/NetworkContext";
+import { Offline } from "./Offline/Offline";
 
 const Defaultlayout = () => {
   const routes = all_routes;
@@ -36,6 +37,7 @@ const Defaultlayout = () => {
       setSubrole(userSubrole);
     }
   }, []);
+
 
   const StudentsItems = [
     { path: "/Students_profile", label: "PROFILE" },
@@ -64,7 +66,9 @@ const Defaultlayout = () => {
 
   return (
     <>
-      <Sidebar
+    {
+      isOnline ?     <>
+ <Sidebar
         className="posRel sidebarBg"
         visible={visible}
         onHide={() => setVisible(false)}
@@ -149,6 +153,11 @@ const Defaultlayout = () => {
                   onClick={() => setVisible(false)}
                 >
                   Logout
+              <div className="sidebarHeaderContainer">
+                <span className="sidebarRole">WELCOME,</span>
+                <span className="sidebarName">
+                  {userLoggedIN && user && `${user.first_name} ${user.last_name}`}
+</span>
                 </span>
               </div>
             </>
@@ -202,6 +211,12 @@ const Defaultlayout = () => {
           </div>
         </div>
       </div>
+      </>
+      : (
+        <Offline/>
+      )
+    }
+
     </>
   );
 };

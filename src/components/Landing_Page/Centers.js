@@ -63,7 +63,7 @@ export const Centers = () => {
     //   </div>
     // </div>
     <div>
-      <div className="row">
+      <div className="row flex-nowrap scrollbar-wrappercenter">
         <div className="col-xxl-4 col-xl-4 col-md-4">
           <div className="card">
             <div className="card-body">

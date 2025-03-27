@@ -65,8 +65,7 @@ export const RecruitmentDashboard = () => {
   
       if (response.status === 200) {
         console.log("Students recruited successfully!");
-        // Reset form fields after successful recruitment
-        setTechnology("Select Technology");
+                setTechnology("Select Technology");
         setStudentCount("");
         setRemarks("");
         setAvailableStudent(null);

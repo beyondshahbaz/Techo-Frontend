@@ -16,6 +16,7 @@ import TrainerProfile from "../../components/Trainer_dashboard/TrainerProfile";
 import { Students_SponserDashboard } from "../../components/Sponser_Dashboard/Students_SponserDashboard";
 import { AuthContext } from "../../contexts/authContext";
 import { RecruitmentDashboard } from "../../components/RecruitmentDashboard/RecruitmentDashboard";
+import Sponsor_Profile from "../../components/Sponser_Dashboard/SponsorProfile";
 
 import AdmissionTable from "../../components/Admission_dashboard/Admission_table";
 import InterviewCandidate from "../../components/Admission_dashboard/InterviewCandidate";
@@ -49,6 +50,7 @@ const ALLRoutes: React.FC = () => {
         {userLoggedIN &&  accessToken  && <Route path="/TrainerBatchDetail/:batchId" element={<TrainerBatchDetail />} /> }
         {userLoggedIN &&  accessToken  && <Route path="/AssessmentTable" element={<AssessmentTable />} /> }
         {userLoggedIN &&  accessToken  && <Route path="/AssessmentCandidte/:id" element={<AssessmentCandidte />} /> }
+
       </Route>
 
 
