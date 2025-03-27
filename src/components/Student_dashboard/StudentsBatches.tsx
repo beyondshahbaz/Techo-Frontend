@@ -14,10 +14,16 @@ const StudentsBatches: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
+    const token = localStorage.getItem("accessToken");
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "https://gl8tx74f-8000.inc1.devtunnels.ms/auth/batches/"
+          "https://gl8tx74f-8000.inc1.devtunnels.ms/auth/batches/",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
         console.log(response.data);
 
@@ -68,10 +74,19 @@ const StudentsBatches: React.FC = () => {
             </div>
             <div className="batch-card-bodyHSB">
               <div className="batch-infoHSB">
-                <p><strong>Start Date:</strong> {batch.start_date}</p>
-                <p><strong>Trainer:</strong> {batch.trainer}</p>
-                <p><strong>Duration:</strong> {batch.duration}</p>
-                <p><strong>Technologies:</strong> {mapTechnologies(batch.technoLogies)}</p>
+                <p>
+                  <strong>Start Date:</strong> {batch.start_date}
+                </p>
+                <p>
+                  <strong>Trainer:</strong> {batch.trainer}
+                </p>
+                <p>
+                  <strong>Duration:</strong> {batch.duration}
+                </p>
+                <p>
+                  <strong>Technologies:</strong>{" "}
+                  {mapTechnologies(batch.technoLogies)}
+                </p>
               </div>
             </div>
           </div>

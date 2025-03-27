@@ -4,21 +4,26 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import TrainerImage from "../../assets/images/trainers/Trainer.jpg";
 
-
-
 const TrainerBatch = () => {
-  const [batches, setBatches] = useState([]); 
+  const [batches, setBatches] = useState([]);
   const navigate = useNavigate();
 
   // Fetch batch data from the API
   useEffect(() => {
+    const token = localStorage.getItem("accessToken");
+
     const fetchBatches = async () => {
       try {
         const response = await axios.get(
-          "https://gl8tx74f-8000.inc1.devtunnels.ms/auth/trainers/1/batches/"
+          "https://gl8tx74f-8000.inc1.devtunnels.ms/auth/trainers/batches/",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
         console.log(response);
-        setBatches(response.data.data); // Access the nested `data` property
+        setBatches(response.data.data);
       } catch (error) {
         console.error("Error fetching batch data:", error);
       }
@@ -34,7 +39,6 @@ const TrainerBatch = () => {
     navigate(`/TrainerBatchDetail/${batchId}`); // Navigate to /TrainerBatchDetail with batch ID
   };
 
-  
   return (
     <>
       <div>

@@ -23,7 +23,7 @@ const Login3 = () => {
       navigation("/Students_SponserDashboard");
     }
     if (userLoggedIN && responseSubrole === "STUDENT") {
-      navigation("/Students_batches");
+      navigation("/Students_profile");
       window.location.reload();
     }
     if (userLoggedIN && responseSubrole === "TRAINER") {

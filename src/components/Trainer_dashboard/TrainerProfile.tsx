@@ -21,17 +21,27 @@ const TrainerProfile: React.FC = () => {
   const [trainer, setTrainer] = useState<Trainer | null>(null);
   const [editMode, setEditMode] = useState(false);
   const [image, setImage] = useState<File | null>(null);
+  const [accessToken, setAccessToken] = useState<string>("");
 
   const { register, handleSubmit, reset } = useForm<Trainer>();
 
   useEffect(() => {
+    const token = localStorage.getItem("accessToken");
+    if (token) {
+      setAccessToken(token);
+    }
+
     axios
-      .get<Trainer[]>("https://gl8tx74f-8000.inc1.devtunnels.ms/auth/trainers/")
+      .get<Trainer>("https://gl8tx74f-8000.inc1.devtunnels.ms/auth/trainers/", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then((response) => {
-        if (response.data.length > 2) {
-          const trainerData = response.data[2]; // Ensure index exists
+        if (response) {
+          const trainerData = response.data;
           setTrainer(trainerData);
-          reset(trainerData); // Pre-fill the form
+          reset(trainerData);
         } else {
           console.error("Trainer data is missing.");
         }
@@ -63,7 +73,12 @@ const TrainerProfile: React.FC = () => {
       await axios.put(
         `https://gl8tx74f-8000.inc1.devtunnels.ms/auth/trainers/${trainer.id}/`,
         formData,
-        { headers: { "Content-Type": "multipart/form-data" } }
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
       );
 
       alert("Profile updated successfully!");
