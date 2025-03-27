@@ -16,6 +16,7 @@ import TrainerProfile from "../../components/Trainer_dashboard/TrainerProfile";
 import { Students_SponserDashboard } from "../../components/Sponser_Dashboard/Students_SponserDashboard";
 import { AuthContext } from "../../contexts/authContext";
 import { RecruitmentDashboard } from "../../components/RecruitmentDashboard/RecruitmentDashboard";
+import Sponsor_Profile from "../../components/Sponser_Dashboard/SponsorProfile";
 
 import AdmissionTable from "../../components/Admission_dashboard/Admission_table";
 import InterviewCandidate from "../../components/Admission_dashboard/InterviewCandidate";
@@ -40,6 +41,7 @@ const ALLRoutes: React.FC = () => {
         <Route path={routes.login3} element={<Login />} />
         <Route path={routes.register3} element={<Register3 />} />
         <Route path="/Students_profile" element={<StudentsProfile />} />
+        <Route path="/Sponsor_Profile" element={<Sponsor_Profile />} />
         <Route path="/Students_batches" element={<StudentsBatches />} />
         <Route path="/Trainer_profile" element={<TrainerProfile />} />
         <Route path="/Admission_table" element={<AdmissionTable />} /> 

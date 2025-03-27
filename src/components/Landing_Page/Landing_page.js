@@ -7,7 +7,6 @@ import { Testimonials } from "./Testimonials";
 import { Carausel } from "./Carausel";
 export const Landing_page = () => {
   return (
-
         <div>
           <Carausel />
           <div className="row mx-2 my-3">
@@ -34,7 +33,7 @@ export const Landing_page = () => {
             <div className="text-primary">
               <hr />
             </div>
-            <h1>Testimonials</h1>
+            <h1 className="d-none">Testimonials</h1>
             <Testimonials />
           </div>
           <Footer />
