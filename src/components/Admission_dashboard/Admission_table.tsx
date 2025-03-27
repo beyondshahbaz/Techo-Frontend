@@ -39,7 +39,7 @@ const AdmissionTable: React.FC = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "https://187gwsw1-8000.inc1.devtunnels.ms/auth/Learner/"
+          "https://gl8tx74f-8000.inc1.devtunnels.ms/auth/Learner/"
         );
         setData(response.data);
       } catch (error) {
@@ -51,21 +51,21 @@ const AdmissionTable: React.FC = () => {
   }, []);
 
   const nameTemplate = (rowData: AdmissionData) => (
-    <span style={{ color: "blue", fontWeight: "bold" }}>{rowData.name}</span>
+    <span style={{ color: "black", fontWeight: "bold" }}>{rowData.name}</span>
   );
 
   const emailTemplate = (rowData: AdmissionData) => (
-    <span style={{ color: "green" }}>{rowData.email}</span>
+    <span style={{ color: "black" }}>{rowData.email}</span>
   );
 
   const mobileTemplate = (rowData: AdmissionData) => (
-    <span style={{ color: "red", fontWeight: "bold" }}>
+    <span style={{ color: "black", fontWeight: "bold" }}>
       {rowData.mobile_no}
     </span>
   );
 
   const interviewByTemplate = (rowData: AdmissionData) => (
-    <span style={{ color: "purple", fontWeight: "bold" }}>
+    <span style={{ color: "black", fontWeight: "bold" }}>
       {rowData.interview_by}
     </span>
   );
@@ -82,7 +82,7 @@ const AdmissionTable: React.FC = () => {
     // Send the updated data to the backend
     axios
       .put(
-        `https://187gwsw1-8000.inc1.devtunnels.ms/auth/Learner/${rowData.id}/`,
+        `https://gl8tx74f-8000.inc1.devtunnels.ms/auth/Learner/${rowData.id}/`,
         {
           ...rowData,
           interview_by: newInterviewer,
@@ -128,8 +128,8 @@ const AdmissionTable: React.FC = () => {
           style={{
             background:
               hoveredRow === rowData.id
-                ? "linear-gradient(45deg, #ff8a65, #ff6f61)"
-                : "linear-gradient(45deg, #23f218, #f81464)",
+                ? "var(--bs-info)"
+                : "rgb(92, 160, 232)",
           }}
           onMouseEnter={() => setHoveredRow(rowData.id)}
           onMouseLeave={() => setHoveredRow(null)}

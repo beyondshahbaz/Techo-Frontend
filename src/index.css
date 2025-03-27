@@ -594,7 +594,7 @@ input[type="file"]::file-selector-button {
 
 /* Admistion button by Hasnen START */
 .custom-edit-button {
-  background: linear-gradient(45deg, #7361ff, #ff8a65);
+  background: var(--bs-info);
   border: none;
   border-radius: 50px;
   color: white;
@@ -604,7 +604,7 @@ input[type="file"]::file-selector-button {
 }
 
 .custom-edit-button:hover {
-  background: linear-gradient(45deg, #ff8a65, #ff6f61);
+  background: rgb(92, 160, 232);
   transform: translateY(-2px);
 }
 /* Admistion button by Hasnen End */
@@ -1047,7 +1047,7 @@ input[type="file"]::file-selector-button {
 
 /* Trainer Assigned Batches End by hasnen */
 
-/* TrainerBatchDetail start by hasnen */
+/* TrainerBatchDetail start by hasnen - Updated to rgb(92, 160, 232) theme */
 
 /* Full-width container styling */
 .trainer-batch-detail-container {
@@ -1063,7 +1063,7 @@ input[type="file"]::file-selector-button {
   margin-bottom: 30px;
   padding: 30px 20px;
   border-radius: 12px;
-  background: linear-gradient(135deg, #6a11cb, #2575fc); /* Gradient background */
+  background: linear-gradient(135deg, rgb(92, 160, 232), rgb(52, 130, 212)); /* Updated gradient */
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   position: relative;
   overflow: hidden;
@@ -1131,7 +1131,7 @@ input[type="file"]::file-selector-button {
   flex: 1;
   padding: 20px;
   margin: 0 10px;
-  background: linear-gradient(145deg, #6a11cb, #2575fc);
+  background: linear-gradient(145deg, rgb(92, 160, 232), rgb(52, 130, 212)); /* Updated gradient */
   border-radius: 12px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   transition: all 0.3s ease-in-out;
@@ -1143,7 +1143,7 @@ input[type="file"]::file-selector-button {
 .info-itemTBD:hover {
   transform: translateY(-5px);
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
-  background: linear-gradient(145deg, #2575fc, #6a11cb);
+  background: linear-gradient(145deg, rgb(52, 130, 212), rgb(92, 160, 232)); /* Updated gradient */
 }
 
 /* Glow effect on hover */
@@ -1182,7 +1182,7 @@ input[type="file"]::file-selector-button {
   font-weight: 700;
   display: inline-block;
   padding: 5px 10px;
-  background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+  background: linear-gradient(135deg, #a8edea, #fed6e3); /* Lighter gradient for text */
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -1222,12 +1222,12 @@ input[type="file"]::file-selector-button {
 
 /* Header styling */
 .custom-datatableTBD .p-datatable-thead > tr > th {
-  background-color: #6a11cb; /* Purple header */
+  background-color: rgb(92, 160, 232); /* Blue header */
   color: white;
   font-weight: bold;
   padding: 14px;
   text-align: left;
-  border-bottom: 2px solid #4a0d8f; /* Darker purple border */
+  border-bottom: 2px solid rgb(52, 130, 212); /* Darker blue border */
   font-size: 16px;
   text-transform: uppercase;
   letter-spacing: 1px;
@@ -1263,12 +1263,12 @@ input[type="file"]::file-selector-button {
 }
 
 .custom-datatableTBD .p-paginator .p-paginator-pages .p-paginator-page.p-highlight {
-  background-color: #6a11cb; /* Purple for active page */
+  background-color: rgb(92, 160, 232); /* Blue for active page */
   color: white;
 }
 
 .custom-datatableTBD .p-paginator .p-paginator-pages .p-paginator-page:not(.p-highlight):hover {
-  background-color: #4a0d8f; /* Darker purple on hover */
+  background-color: rgb(52, 130, 212); /* Darker blue on hover */
   color: white;
 }
 
@@ -1279,12 +1279,12 @@ input[type="file"]::file-selector-button {
 }
 
 .custom-datatableTBD .p-dropdown:hover {
-  border-color: #6a11cb; /* Purple border on hover */
+  border-color: rgb(92, 160, 232); /* Blue border on hover */
 }
 
 /* Gradient effect for student names */
 .student-name-gradient {
-  background: linear-gradient(135deg, #6a11cb, #2575fc);
+  background: linear-gradient(135deg, rgb(92, 160, 232), rgb(52, 130, 212));
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -1293,8 +1293,8 @@ input[type="file"]::file-selector-button {
 
 /* trainerBatchDetail checked box designing */
 .checked-designH .p-checkbox-box {
-  background-color: #6a11cb; /* Green background for checked state */
-  border-color: #6a11cb; /* Green border for checked state */
+  background-color: rgb(92, 160, 232); /* Blue background for checked state */
+  border-color: rgb(92, 160, 232); /* Blue border for checked state */
 }
 
 .checked-designH .p-checkbox-icon {
@@ -1305,21 +1305,31 @@ input[type="file"]::file-selector-button {
 .align-end-columnH {
   text-align: center;
 }
+
 /* trainerBatchDetail Submit button designing */
-/* Submit button styling */
 .submit-buttonH {
   margin-top: 20px;
-  padding: 10px 20px;
-  background-color: #6a11cb;
+  padding: 12px 24px;
+  background-color: rgb(92, 160, 232);
   color: white;
   border: none;
   border-radius: 15px;
   cursor: pointer;
   font-size: 18px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 8px rgba(92, 160, 232, 0.3);
 }
 
 .submit-buttonH:hover {
-  background-color: #36046c;
+  background-color: rgb(52, 130, 212);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(92, 160, 232, 0.4);
+}
+
+.submit-buttonH:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(92, 160, 232, 0.4);
 }
 
 /* TrainerBatchDetail End by hasnen */

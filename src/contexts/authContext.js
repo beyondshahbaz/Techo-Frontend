@@ -97,6 +97,7 @@ const AuthProvider = ({ children }) => {
         localStorage.setItem("refreshToken", response.data.refresh);
         localStorage.setItem("userID", response.data.user_id);
         localStorage.setItem("role", response.data.role);
+        localStorage.setItem("subrole", response.data.subrole);
 
         if (response.status === 200) {
           console.log('data', response.data);
@@ -156,6 +157,7 @@ const AuthProvider = ({ children }) => {
     localStorage.removeItem("refreshToken");
     localStorage.removeItem("userID");
     localStorage.removeItem("role");
+    localStorage.removeItem("subrole");
     setUserLoggedIN(false);
     setAccessToken(null);
     setRefreshToken(null);
@@ -188,8 +190,7 @@ const AuthProvider = ({ children }) => {
     responseSubrole,
     emailAlreadyCreated,
     setLoginError,
-    API_BASE_URL
-
+    API_BASE_URL,
   };
 
   return (

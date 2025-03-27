@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams ,  useNavigate  } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { Checkbox } from "primereact/checkbox";
@@ -39,10 +39,17 @@ const TrainerBatchDetail = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    const token = localStorage.getItem("accessToken");
+
     const fetchBatchDetail = async () => {
       try {
         const response = await axios.get<ApiResponse>(
-          `https://gl8tx74f-8000.inc1.devtunnels.ms/auth/trainers/1/batches/${batchId}/`
+          `https://gl8tx74f-8000.inc1.devtunnels.ms/auth/trainers/batches/${batchId}/`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
         setBatchDetail(response.data.data);
       } catch (error) {
@@ -125,7 +132,7 @@ const TrainerBatchDetail = () => {
             )}
           />
           <Column
-            header="Select"
+            header="INDUSTRY READY"
             body={(rowData: Student) => (
               <Checkbox
                 checked={
@@ -137,7 +144,7 @@ const TrainerBatchDetail = () => {
                 className={rowData.trainer_is_selected ? "checked-designH" : ""}
               />
             )}
-            className="align-end-columnH" 
+            className="align-end-columnH"
           />
         </DataTable>
         <button onClick={handleSubmit} className="submit-buttonH">

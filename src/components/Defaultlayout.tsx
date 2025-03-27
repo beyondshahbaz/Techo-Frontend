@@ -1,8 +1,13 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { Outlet, useNavigate, Link } from "react-router-dom";
 import Header from "./Header";
 
-import { faSchool , faChalkboardUser , faTicket , faCubes} from "@fortawesome/free-solid-svg-icons";
+import {
+  faSchool,
+  faChalkboardUser,
+  faTicket,
+  faCubes,
+} from "@fortawesome/free-solid-svg-icons";
 
 
 import { Sidebar } from "primereact/sidebar";
@@ -19,7 +24,20 @@ const Defaultlayout = () => {
   const { user, userLoggedIN, LogoutUser } = useContext(AuthContext);
   const { isOnline } = useNetworkCheck();
   const [visible, setVisible] = useState(false);
+  const [role, setRole] = useState("");
+  const [subrole, setSubrole] = useState("");
 
+  useEffect(() => {
+    const userRole = localStorage.getItem("role");
+    const userSubrole = localStorage.getItem("subrole");
+    
+    if (userRole) {
+      setRole(userRole);
+    }
+    if (userSubrole) {
+      setSubrole(userSubrole);
+    }
+  }, []);
 
 
   const StudentsItems = [
@@ -29,14 +47,12 @@ const Defaultlayout = () => {
 
   const TrainerItems = [
     { path: "/Trainer_profile", label: "PROFILE" },
-    { path: "/Trainer_batch", label: "BATCH" }
+    { path: "/Trainer_batch", label: "BATCH" },
   ];
-  const Admission = [
-    { path: "/Admission_table", label: "INTERVIEW" }
-  ];
+  const Admission = [{ path: "/Admission_table", label: "INTERVIEW" }];
 
   const Assessment = [
-    { path: "/AssessmentTable", label: "ASSESSMENT CANDIDATE" }
+    { path: "/AssessmentTable", label: "ASSESSMENT CANDIDATE" },
   ];
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -45,7 +61,7 @@ const Defaultlayout = () => {
   const handleLogout = () => {
     setVisible(false);
     LogoutUser();
-    navigate('/login-3');
+    navigate("/login-3");
   };
 
   return (
@@ -71,31 +87,53 @@ const Defaultlayout = () => {
           </div>
         }
       >
-        <Dropdown
-          key="student-dashboard"
-          title="Student Dashboard"
-          items={StudentsItems}
-          icon={faSchool}
-        />
-        <Dropdown
-          key="trainer-dashboard"
-          title="Trainer Dashboard"
-          items={TrainerItems}
-          icon={faChalkboardUser}
-        />
-        <Dropdown
-          key="admission-process"
-          title="Admission Process"
-          items={Admission}
-          icon={faTicket}
-        />
-        <Dropdown
-          key="assessment-process"
-          title="Assessment Process"
-          items={Assessment}
-          icon={faCubes}
-        />
-       
+        {/* Show STUDENT Dashboard only for STUDENT */}
+        {subrole === "STUDENT" && (
+          <>
+            <Dropdown
+              key="student-dashboard"
+              title="Student Dashboard"
+              items={StudentsItems}
+              icon={faSchool}
+            />
+          </>
+        )}
+
+        {/* Show Trainer Dashboard, Admission, and Assessment only for TRAINER */}
+        {subrole === "TRAINER" && (
+          <>
+            <Dropdown
+              key="trainer-dashboard"
+              title="Trainer Dashboard"
+              items={TrainerItems}
+              icon={faChalkboardUser}
+            />
+            <Dropdown
+              key="admission-process"
+              title="Admission Process"
+              items={Admission}
+              icon={faTicket}
+            />
+            <Dropdown
+              key="assessment-process"
+              title="Assessment Process"
+              items={Assessment}
+              icon={faCubes}
+            />
+          </>
+        )}
+
+        {/* Show ADMIN Dashboard, Assessment only ADMIN */}
+        {role === "ADMIN" && (
+          <>
+            <Dropdown
+              key="assessment-process"
+              title="Assessment Process"
+              items={Assessment}
+              icon={faCubes}
+            />
+          </>
+        )}
 
         <div className="authFuncCont">
           {userLoggedIN && (

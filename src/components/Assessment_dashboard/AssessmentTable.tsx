@@ -40,19 +40,19 @@ const AssessmentTable: React.FC = () => {
   }, []);
 
   const studentNameTemplate = (rowData: AssessmentData) => (
-    <span style={{ color: "blue", fontWeight: "bold" }}>{rowData.student_name}</span>
+    <span style={{ color: "black", fontWeight: "bold" }}>{rowData.student_name}</span>
   );
 
   const trainerNameTemplate = (rowData: AssessmentData) => (
-    <span style={{ color: "green" }}>{rowData.trainer_name}</span>
+    <span style={{ color: "black" }}>{rowData.trainer_name}</span>
   );
 
   const batchNameTemplate = (rowData: AssessmentData) => (
-    <span style={{ color: "red", fontWeight: "bold" }}>{rowData.batch_name}</span>
+    <span style={{ color: "black", fontWeight: "bold" }}>{rowData.batch_name}</span>
   );
 
   const assessmentStatusTemplate = (rowData: AssessmentData) => (
-    <span style={{ color: "purple", fontWeight: "bold" }}>
+    <span style={{ color: "black", fontWeight: "bold" }}>
       {rowData.assessment_test_status}
     </span>
   );

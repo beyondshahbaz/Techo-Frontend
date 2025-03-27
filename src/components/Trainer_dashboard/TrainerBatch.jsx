@@ -2,32 +2,28 @@ import React, { useEffect, useState } from "react";
 import { Card } from "primereact/card";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-
-// Define the type for a batch object
-interface Batch {
-  batch_id: string;
-  batch_name: string;
-  student_count: number;
-}
-
-// Define the type for the API response
-interface ApiResponse {
-  data: Batch[]; // The actual data is nested inside a `data` property
-}
+import TrainerImage from "../../assets/images/trainers/Trainer.jpg";
 
 const TrainerBatch = () => {
-  const [batches, setBatches] = useState<Batch[]>([]); // Explicitly type the batches state
+  const [batches, setBatches] = useState([]);
   const navigate = useNavigate();
 
   // Fetch batch data from the API
   useEffect(() => {
+    const token = localStorage.getItem("accessToken");
+
     const fetchBatches = async () => {
       try {
-        const response = await axios.get<ApiResponse>(
-          "https://gl8tx74f-8000.inc1.devtunnels.ms/auth/trainers/1/batches/"
+        const response = await axios.get(
+          "https://gl8tx74f-8000.inc1.devtunnels.ms/auth/trainers/batches/",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
         console.log(response);
-        setBatches(response.data.data); // Access the nested `data` property
+        setBatches(response.data.data);
       } catch (error) {
         console.error("Error fetching batch data:", error);
       }
@@ -37,13 +33,12 @@ const TrainerBatch = () => {
   }, []);
 
   // Function to handle card click
-  const handleCardClick = (batchId: string) => {
+  const handleCardClick = (batchId) => {
     console.log(batches);
     console.log("Navigating to batch ID:", batchId);
     navigate(`/TrainerBatchDetail/${batchId}`); // Navigate to /TrainerBatchDetail with batch ID
   };
 
-  
   return (
     <>
       <div>
@@ -62,9 +57,7 @@ const TrainerBatch = () => {
               style={{ cursor: "pointer" }} // Change cursor to pointer to indicate clickability
             >
               <img
-                src={
-                  "https://scienceai.co.in/wp-content/uploads/2024/04/programming-language.png"
-                }
+                src={TrainerImage}
                 className="card-img-topH2"
                 alt={batch.batch_name}
               />
