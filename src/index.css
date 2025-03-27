@@ -170,7 +170,7 @@
 
 /*======= Button-color css end  ======= */
 
-/* TEXT COLORS STARTS */
+/* TEXT COLORS STARTS *
 
 /* TEXT COLORS ENDS */
 
@@ -649,11 +649,10 @@ input[type="file"]::file-selector-button {
 @media (min-width: 1200px) {
   .custom-button-interview {
     width: 20%; /* Adjust width for extra-large screens */
-  font-size: 18px; /* Increase font size for better readability */
+    font-size: 18px; /* Increase font size for better readability */
   }
 }
 /* Interview button End by Hasnen */
-
 
 /* LandingPage CSS Starts */
 .carouselImg {
@@ -723,6 +722,607 @@ input[type="file"]::file-selector-button {
 }
 
 /* LandingPage CSS Ends */
+
+/* All-Interviewers-button start by Hasnen */
+
+.header-containerH {
+  display: flex;
+  align-items: center; /* Centers vertically */
+  justify-content: center; /* Centers horizontally */
+  position: relative;
+  padding: 10px; /* Adds padding for better spacing */
+}
+
+.header-titleH {
+  color: var(--bs-primary); /* Uses Bootstrap's primary color */
+  text-align: center;
+  margin: 0; /* Removes default margin */
+  flex-grow: 1; /* Allows the title to take up available space */
+}
+
+.header-buttonH {
+  background-color: var(--bs-info); /* Bootstrap info color */
+  border: 2px solid var(--bs-info); /* Adds a border */
+  color: white; /* Text color */
+  padding: 5px 10px; /* Padding for a better look */
+  font-size: 16px; /* Font size */
+  font-weight: 500; /* Medium bold text */
+  border-radius: 30px; /* More rounded corners */
+  transition: all 0.3s ease-in-out; /* Smooth transitions */
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  position: absolute; /* Positions the button absolutely */
+  right: 10px; /* Places the button on the right */
+}
+
+.header-buttonH:hover {
+  background-color: rgb(92, 160, 232); /* Inverts colors on hover */
+  border-color: var(--bs-info); /* Keeps the border */
+  transform: translateY(-2px); /* Lifts the button slightly */
+  box-shadow: 0px 6px 10px rgba(239, 199, 199, 0.2); /* Increases shadow */
+}
+
+.header-buttonH:focus {
+  outline: none; /* Removes default outline */
+  box-shadow: 0px 0px 10px rgba(23, 162, 184, 0.5); /* Glowing effect */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .header-containerH {
+    flex-direction: column; /* Stacks items vertically on smaller screens */
+    align-items: center;
+    text-align: center;
+  }
+
+  .header-titleH {
+    margin-bottom: 10px; /* Adds space between title and button */
+  }
+
+  .header-buttonH {
+    position: static; /* Resets the position */
+    width: 100%; /* Makes the button full width */
+    max-width: 200px; /* Limits the maximum width */
+    margin-top: 10px; /* Adds space between title and button */
+  }
+}
+
+@media (max-width: 480px) {
+  .header-titleH {
+    font-size: 18px; /* Adjusts font size for very small screens */
+  }
+
+  .header-buttonH {
+    font-size: 14px; /* Adjusts button font size */
+    padding: 5px 8px; /* Adjusts padding */
+  }
+}
+
+/* All-Interviewers-button end by Hasnen */
+
+/* AllInterviweesInformation Component-table Start by hasnen  */
+
+.custom-table-containerH1 {
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  overflow-x: auto; /* Enable horizontal scrolling on small screens */
+}
+
+/* Custom styles for the DataTable */
+.custom-datatableH1 {
+  font-family: "Arial", sans-serif;
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  width: 100%; /* Ensure the table takes full width */
+}
+
+/* Header row styling */
+.custom-datatableH1 .p-datatable-thead > tr > th {
+  background-color: #2c3e50;
+  color: white;
+  font-weight: bold;
+  padding: 14px;
+  text-align: left;
+  border-bottom: 2px solid #34495e;
+}
+
+/* Body row styling */
+.custom-datatableH1 .p-datatable-tbody > tr > td {
+  padding: 12px;
+  border-bottom: 1px solid #ecf0f1;
+}
+
+/* Hover effect on rows */
+.custom-datatableH1 .p-datatable-tbody > tr:hover {
+  background-color: #f8f9fa;
+  cursor: pointer;
+}
+
+/* Remove border from the last row */
+.custom-datatableH1 .p-datatable-tbody > tr:last-child > td {
+  border-bottom: none;
+}
+
+/* Paginator styling */
+.custom-datatableH1 .p-paginator {
+  background-color: #f8f9fa;
+  padding: 10px;
+  border-top: 1px solid #ecf0f1;
+  border-radius: 0 0 12px 12px;
+}
+
+.custom-datatableH1 .p-paginator .p-paginator-pages .p-paginator-page {
+  margin: 0 4px;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+}
+
+.custom-datatableH1
+  .p-paginator
+  .p-paginator-pages
+  .p-paginator-page.p-highlight {
+  background-color: #2c3e50;
+  color: white;
+}
+
+.custom-datatableH1
+  .p-paginator
+  .p-paginator-pages
+  .p-paginator-page:not(.p-highlight):hover {
+  background-color: #34495e;
+  color: white;
+}
+
+/* Dropdown styling */
+.custom-datatableH1 .p-dropdown {
+  border-radius: 4px;
+  border: 1px solid #ced4da;
+}
+
+.custom-datatableH1 .p-dropdown:hover {
+  border-color: #2c3e50;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .custom-table-containerH1 {
+    padding: 10px;
+  }
+
+  .custom-datatableH1 .p-datatable-thead > tr > th,
+  .custom-datatableH1 .p-datatable-tbody > tr > td {
+    padding: 8px; /* Reduce padding for smaller screens */
+  }
+
+  .custom-datatableH1 .p-paginator {
+    padding: 5px; /* Reduce paginator padding */
+  }
+
+  .custom-datatableH1 .p-paginator .p-paginator-pages .p-paginator-page {
+    margin: 0 2px; /* Reduce margin between paginator buttons */
+  }
+}
+
+@media (max-width: 480px) {
+  .custom-datatableH1 .p-datatable-thead > tr > th,
+  .custom-datatableH1 .p-datatable-tbody > tr > td {
+    font-size: 12px; /* Reduce font size for very small screens */
+  }
+
+  .custom-datatableH1 .p-paginator {
+    font-size: 12px; /* Reduce paginator font size */
+  }
+}
+
+/* AllInterviweesInformation Component-table End by hasnen  */
+
+/* TrainerBatch Card Start by hasnen */
+
+.trainer-batch-cardH2 {
+  width: 18rem;
+  margin: 20px;
+  border-radius: 15px;
+  overflow: hidden;
+  background: linear-gradient(145deg, #ffffff, #f0f0f0);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.trainer-batch-cardH2:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.card-img-topH2 {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+.card-bodyH2 {
+  padding: 20px;
+  text-align: center;
+  background: linear-gradient(145deg, #f9f9f9, #eaeaea);
+}
+
+.card-titleH2 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 15px;
+  color: #333;
+}
+
+.card-textH2 {
+  font-size: 1.1rem;
+  color: #666;
+}
+
+/* Optional: Add a subtle animation on hover for the text */
+.card-bodyH2:hover .card-titleH2 {
+  color: #007bff;
+  transition: color 0.3s ease;
+}
+
+.card-bodyH2:hover .card-textH2 {
+  color: #444;
+  transition: color 0.3s ease;
+}
+
+/* TrainerBatch in Card End by hasnen */
+
+/* TrainerBatch in Assigned Batches start by hasnen */
+
+.custom-cardH3 {
+  border: none; /* Remove default border */
+  border-left: 5px solid #6a11cb; /* Purple accent border */
+  border-radius: 12px; /* Smooth rounded corners */
+  background: linear-gradient(
+    135deg,
+    rgba(25, 85, 226, 0.1), /* Light purple */
+    rgba(119, 147, 226, 0.9) /* White with transparency */
+  ), url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%236a11cb' fill-opacity='0.1'%3E%3Cpath d='M0 40L40 0H20L0 20M40 40V20L20 40'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E"); /* Subtle SVG pattern */
+  background-size: cover, 40px 40px; /* Size of the pattern */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Light shadow */
+  padding: 20px;
+  transition: all 0.3s ease-in-out;
+  position: relative;
+  overflow: hidden;
+}
+
+.custom-cardH3::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    45deg,
+    rgba(106, 17, 203, 0.1),
+    rgba(37, 117, 252, 0.05)
+  ); /* Gradient overlay */
+  transform: rotate(45deg);
+  transition: all 0.5s ease-in-out;
+  z-index: 1;
+}
+
+.custom-cardH3:hover::before {
+  top: 0;
+  left: 0;
+  transform: rotate(0deg);
+}
+
+.custom-cardH3:hover {
+  transform: translateY(-5px); /* Lift effect on hover */
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2); /* Stronger shadow */
+  border-left-color: #2575fc; /* Change border color on hover */
+}
+
+.custom-cardH3-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: #6a11cb; /* Purple text color */
+  background: linear-gradient(135deg, #6a11cb, #2575fc); /* Gradient text */
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.p-card .p-card-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: #6a11cb; /* Purple text color */
+  background: linear-gradient(135deg, #6a11cb, #2575fc); /* Gradient text */
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Trainer Assigned Batches End by hasnen */
+
+/* TrainerBatchDetail start by hasnen */
+
+/* Full-width container styling */
+.trainer-batch-detail-container {
+  width: 100%;
+  padding: 40px 20px;
+  background-color: #f9f9f9;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Batch header styling */
+.batch-headerTBD {
+  text-align: center;
+  margin-bottom: 30px;
+  padding: 30px 20px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #6a11cb, #2575fc); /* Gradient background */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease-in-out;
+}
+
+/* Animated gradient overlay */
+.batch-headerTBD::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 200%;
+  height: 100%;
+  background: linear-gradient(
+    120deg,
+    rgba(255, 255, 255, 0.2) 20%,
+    transparent 80%
+  );
+  transition: all 0.5s ease-in-out;
+}
+
+/* Shine effect on hover */
+.batch-headerTBD:hover::before {
+  left: 100%;
+}
+
+/* Stylish heading inside batch-header */
+.batch-headerTBD h2 {
+  font-size: 34px;
+  font-weight: 700;
+  color: #fff;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  position: relative;
+  z-index: 2;
+  background: linear-gradient(135deg, #ffffff, #e0e0e0); /* Gradient text */
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Adding hover effect */
+.batch-headerTBD:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+}
+
+/* Batch info styling */
+.batch-infoTBD {
+  display: flex;
+  justify-content: space-between;
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  margin-bottom: 30px;
+  transition: all 0.3s ease-in-out;
+}
+
+/* Custom design for info-item */
+.info-itemTBD {
+  text-align: center;
+  flex: 1;
+  padding: 20px;
+  margin: 0 10px;
+  background: linear-gradient(145deg, #6a11cb, #2575fc);
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease-in-out;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Hover effect for info-item */
+.info-itemTBD:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+  background: linear-gradient(145deg, #2575fc, #6a11cb);
+}
+
+/* Glow effect on hover */
+.info-itemTBD::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 200%;
+  height: 100%;
+  background: linear-gradient(
+    120deg,
+    rgba(255, 255, 255, 0.3) 20%,
+    transparent 80%
+  );
+  transition: all 0.5s ease-in-out;
+}
+
+.info-itemTBD:hover::before {
+  left: 100%;
+}
+
+/* Info label styling */
+.info-labelTBD {
+  display: block;
+  font-size: 18px;
+  color: #fff;
+  margin-bottom: 10px;
+  font-weight: 500;
+}
+
+/* Info value styling */
+.info-valueTBD {
+  font-size: 22px;
+  color: #fff;
+  font-weight: 700;
+  display: inline-block;
+  padding: 5px 10px;
+  background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Student name section styling */
+.student-name-section {
+  text-align: center;
+  padding: 30px;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.student-name-section h3 {
+  font-size: 28px;
+  color: #333;
+  margin: 0;
+}
+
+/* Hover effects */
+.batch-info:hover,
+.student-name-section:hover {
+  transform: translateY(-4px);
+  transition: transform 0.3s ease-in-out;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* Custom styles for the DataTable */
+.custom-datatableTBD {
+  margin-top: 20px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+}
+
+/* Header styling */
+.custom-datatableTBD .p-datatable-thead > tr > th {
+  background-color: #6a11cb; /* Purple header */
+  color: white;
+  font-weight: bold;
+  padding: 14px;
+  text-align: left;
+  border-bottom: 2px solid #4a0d8f; /* Darker purple border */
+  font-size: 16px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Row styling */
+.custom-datatableTBD .p-datatable-tbody > tr > td {
+  padding: 12px;
+  border-bottom: 1px solid #f0f0f0; /* Light gray border */
+  font-size: 14px;
+  color: #333;
+}
+
+/* Hover effect for rows */
+.custom-datatableTBD .p-datatable-tbody > tr:hover {
+  background-color: #f8f8f8; /* Light gray background on hover */
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+/* Paginator styling */
+.custom-datatableTBD .p-paginator {
+  background-color: #f8f9fa;
+  padding: 10px;
+  border-top: 1px solid #ecf0f1;
+  border-radius: 0 0 12px 12px;
+}
+
+.custom-datatableTBD .p-paginator .p-paginator-pages .p-paginator-page {
+  margin: 0 4px;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+}
+
+.custom-datatableTBD .p-paginator .p-paginator-pages .p-paginator-page.p-highlight {
+  background-color: #6a11cb; /* Purple for active page */
+  color: white;
+}
+
+.custom-datatableTBD .p-paginator .p-paginator-pages .p-paginator-page:not(.p-highlight):hover {
+  background-color: #4a0d8f; /* Darker purple on hover */
+  color: white;
+}
+
+/* Dropdown styling */
+.custom-datatableTBD .p-dropdown {
+  border-radius: 4px;
+  border: 1px solid #ced4da;
+}
+
+.custom-datatableTBD .p-dropdown:hover {
+  border-color: #6a11cb; /* Purple border on hover */
+}
+
+/* Gradient effect for student names */
+.student-name-gradient {
+  background: linear-gradient(135deg, #6a11cb, #2575fc);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-weight: 600;
+}
+
+/* trainerBatchDetail checked box designing */
+.checked-designH .p-checkbox-box {
+  background-color: #6a11cb; /* Green background for checked state */
+  border-color: #6a11cb; /* Green border for checked state */
+}
+
+.checked-designH .p-checkbox-icon {
+  color: white; /* White checkmark */
+}
+
+/* Align checkbox column to the end */
+.align-end-columnH {
+  text-align: center;
+}
+/* trainerBatchDetail Submit button designing */
+/* Submit button styling */
+.submit-buttonH {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #6a11cb;
+  color: white;
+  border: none;
+  border-radius: 15px;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.submit-buttonH:hover {
+  background-color: #36046c;
+}
+
+/* TrainerBatchDetail End by hasnen */
 
 /* LOGIN SCREEN STARTS*/
 
@@ -1214,3 +1814,231 @@ td {
   background-color: #00334c;
   color: white !important;
 }
+=======
+/* table css ends */
+
+/* StudentBatche component start by hasnen */
+
+.batches-containerHSB {
+  padding: 2rem;
+  background-color: #f0f4f8;
+  min-height: 100vh;
+}
+
+.batches-titleHSB {
+  text-align: center;
+  font-size: 2.5rem;
+  color: #2c3e50;
+  margin-bottom: 2rem;
+  font-weight: 600;
+  letter-spacing: -0.05em;
+  position: relative;
+}
+
+.batches-titleHSB::after {
+  content: "";
+  display: block;
+  width: 100px;
+  height: 4px;
+  background: linear-gradient(135deg, #3498db, #2980b9);
+  margin: 0.5rem auto 0;
+  border-radius: 2px;
+}
+
+.batches-gridHSB {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  padding: 0 1rem;
+}
+
+.batch-cardHSB {
+  background-color: #ffffff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: 1px solid #e0e0e0;
+}
+
+.batch-cardHSB:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.batch-card-headerHSB {
+  background-color: #3498db;
+  color: #ffffff;
+  padding: 1.5rem;
+  text-align: center;
+  border-bottom: 2px solid #2980b9;
+}
+
+.batch-card-headerHSB h2 {
+  margin: 0;
+  font-size: 1.75rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.batch-nameHSB {
+  color: #f3f3f4;
+  background: linear-gradient(135deg, #f3f3f4, #f3f3f4);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 600;
+  font-size: 1.75rem;
+  letter-spacing: -0.02em;
+}
+
+.batch-card-bodyHSB {
+  padding: 1.5rem;
+}
+
+.batch-infoHSB {
+  font-size: 1rem;
+  color: #333;
+  line-height: 1.6;
+}
+
+.batch-infoHSB p {
+  margin: 0.75rem 0;
+  font-size: 1.1rem;
+}
+
+.batch-infoHSB strong {
+  color: #2c3e50;
+  font-weight: 600;
+}
+
+
+@media (max-width: 768px) {
+  .batches-gridHSB {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  }
+
+  .batch-card-headerHSB h2 {
+    font-size: 1.5rem;
+  }
+
+  .batch-infoHSB p {
+    font-size: 1rem;
+  }
+
+  .batches-titleHSB {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .batches-titleHSB {
+    font-size: 1.75rem;
+  }
+
+  .batch-card-headerHSB h2 {
+    font-size: 1.25rem;
+  }
+
+  .batch-infoHSB p {
+    font-size: 0.9rem;
+  }
+}
+
+@keyframes cardHover {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-10px);
+  }
+}
+
+.batch-cardHSB:hover {
+  animation: cardHover 0.3s ease forwards;
+}
+
+.batch-card-headerHSB {
+  background: linear-gradient(135deg, #3498db, #2980b9);
+}
+
+.batches-containerHSB::-webkit-scrollbar {
+  width: 8px;
+}
+
+.batches-containerHSB::-webkit-scrollbar-track {
+  background: #f0f4f8;
+}
+
+.batches-containerHSB::-webkit-scrollbar-thumb {
+  background: #3498db;
+  border-radius: 4px;
+}
+
+.batches-containerHSB::-webkit-scrollbar-thumb:hover {
+  background: #2980b9;
+}
+
+/* StudentBatche component End by hasnen */
+
+/* TrainerProfile Start by hasnen */
+
+.custom-tableHTP {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 10px; /* Adds space between rows */
+  margin-top: 20px;
+}
+
+.custom-tableHTP th,
+.custom-tableHTP td {
+  padding: 12px 15px;
+  text-align: left;
+}
+
+.custom-tableHTP th {
+  background-color: #3498db; /* Primary color for headers */
+  color: white;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  width: 150px; /* Adjust this value as needed */
+  max-width: 150px; /* Ensures the header doesn't exceed this width */
+  white-space: nowrap; /* Prevents text from wrapping */
+  overflow: hidden; /* Hides overflow text */
+  text-overflow: ellipsis; /* Adds ellipsis for overflow text */
+}
+
+.custom-tableHTP td {
+  background-color: #f8f9fa; /* Light background for table cells */
+  border: 1px solid #dee2e6; /* Light border for cells */
+}
+
+.custom-tableHTP tr:hover td {
+  background-color: #e9ecef; /* Hover effect for rows */
+}
+
+.custom-tableHTP th:first-child,
+.custom-tableHTP td:first-child {
+  border-top-left-radius: 8px;
+  border-bottom-left-radius: 8px;
+}
+
+.custom-tableHTP th:last-child,
+.custom-tableHTP td:last-child {
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+
+.profile-headerHTP {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #343a40; /* Dark gray for headers */
+}
+
+.profile-subheaderHTP {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #495057; /* Slightly lighter gray for subheaders */
+}
+
+/* TrainerProfile End by hasnen */

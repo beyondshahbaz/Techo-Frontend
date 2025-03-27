@@ -2,6 +2,7 @@ import React, { useContext, useState } from "react";
 import { Outlet, useNavigate, Link } from "react-router-dom";
 import Header from "./Header";
 
+
 import { faSchool , faChalkboardUser , faTicket , faCubes} from "@fortawesome/free-solid-svg-icons";
 
 
@@ -11,6 +12,7 @@ import { all_routes } from "../feature-module/router/all_routes";
 import { AuthContext } from "../contexts/authContext";
 import { useNetworkCheck } from "../contexts/NetworkContext";
 import { Offline } from "./Offline/Offline";
+
 
 const Defaultlayout = () => {
   const routes = all_routes;
@@ -38,6 +40,7 @@ const Defaultlayout = () => {
   const Assessment = [
     { path: "/AssessmentTable", label: "ASSESSMENT CANDIDATE" }
   ];
+
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
@@ -115,6 +118,11 @@ const Defaultlayout = () => {
                   onClick={() => setVisible(false)}
                 >
                   Logout
+              <div className="sidebarHeaderContainer">
+                <span className="sidebarRole">WELCOME,</span>
+                <span className="sidebarName">
+                  {userLoggedIN && user && `${user.first_name} ${user.last_name}`}
+
                 </span>
               </div>
             </>

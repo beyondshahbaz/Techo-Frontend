@@ -7,7 +7,7 @@ import ClipLoader from "react-spinners/ClipLoader";
 
 const Login3 = () => {
   const routes = all_routes;
-  const { LoginUser, loading, loginError, responseSubrole, userLoggedIN, setLoginError} = useContext(AuthContext);
+  const { LoginUser, loading, loginError, responseSubrole, userLoggedIN, setLoginError , role } = useContext(AuthContext);
 
   const navigation = useNavigate();
   const [email, setEmail] = useState("");
@@ -28,16 +28,21 @@ const Login3 = () => {
     if (userLoggedIN && responseSubrole === "TRAINER") {
       navigation("/Trainer_profile");
     }
+    if (userLoggedIN && role === "ADMIN") {
+      navigation("/AssessmentTable");
+    }
     if (userLoggedIN && responseSubrole === "RECRUITER") {
       navigation("/ReadyToRecruitDashboard");
     }
-  }, [userLoggedIN, responseSubrole, navigation]);
+    
+  }, [userLoggedIN, responseSubrole,role , navigation]);
 
-
+  console.log(role)
   const validateEmail = (email) => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return re.test(String(email).toLowerCase());
   };
+
 
   const validatePassword = (password) => {
     return password >= 8;
@@ -170,12 +175,14 @@ const Login3 = () => {
                     >
                       <span>Sign In</span>
                       {/* <ClipLoader
+
                         color="#fff"
                         size={18}
                         speedMultiplier={0.5}
                         loading={loading}
                         className="loginLoader"
                       /> */}
+
                     </Link>
                     {loginError && <span className="text-danger">{loginError}</span>}
                   </div>

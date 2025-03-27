@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { AuthContext } from "../authContext";
 
+
 export const SponsorContext = createContext();
 
 const SponsorDashboardProvider = ({ children }) => {
@@ -30,6 +31,7 @@ const SponsorDashboardProvider = ({ children }) => {
   const GET_BATCH = async () => {
     try {
       const response = await axios.get(`${API_BASE_URL}/batches/`);
+
 
       if (response.status == 200) {
         setBatchName(response.data);
@@ -71,6 +73,7 @@ const SponsorDashboardProvider = ({ children }) => {
     }
   };
 
+
   useEffect(() => {
     GET_ALL_STUDENTS_TO_SPONSER();
     GET_BATCH();
@@ -84,6 +87,8 @@ const SponsorDashboardProvider = ({ children }) => {
     batchId,
     readyForRecruitment,
     FetchSponsor,
+
+
   };
 
   return (
