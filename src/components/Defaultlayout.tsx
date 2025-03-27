@@ -122,7 +122,7 @@ const Defaultlayout = () => {
                 <span className="sidebarRole">WELCOME,</span>
                 <span className="sidebarName">
                   {userLoggedIN && user && `${user.first_name} ${user.last_name}`}
-
+</span>
                 </span>
               </div>
             </>
