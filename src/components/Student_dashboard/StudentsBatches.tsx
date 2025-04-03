@@ -1,16 +1,24 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { baseURL } from "../../utils/axios";
+interface Student {
+  student_name: string;
+  student_id: number;
+  batch_name: string;
+  is_sponsored: boolean;
+}
 
 interface Batch {
   batch_name: string;
   start_date: string;
   trainer: string;
   duration: string;
-  technoLogies: number[];
+  technologies: string[];
+  student: Student;
 }
 
 const StudentsBatches: React.FC = () => {
-  const [batches, setBatches] = useState<Batch[]>([]);
+  const [batch, setBatch] = useState<Batch | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
@@ -18,7 +26,7 @@ const StudentsBatches: React.FC = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "https://gl8tx74f-8000.inc1.devtunnels.ms/auth/batches/",
+          `${baseURL}/batches/students_in_batch/`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -26,15 +34,10 @@ const StudentsBatches: React.FC = () => {
           }
         );
         console.log(response.data);
-
-        if (response.data && Array.isArray(response.data)) {
-          setBatches(response.data[2] ? [response.data[2]] : []);
-        } else {
-          setBatches([]);
-        }
+        setBatch(response.data);
       } catch (error) {
         console.error("Error fetching data:", error);
-        setBatches([]);
+        setBatch(null);
       } finally {
         setLoading(false);
       }
@@ -43,57 +46,64 @@ const StudentsBatches: React.FC = () => {
     fetchData();
   }, []);
 
-  const mapTechnologies = (techIds: number[]): string => {
-    const techMap: { [key: number]: string } = {
-      1: "Python",
-      2: "Django",
-      3: "Fastapi",
-      4: "MYSQL",
-      5: "Java",
-      6: "JavaScript",
-      7: "AI/ML",
-      8: "React",
-      9: "Nodejs",
-    };
-
-    return techIds.map((id) => techMap[id] || "Unknown").join(", ");
-  };
-
   if (loading) {
-    return <div className="text-center mt-5">Loading...</div>;
+    return (
+      <div className="loading-containerHSB">
+        <div className="loading-spinnerHSB"></div>
+        <p>Loading batch information...</p>
+      </div>
+    );
+  }
+
+  if (!batch) {
+    return (
+      <div className="error-containerHSB">
+        <div className="error-iconHSB">⚠️</div>
+        <h2>No batch data available</h2>
+        <p>Please check your connection or contact support</p>
+      </div>
+    );
   }
 
   return (
     <div className="batches-containerHSB">
-      <h1 className="batches-titleHSB">Students Batch</h1>
+      <h1 className="batches-titleHSB">Student Batch Information</h1>
       <div className="batches-gridHSB">
-        {batches.map((batch, index) => (
-          <div key={index} className="batch-cardHSB">
-            <div className="batch-card-headerHSB">
-              <h2 className="batch-nameHSB">{batch.batch_name}</h2>
-            </div>
-            <div className="batch-card-bodyHSB">
-              <div className="batch-infoHSB">
-                <p>
-                  <strong>Start Date:</strong> {batch.start_date}
-                </p>
-                <p>
-                  <strong>Trainer:</strong> {batch.trainer}
-                </p>
-                <p>
-                  <strong>Duration:</strong> {batch.duration}
-                </p>
-                <p>
-                  <strong>Technologies:</strong>{" "}
-                  {mapTechnologies(batch.technoLogies)}
-                </p>
+        <div className="batch-cardHSB">
+          <div className="batch-card-headerHSB">
+            <h2 className="batch-nameHSB text-uppercase">{batch.batch_name}</h2>
+          </div>
+          <div className="batch-card-bodyHSB">
+            <div className="batch-infoHSB">
+              <div className="info-itemHSB">
+                <span className="info-labelHSB">Start Date:</span>
+                <span className="info-valueHSB">{batch.start_date}</span>
+              </div>
+              <div className="info-itemHSB">
+                <span className="info-labelHSB">Trainer:</span>
+                <span className="info-valueHSB">{batch.trainer}</span>
+              </div>
+              <div className="info-itemHSB">
+                <span className="info-labelHSB">Duration:</span>
+                <span className="info-valueHSB">{batch.duration}</span>
+              </div>
+              <div className="info-itemHSB">
+                <span className="info-labelHSB">Technologies:</span>
+                <div className="tech-tagsHSB">
+                  {batch.technologies.map((tech, index) => (
+                    <span key={index} className="tech-tagHSB">
+                      {tech}
+                    </span>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
-        ))}
+        </div>
       </div>
     </div>
   );
 };
 
 export default StudentsBatches;
+

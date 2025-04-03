@@ -5,6 +5,7 @@ import 'primereact/resources/themes/saga-blue/theme.css';
 import 'primereact/resources/primereact.min.css';
 import 'primeicons/primeicons.css';
 import axios from 'axios';
+import { baseURL } from '../../utils/axios';
 
 const AllIntervieweesInformation = () => {
   const [interviewees, setInterviewees] = useState([]);
@@ -13,7 +14,7 @@ const AllIntervieweesInformation = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('https://gl8tx74f-8000.inc1.devtunnels.ms/auth/Learner/');
+        const response = await axios.get(`${baseURL}/Learner/`);
         setInterviewees(response.data); 
         setLoading(false);
       } catch (error) {

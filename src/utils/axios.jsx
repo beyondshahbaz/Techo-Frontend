@@ -1,5 +1,5 @@
 import axios from 'axios';
-export const baseURL = "https://gl8tx74f-8000.inc1.devtunnels.ms/"
+export const baseURL = "https://gl8tx74f-8000.inc1.devtunnels.ms/auth"
 
 
 

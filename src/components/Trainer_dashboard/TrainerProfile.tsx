@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useForm } from "react-hook-form";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { baseURL } from "../../utils/axios";
 
 interface Trainer {
   id: number;
@@ -32,7 +33,7 @@ const TrainerProfile: React.FC = () => {
     }
 
     axios
-      .get<Trainer>("https://gl8tx74f-8000.inc1.devtunnels.ms/auth/trainers/", {
+      .get<Trainer>(`${baseURL}/trainers/`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -71,7 +72,7 @@ const TrainerProfile: React.FC = () => {
 
     try {
       await axios.put(
-        `https://gl8tx74f-8000.inc1.devtunnels.ms/auth/trainers/${trainer.id}/`,
+        `${baseURL}/trainers/${trainer.id}/`,
         formData,
         {
           headers: {
@@ -100,7 +101,7 @@ const TrainerProfile: React.FC = () => {
         <div className="row align-items-center">
           <div className="col-sm-12 col-md-4 d-flex flex-column align-items-center justify-content-center mb-3">
             <img
-              src={`https://gl8tx74f-8000.inc1.devtunnels.ms/auth${trainer.user_profile}`}
+              src={`${baseURL}${trainer.user_profile}`}
               alt="Trainer Profile"
               className="img-thumbnail rounded-circle border border-primary"
               style={{ width: "180px", height: "180px", objectFit: "cover" }}

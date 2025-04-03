@@ -5,7 +5,7 @@ import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { Button } from "primereact/button";
 import { useNavigate } from "react-router-dom";
-
+import { baseURL } from "../../utils/axios";
 interface AssessmentData {
   id: string;
   student_name: string;
@@ -27,7 +27,7 @@ const AssessmentTable: React.FC = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get<ApiResponse>(
-          "https://gl8tx74f-8000.inc1.devtunnels.ms/auth/assessment/"
+          `${baseURL}/assessment/`
         );
         setData(response.data.data);
         console.log(response.data.data)

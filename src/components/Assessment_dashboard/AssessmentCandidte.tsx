@@ -3,7 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { AuthContext } from "../../contexts/authContext";
-
+import { baseURL } from "../../utils/axios";
 interface AssessmentDetail {
   id: string;
   batch_id: number;
@@ -43,7 +43,7 @@ const AssessmentCandidateWithForm: React.FC = () => {
     const fetchAssessmentDetail = async () => {
       try {
         const response = await axios.get<ApiResponse>(
-          `https://gl8tx74f-8000.inc1.devtunnels.ms/auth/assessment/${id}/`
+          `${baseURL}/assessment/${id}/`
         );
         setAssessmentDetail(response.data.data);
         reset(response.data.data); 
@@ -83,7 +83,7 @@ const AssessmentCandidateWithForm: React.FC = () => {
   
     try {
       const response = await axios.put(
-        `https://gl8tx74f-8000.inc1.devtunnels.ms/auth/assessment/${id}/`,
+        `${baseURL}/assessment/${id}/`,
         payload
       );
       console.log("Data updated successfully:", response.data);
