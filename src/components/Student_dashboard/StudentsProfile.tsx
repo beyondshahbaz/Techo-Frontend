@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useForm } from "react-hook-form";
+import { baseURL } from "../../utils/axios";
 
 interface Student {
   id: number;
@@ -28,7 +29,7 @@ const StudentsProfile: React.FC = () => {
     const fetchStudentData = async (token: string) => {
       try {
         const response = await axios.get<Student>(
-          "https://gl8tx74f-8000.inc1.devtunnels.ms/auth/Students/",
+          `${baseURL}/Students/`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -72,7 +73,7 @@ const StudentsProfile: React.FC = () => {
 
     try {
       await axios.put(
-        `https://gl8tx74f-8000.inc1.devtunnels.ms/auth/Students/${student.id}/`,
+        `${baseURL}/Students/${student.id}/`,
         formData,
         { 
           headers: { 
@@ -103,7 +104,7 @@ const StudentsProfile: React.FC = () => {
         <div className="col-md-4">
           <div className="card shadow-sm">
             <img
-              src={`https://gl8tx74f-8000.inc1.devtunnels.ms/auth${student.user_profile}`}
+              src={`${baseURL}${student.user_profile}`}
               className="card-img-top rounded-circle mx-auto mt-4"
               alt="Student"
               style={{ width: "150px", height: "150px", objectFit: "cover" }}

@@ -6,6 +6,7 @@ import { Column } from "primereact/column";
 import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
 import { useNavigate } from "react-router-dom";
+import { baseURL } from "../../utils/axios";
 
 interface AdmissionData {
   id: string;
@@ -39,7 +40,7 @@ const AdmissionTable: React.FC = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "https://gl8tx74f-8000.inc1.devtunnels.ms/auth/Learner/"
+          `${baseURL}/Learner/`
         );
         setData(response.data);
       } catch (error) {
@@ -82,7 +83,7 @@ const AdmissionTable: React.FC = () => {
     // Send the updated data to the backend
     axios
       .put(
-        `https://gl8tx74f-8000.inc1.devtunnels.ms/auth/Learner/${rowData.id}/`,
+        `${baseURL}/Learner/${rowData.id}/`,
         {
           ...rowData,
           interview_by: newInterviewer,

@@ -4,6 +4,7 @@ import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { Checkbox } from "primereact/checkbox";
 import axios from "axios";
+import { baseURL } from "../../utils/axios";
 
 // Define the type for a student object
 interface Student {
@@ -37,14 +38,18 @@ const TrainerBatchDetail = () => {
   const [batchDetail, setBatchDetail] = useState<BatchDetail | null>(null);
   const [selectedStudents, setSelectedStudents] = useState<number[]>([]);
   const navigate = useNavigate();
+  const [accessToken, setAccessToken] = useState<string>("");
 
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
+    if (token) {
+      setAccessToken(token);
+    }
 
     const fetchBatchDetail = async () => {
       try {
         const response = await axios.get<ApiResponse>(
-          `https://gl8tx74f-8000.inc1.devtunnels.ms/auth/trainers/batches/${batchId}/`,
+          `${baseURL}/trainers/batches/${batchId}/`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -80,8 +85,13 @@ const TrainerBatchDetail = () => {
 
     try {
       const response = await axios.post(
-        "https://gl8tx74f-8000.inc1.devtunnels.ms/auth/Trainer/1/trainer_select/",
-        payload
+        `${baseURL}/Trainer/trainer_select/`,
+        payload ,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
       );
       alert("Students selected successfully!");
       navigate("/Trainer_batch");

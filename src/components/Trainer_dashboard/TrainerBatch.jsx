@@ -3,6 +3,7 @@ import { Card } from "primereact/card";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import TrainerImage from "../../assets/images/trainers/Trainer.jpg";
+import { baseURL } from "../../utils/axios";
 
 const TrainerBatch = () => {
   const [batches, setBatches] = useState([]);
@@ -15,7 +16,7 @@ const TrainerBatch = () => {
     const fetchBatches = async () => {
       try {
         const response = await axios.get(
-          "https://gl8tx74f-8000.inc1.devtunnels.ms/auth/trainers/batches/",
+          `${baseURL}/trainers/batches/`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
