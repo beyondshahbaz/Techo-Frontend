@@ -100,6 +100,7 @@
     ]
   },
   "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@types/bootstrap": "^5.2.10",
     "@types/dragula": "^3.7.5",
     "@types/node": "^20.17.23",

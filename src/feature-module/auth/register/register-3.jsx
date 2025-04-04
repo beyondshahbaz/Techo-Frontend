@@ -60,9 +60,9 @@ const Register3 = () => {
   });
 
   const ID_TYPE_MAPPING = {
-    'PASSPORT': 1,
-    'VOTER_ID': 2,
-    'ADHAARCARD': 3
+    'PASSPORT': 2,
+    'VOTER_ID': 3,
+    'ADHAARCARD': 1
   };
 
   // Validation functions (keep your existing ones)
@@ -250,7 +250,7 @@ const Register3 = () => {
       formData.append('password', password);
       
       if (newSelectedRole === "LEARNER") {
-        formData.append('role', '2');
+        formData.append('role', '6');
         formData.append('mobile_no', mobileNumber);
         formData.append('id_type', ID_TYPE_MAPPING[selectedIdType.toUpperCase()]);
         formData.append('identity', identity.trim());
@@ -263,7 +263,7 @@ const Register3 = () => {
           formData.append('user_profile', profileImage, profileImage.name);
         }
       } else if (newSelectedRole === "ENABLER") {
-        formData.append('role', '3');
+        formData.append('role', '7');
         const subroleMapping = {
           APPLICANT: 1,
           INTERVIEWEE: 2,
@@ -597,7 +597,7 @@ const Register3 = () => {
                       <li
                         key={idtype.idTypeName}
                         onClick={() => {
-                          setSelectedIdType(idtype.idTypeName);
+                          setSelectedIdType(idtype.id);
                           setSelectedIdTypeError("");
                         }}
                         className="dropdown-item c-pointer"
