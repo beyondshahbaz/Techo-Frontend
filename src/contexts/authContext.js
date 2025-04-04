@@ -43,19 +43,37 @@ const AuthProvider = ({ children }) => {
     setLoading(true);
     setUserCreatedSuccessfully(false);
     try {
-      const response = await axios.post(`${API_BASE_URL}/register/`, userData, {
-        headers: { "Content-Type": "application/json" },
-      });
+      // Determine if we're sending FormData (file upload) or JSON
+      const isFormData = userData instanceof FormData;
+      
+      const config = {
+        headers: {
+          'Content-Type': isFormData ? 'multipart/form-data' : 'application/json'
+        }
+      };
+  
+      const response = await axios.post(
+        `${API_BASE_URL}/register/`, 
+        userData, 
+        config
+      );
+  
       if (response.status === 200) {
         setUserCreatedSuccessfully(true); 
         window.alert("User Created Successfully");
       }
       return response.data;
     } catch (error) {
-      if(error.response?.data?.email[0] == 'user with this email already exists.'){
+      if(error.response?.data?.email?.[0] === 'user with this email already exists.'){
         setEmailAlreadyCreated(true);
       }
-      console.log('err', error);
+      console.log('Registration error:', error);
+      
+      // Handle file upload specific errors
+      if (error.response?.status === 400 && error.response?.data?.user_profile) {
+        throw new Error(error.response.data.user_profile.join(', '));
+      }
+      
 
       throw error;
     } finally {
@@ -83,7 +101,8 @@ const AuthProvider = ({ children }) => {
         localStorage.setItem("subrole", response.data.subrole);
 
         if (response.status === 200) {
-          console.log("responseSubrole", responseSubrole);
+          console.log('data', response.data);
+
           setUserLoggedIN(true);
           return response.data;
         }

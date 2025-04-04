@@ -9,11 +9,13 @@ import {
   faCubes,
 } from "@fortawesome/free-solid-svg-icons";
 
+
 import { Sidebar } from "primereact/sidebar";
 import Dropdown from "./Dropdown";
 import { all_routes } from "../feature-module/router/all_routes";
 import { AuthContext } from "../contexts/authContext";
 import { useNetworkCheck } from "../contexts/NetworkContext";
+import { Offline } from "./Offline/Offline";
 
 const Defaultlayout = () => {
   const routes = all_routes;
@@ -37,6 +39,7 @@ const Defaultlayout = () => {
     }
   }, []);
 
+
   const StudentsItems = [
     { path: "/Students_profile", label: "PROFILE" },
     { path: "/Students_batches", label: "BATCH" },
@@ -51,7 +54,6 @@ const Defaultlayout = () => {
   const Assessment = [
     { path: "/AssessmentTable", label: "ASSESSMENT CANDIDATE" },
   ];
-
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
@@ -64,7 +66,9 @@ const Defaultlayout = () => {
 
   return (
     <>
-      <Sidebar
+    {
+      isOnline ?     <>
+ <Sidebar
         className="posRel sidebarBg"
         visible={visible}
         onHide={() => setVisible(false)}
@@ -202,6 +206,12 @@ const Defaultlayout = () => {
           </div>
         </div>
       </div>
+      </>
+      : (
+        <Offline/>
+      )
+    }
+
     </>
   );
 };
