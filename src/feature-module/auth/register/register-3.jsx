@@ -99,7 +99,11 @@ const Register3 = () => {
     try {
       const response = await axios.get(`${API_BASE_URL}/idtypes/`);
       if (response.status === 200) {
+        console.log(response.data);
+        
         setIdType(response.data);
+        console.log(idTypes);
+
       }
     } catch (error) {
       console.error("Error fetching ID types:", error);
@@ -252,6 +256,8 @@ const Register3 = () => {
       if (newSelectedRole === "LEARNER") {
         formData.append('role', '6');
         formData.append('mobile_no', mobileNumber);
+        console.log(selectedIdType ,ID_TYPE_MAPPING[selectedIdType.toUpperCase()]);
+        
         formData.append('id_type', ID_TYPE_MAPPING[selectedIdType.toUpperCase()]);
         formData.append('identity', identity.trim());
         formData.append('subrole', 1);
@@ -265,7 +271,7 @@ const Register3 = () => {
       } else if (newSelectedRole === "ENABLER") {
         formData.append('role', '7');
         const subroleMapping = {
-          APPLICANT: 1,
+          APPLICANT: 1, 
           INTERVIEWEE: 2,
           STUDENT: 3,
           SPONSOR: 4,
@@ -597,7 +603,10 @@ const Register3 = () => {
                       <li
                         key={idtype.idTypeName}
                         onClick={() => {
-                          setSelectedIdType(idtype.id);
+                          console.log(idtype);
+                          console.log(idtype.idTypeName);
+                          
+                          setSelectedIdType(idtype.idTypeName);
                           setSelectedIdTypeError("");
                         }}
                         className="dropdown-item c-pointer"
