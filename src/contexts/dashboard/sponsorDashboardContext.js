@@ -11,12 +11,12 @@ const SponsorDashboardProvider = ({ children }) => {
   const [readyForRecruitment, setReadyForRecruitment] = useState([]);
   const [sponsor, setSponsor] = useState([]);
 
-  const { API_BASE_URL, userID, accessToken} = useContext(AuthContext);
+  const { API_BASE_URL, accessToken} = useContext(AuthContext);
 
   const GET_ALL_STUDENTS_TO_SPONSER = async () => {
     try {
       const response = await axios.get(
-        `${API_BASE_URL}/sponsers/1/available_students/`
+        `${API_BASE_URL}/sponsors/available_students/`
       );
       if (response.status == 200) {
         setUserDataToSponsor(response.data.students_to_sponsor);
@@ -56,10 +56,10 @@ const SponsorDashboardProvider = ({ children }) => {
   };
 
   const FetchSponsor = async () => {
-    console.log()
     try {
-      const response = await axios.get(`${API_BASE_URL}/sponsers/`, {
+      const response = await axios.get(`${API_BASE_URL}/sponsors/`, {
         headers: {
+          'Content-Type' : 'application/json',
           'Authorization': `Bearer ${accessToken}`
         }
       });

@@ -17,8 +17,8 @@ const AuthProvider = ({ children }) => {
 
   const [loginError, setLoginError] = useState("");
 
-  // const API_BASE_URL = "https://techie01.pythonanywhere.com/auth";
-  const API_BASE_URL = "https://gl8tx74f-8000.inc1.devtunnels.ms/auth";
+  const API_BASE_URL = "https://techie01.pythonanywhere.com/auth";
+  // const API_BASE_URL = "https://gl8tx74f-8000.inc1.devtunnels.ms/auth";
   // const API_BASE_URL = "https://p9777pv7-8000.inc1.devtunnels.ms/auth";
 
   useEffect(() => {
@@ -75,34 +75,40 @@ const AuthProvider = ({ children }) => {
     }
   };
 
-    const LoginUser = async (userData) => {
-      setLoginError("");
-      setLoading(true);
-      try {
-        const response = await axios.post(`${API_BASE_URL}/login/`, userData, {
-          headers: { "Content-Type": "application/json" },
-        });
-
-        setAccessToken(response.data.access);
-        setRefreshToken(response.data.refresh);
-        setUserID(response.data.user_id);
-        setResponseSubrole(response.data.subrole);
-        localStorage.setItem("accessToken", response.data.access);
-        localStorage.setItem("refreshToken", response.data.refresh);
-        localStorage.setItem("userID", response.data.user_id);
-
-        if (response.status === 200) {
-          console.log('data', response.data);
-          setUserLoggedIN(true);
-          return response.data;
-        }
-      } catch (error) {
-        setLoginError(error.response.data.non_field_errors[0]);
-        throw error;
-      } finally {
-        setLoading(false);
+  const LoginUser = async (userData) => {
+    setLoginError(""); // Clear previous errors
+    setLoading(true);
+    try {
+      const response = await axios.post(`${API_BASE_URL}/login/`, userData, {
+        headers: { "Content-Type": "application/json" },
+      });
+  
+      setAccessToken(response.data.access);
+      setRefreshToken(response.data.refresh);
+      setUserID(response.data.user_id);
+      setResponseSubrole(response.data.subrole);
+      localStorage.setItem("accessToken", response.data.access);
+      localStorage.setItem("refreshToken", response.data.refresh);
+      localStorage.setItem("userID", response.data.user_id);
+  
+      if (response.status === 200) {
+        setUserLoggedIN(true);
+        return response.data;
       }
-    };
+    } catch (error) {
+      // Check for different error response structures
+      const errorMessage =
+        error.response?.data?.error || // Case: {"error": "..."}
+        error.response?.data?.non_field_errors?.[0] || // Case: {"non_field_errors": ["..."]}
+        "Login failed. Please try again."; // Fallback message
+  
+      setLoginError(errorMessage); // Store the error in state
+      console.error("Login Error:", error.response?.data);
+      throw error; // Re-throw to allow component-level handling
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const GetUser = async () => {
     if (!accessToken) {

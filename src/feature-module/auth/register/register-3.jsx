@@ -65,7 +65,7 @@ const Register3 = () => {
     'ADHAARCARD': 3
   };
 
-  // Validation functions (keep your existing ones)
+  // Validation functions
   const validatePassword = (password) => {
     const strongPasswordRegex =
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
@@ -78,8 +78,8 @@ const Register3 = () => {
   };
 
   const validateMobileNumber = (number) => {
-    const mobileRegex = /^[0-9]{10}$/;
-    return mobileRegex.test(number);
+    const mobileRegex = /^[6-9]\d{9}$/; // Indian mobile numbers start with 6-9
+    return mobileRegex.test(number) && number.length === 10;
   };
 
   const togglePasswordVisibility = () => {
@@ -94,7 +94,7 @@ const Register3 = () => {
     setErrorSelectedRole("");
   };
 
-  // Fetch ID types from API (keep your existing one)
+  // Fetch ID types from API
   const fetchIdType = async () => {
     try {
       const response = await axios.get(`${API_BASE_URL}/idtypes/`);
@@ -133,6 +133,12 @@ const Register3 = () => {
 
     setProfileImage(file);
     setUserProfileError("");
+  };
+
+  // Format mobile number for display
+  const formatMobileNumber = (value) => {
+    const cleaned = value.replace(/\D/g, '');
+    return cleaned.slice(0, 10);
   };
 
   useEffect(() => {
@@ -205,7 +211,7 @@ const Register3 = () => {
         setMobileNumberError("Mobile Number is Required");
         isValid = false;
       } else if (!validateMobileNumber(mobileNumber)) {
-        setMobileNumberError("Invalid Mobile Number");
+        setMobileNumberError("Please enter a valid 10-digit mobile number starting with 6-9");
         isValid = false;
       }
       if (!profileImage) {
@@ -231,7 +237,7 @@ const Register3 = () => {
         setproposerMobileError("Proposer Mobile Number is Required");
         isValid = false;
       } else if (!validateMobileNumber(proposerNumber)) {
-        setproposerMobileError("Invalid Proposer Mobile Number");
+        setproposerMobileError("Please enter a valid 10-digit mobile number starting with 6-9");
         isValid = false;
       }
     }
@@ -248,10 +254,10 @@ const Register3 = () => {
       formData.append('last_name', lastName.trim());
       formData.append('email', email.trim());
       formData.append('password', password);
+      formData.append('mobile_no', mobileNumber);
       
       if (newSelectedRole === "LEARNER") {
         formData.append('role', '2');
-        formData.append('mobile_no', mobileNumber);
         formData.append('id_type', ID_TYPE_MAPPING[selectedIdType.toUpperCase()]);
         formData.append('identity', identity.trim());
         formData.append('subrole', 1);
@@ -276,17 +282,7 @@ const Register3 = () => {
         formData.append('subrole', subroleMapping[selectedSubrole] || '');
       }
   
-
-  
-      // Call RegisterUser with progress tracking
-      await RegisterUser(formData, (progressEvent) => {
-        if (progressEvent.lengthComputable) {
-          const percentCompleted = Math.round(
-            (progressEvent.loaded * 100) / progressEvent.total
-          );
-          setUploadProgress(percentCompleted);
-        }
-      });
+      await RegisterUser(formData);
       
     } catch (error) {
       console.error("Registration error:", error);
@@ -312,12 +308,12 @@ const Register3 = () => {
         if (errors.mobileNumber) {
           setMobileNumberError(errors.mobileNumber.join(', '));
         }
-        // Add more field-specific error handling as needed
       }
     } finally {
       setIsUploading(false);
     }
   };
+
   return (
     <div className="card mt-5 mx-2">
       <div className="card-header">
@@ -395,7 +391,6 @@ const Register3 = () => {
               </label>
               <Tooltip target=".custom-target-icon" />
 
-              {/* Icon with tooltip */}
               <i
                 className="custom-target-icon pi pi-info-circle p-text-secondary ms-5"
                 data-pr-tooltip="Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, one number, and one special character"
@@ -423,6 +418,29 @@ const Register3 = () => {
               ></span>
               {errorPassword && (
                 <span className="text-danger">{errorPassword}</span>
+              )}
+            </div>
+
+            <div className="col-xxl-6 col-xl-6 col-md-6 mb-3">
+              <label className="form-label" htmlFor="mobileNumber">
+                Mobile Number <span className="text-danger">*</span>
+              </label>
+              <input
+                className="mb-0"
+                placeholder="Enter 10-digit mobile number"
+                id="mobileNumber"
+                type="tel"
+                pattern="[0-9]*"
+                maxLength="10"
+                value={mobileNumber}
+                onChange={(e) => {
+                  const formattedNumber = formatMobileNumber(e.target.value);
+                  setMobileNumber(formattedNumber);
+                  setMobileNumberError("");
+                }}
+              />
+              {mobilenumberError && (
+                <span className="text-danger">{mobilenumberError}</span>
               )}
             </div>
 
@@ -458,6 +476,7 @@ const Register3 = () => {
                 <span className="text-danger">{errorSelectedRole}</span>
               )}
             </div>
+
             <div
               className={`col-xxl-6 col-xl-6 col-md-6 mb-3 ${
                 newSelectedRole === "LEARNER" ? "d-none" : "d-block"
@@ -521,46 +540,6 @@ const Register3 = () => {
               newSelectedRole === "ENABLER" ? "d-none" : "d-flex mt-4"
             }`}
           >
-            <div className="col-xxl-4 col-xl-4 col-md-4  mb-3">
-              <label className="form-label" htmlFor="mobileNumber">
-                Mobile Number <span className="text-danger">*</span>
-              </label>
-              <input
-                className="mb-0"
-                placeholder="Enter Your Number"
-                id="mobileNumber"
-                type="text"
-                value={mobileNumber}
-                onChange={(e) => {
-                  setMobileNumber(e.target.value);
-                  setMobileNumberError("");
-                }}
-              />
-              {mobilenumberError && (
-                <span className="text-danger">{mobilenumberError}</span>
-              )}
-            </div>
-
-            {/* <div className="col-xxl-4 col-xl-4 col-md-4  mb-3">
-                <label className="form-label" htmlFor="user_profile">
-                  User Profile Image <span className="text-danger">*</span>
-                </label>
-                <input
-                  id="user_profile"
-                  type="file"
-                  name="user_profile"
-                  className="form-control mb-0"
-                  accept="image/*"
-                  onChange={(e) => {
-                    setProfileImage(e.target.files?.[0] || null);
-                    setUserProfileError("");
-                  }}
-                />
-                {userProfileError && (
-                  <span className="text-danger">{userProfileError}</span>
-                )}
-              </div> */}
-
             <div className="col-xxl-4 col-xl-4 col-md-4 mb-3">
               <label className="form-label" htmlFor="user_profile">
                 User Profile Image <span className="text-danger">*</span>
@@ -623,7 +602,7 @@ const Register3 = () => {
               )}
             </div>
 
-            <div className="col-xxl-4 col-xl-4 col-md-4  mb-3">
+            <div className="col-xxl-4 col-xl-4 col-md-4 mb-3">
               <label
                 className="form-label text-nowrap"
                 htmlFor="identityNumber"
@@ -666,7 +645,7 @@ const Register3 = () => {
               )}
             </div>
 
-            <div className="col-xxl-4 col-xl-4 col-md-4  mb-3">
+            <div className="col-xxl-4 col-xl-4 col-md-4 mb-3">
               <label
                 className="form-label text-nowrap"
                 htmlFor="proposerNumber"
@@ -676,11 +655,14 @@ const Register3 = () => {
               <input
                 className="mb-0"
                 id="proposerNumber"
-                placeholder="Enter Your Proposer Number"
-                type="text"
+                placeholder="Enter 10-digit mobile number"
+                type="tel"
+                pattern="[0-9]*"
+                maxLength="10"
                 value={proposerNumber}
                 onChange={(e) => {
-                  setProposerNumber(e.target.value);
+                  const formattedNumber = formatMobileNumber(e.target.value);
+                  setProposerNumber(formattedNumber);
                   setproposerMobileError("");
                 }}
               />
@@ -697,15 +679,22 @@ const Register3 = () => {
                 <button
                   type="submit"
                   className="btn btn-primary w-100 loginBtn"
+                  disabled={isUploading}
                 >
-                  Sign Up{" "}
-                  {/* <ClipLoader
-                      color="#fff"
-                      size={18}
-                      speedMultiplier={0.5}
-                      loading={loading}
-                      className="loginLoader"
-                    /> */}
+                  {isUploading ? (
+                    <>
+                      <ClipLoader
+                        color="#fff"
+                        size={18}
+                        speedMultiplier={0.5}
+                        loading={isUploading}
+                        className="loginLoader"
+                      />
+                      {" Registering..."}
+                    </>
+                  ) : (
+                    "Sign Up"
+                  )}
                 </button>
               </div>
               <div className="text-center">
@@ -718,55 +707,6 @@ const Register3 = () => {
               </div>
             </div>
           </div>
-          {/* Successfully user created modal */}
-          {/* {userCreatedSuccessfully && (
-              <div
-                className="modal fade"
-                id="registerModal"
-                aria-labelledby="registerModalLabel"
-                aria-hidden="true"
-              >
-                <div className="modal-dialog modal-dialog-centered">
-                  <div className="modal-content">
-                    <div className="modal-header">
-                      <h3 className="modal-title text-center w-100">
-                        Congratulations!{" "}
-                        <i className="pi pi-check-circle text-success ms-2"></i>
-                      </h3>
-                      <button
-                        type="button"
-                        className="btn-close"
-                        data-bs-dismiss="modal"
-                        aria-label="Close"
-                      ></button>
-                    </div>
-                    <div className="modal-body text-center">
-                      <p className="lead mb-4">
-                        Your account has been successfully created. You can now
-                        log in to access your account.
-                      </p>
-                      <div className="d-flex justify-content-center gap-3">
-                        <button
-                          type="button"
-                          className="btn btn-light w-50"
-                          data-bs-dismiss="modal"
-                        >
-                          Close
-                        </button>
-                        <Link
-                          type="button"
-                          className="btn btn-primary w-50"
-                          onClick={navigate(routes.login3)}
-                          data-bs-dismiss="modal"
-                        >
-                          Go to Login
-                        </Link>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )} */}
         </form>
       </div>
     </div>
