@@ -36,9 +36,7 @@ const Register3 = () => {
   const [proposerEmail, setProposerEmail] = useState("");
   const [proposerNumber, setProposerNumber] = useState("");
   const [selectedIdType, setSelectedIdType] = useState("Select an ID");
-  const [imagePreview, setImagePreview] = useState(null);
-  const [uploadProgress, setUploadProgress] = useState(0);
-  const [isUploading, setIsUploading] = useState(false);
+  const [imagePreview, setImagePreview] = useState("");
 
   // Error states
   const [errorFirstName, setErrorFirstName] = useState("");
@@ -65,7 +63,7 @@ const Register3 = () => {
     'ADHAARCARD': 1
   };
 
-  // Validation functions (keep your existing ones)
+  // Validation functions
   const validatePassword = (password) => {
     const strongPasswordRegex =
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
@@ -94,16 +92,12 @@ const Register3 = () => {
     setErrorSelectedRole("");
   };
 
-  // Fetch ID types from API (keep your existing one)
+  // Fetch ID types from API
   const fetchIdType = async () => {
     try {
       const response = await axios.get(`${API_BASE_URL}/idtypes/`);
       if (response.status === 200) {
-        console.log(response.data);
-        
         setIdType(response.data);
-        console.log(idTypes);
-
       }
     } catch (error) {
       console.error("Error fetching ID types:", error);
@@ -128,20 +122,30 @@ const Register3 = () => {
       return;
     }
 
-    // Create preview
-    const reader = new FileReader();
-    reader.onload = () => {
-      setImagePreview(reader.result);
-    };
-    reader.readAsDataURL(file);
-
+    // If validations pass, set the file to state and create preview
     setProfileImage(file);
     setUserProfileError("");
+    setImagePreview(URL.createObjectURL(file));
+  };
+
+  const removeImage = () => {
+    setProfileImage(null);
+    setImagePreview("");
+    if (imagePreview) {
+      URL.revokeObjectURL(imagePreview);
+    }
   };
 
   useEffect(() => {
     fetchNewSubrole();
     fetchIdType();
+    
+    // Clean up object URLs when component unmounts
+    return () => {
+      if (imagePreview) {
+        URL.revokeObjectURL(imagePreview);
+      }
+    };
   }, []);
 
   const onRegisterUser = async (e) => {
@@ -161,8 +165,7 @@ const Register3 = () => {
     setProposerEmailError("");
     setproposerMobileError("");
     setEmailExistsError("");
-    setUploadProgress(0);
-  
+
     let isValid = true;
   
     // Validation checks
@@ -242,8 +245,6 @@ const Register3 = () => {
   
     if (!isValid) return;
   
-    setIsUploading(true);
-  
     try {
       const formData = new FormData();
       
@@ -252,21 +253,19 @@ const Register3 = () => {
       formData.append('last_name', lastName.trim());
       formData.append('email', email.trim());
       formData.append('password', password);
-      
+      formData.append('mobile_no', mobileNumber);
+
       if (newSelectedRole === "LEARNER") {
         formData.append('role', '6');
-        formData.append('mobile_no', mobileNumber);
-        console.log(selectedIdType ,ID_TYPE_MAPPING[selectedIdType.toUpperCase()]);
-        
         formData.append('id_type', ID_TYPE_MAPPING[selectedIdType.toUpperCase()]);
         formData.append('identity', identity.trim());
         formData.append('subrole', 1);
         formData.append('proposer_email', proposerEmail.trim());
         formData.append('proposer_mobile_no', proposerNumber);
         
-        // Append the file directly with proper filename
+        // Append the file
         if (profileImage) {
-          formData.append('user_profile', profileImage, profileImage.name);
+          formData.append('user_profile', profileImage);
         }
       } else if (newSelectedRole === "ENABLER") {
         formData.append('role', '7');
@@ -282,17 +281,8 @@ const Register3 = () => {
         formData.append('subrole', subroleMapping[selectedSubrole] || '');
       }
   
-
-  
       // Call RegisterUser with progress tracking
-      await RegisterUser(formData, (progressEvent) => {
-        if (progressEvent.lengthComputable) {
-          const percentCompleted = Math.round(
-            (progressEvent.loaded * 100) / progressEvent.total
-          );
-          setUploadProgress(percentCompleted);
-        }
-      });
+      await RegisterUser(formData);
       
     } catch (error) {
       console.error("Registration error:", error);
@@ -318,12 +308,10 @@ const Register3 = () => {
         if (errors.mobileNumber) {
           setMobileNumberError(errors.mobileNumber.join(', '));
         }
-        // Add more field-specific error handling as needed
       }
-    } finally {
-      setIsUploading(false);
     }
   };
+
   return (
     <div className="card mt-5 mx-2">
       <div className="card-header">
@@ -401,7 +389,6 @@ const Register3 = () => {
               </label>
               <Tooltip target=".custom-target-icon" />
 
-              {/* Icon with tooltip */}
               <i
                 className="custom-target-icon pi pi-info-circle p-text-secondary ms-5"
                 data-pr-tooltip="Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, one number, and one special character"
@@ -429,6 +416,26 @@ const Register3 = () => {
               ></span>
               {errorPassword && (
                 <span className="text-danger">{errorPassword}</span>
+              )}
+            </div>
+
+            <div className="col-xxl-6 col-xl-6 col-md-6  mb-3">
+              <label className="form-label" htmlFor="mobileNumber">
+                Mobile Number <span className="text-danger">*</span>
+              </label>
+              <input
+                className="mb-0"
+                placeholder="Enter Your Number"
+                id="mobileNumber"
+                type="text"
+                value={mobileNumber}
+                onChange={(e) => {
+                  setMobileNumber(e.target.value);
+                  setMobileNumberError("");
+                }}
+              />
+              {mobilenumberError && (
+                <span className="text-danger">{mobilenumberError}</span>
               )}
             </div>
 
@@ -527,46 +534,6 @@ const Register3 = () => {
               newSelectedRole === "ENABLER" ? "d-none" : "d-flex mt-4"
             }`}
           >
-            <div className="col-xxl-4 col-xl-4 col-md-4  mb-3">
-              <label className="form-label" htmlFor="mobileNumber">
-                Mobile Number <span className="text-danger">*</span>
-              </label>
-              <input
-                className="mb-0"
-                placeholder="Enter Your Number"
-                id="mobileNumber"
-                type="text"
-                value={mobileNumber}
-                onChange={(e) => {
-                  setMobileNumber(e.target.value);
-                  setMobileNumberError("");
-                }}
-              />
-              {mobilenumberError && (
-                <span className="text-danger">{mobilenumberError}</span>
-              )}
-            </div>
-
-            {/* <div className="col-xxl-4 col-xl-4 col-md-4  mb-3">
-                <label className="form-label" htmlFor="user_profile">
-                  User Profile Image <span className="text-danger">*</span>
-                </label>
-                <input
-                  id="user_profile"
-                  type="file"
-                  name="user_profile"
-                  className="form-control mb-0"
-                  accept="image/*"
-                  onChange={(e) => {
-                    setProfileImage(e.target.files?.[0] || null);
-                    setUserProfileError("");
-                  }}
-                />
-                {userProfileError && (
-                  <span className="text-danger">{userProfileError}</span>
-                )}
-              </div> */}
-
             <div className="col-xxl-4 col-xl-4 col-md-4 mb-3">
               <label className="form-label" htmlFor="user_profile">
                 User Profile Image <span className="text-danger">*</span>
@@ -576,11 +543,28 @@ const Register3 = () => {
                 type="file"
                 name="user_profile"
                 className="form-control mb-0"
-                accept="image/*"
+                accept="image/jpeg, image/png, image/jpg"
                 onChange={handleImageUpload}
               />
               {userProfileError && (
                 <span className="text-danger">{userProfileError}</span>
+              )}
+              {imagePreview && (
+                <div className="mt-2">
+                  <img 
+                    src={imagePreview} 
+                    alt="Preview" 
+                    style={{maxWidth: '100px', maxHeight: '100px', display: 'block'}}
+                    className="mb-2"
+                  />
+                  <button 
+                    type="button" 
+                    className="btn btn-sm btn-danger"
+                    onClick={removeImage}
+                  >
+                    Remove Image
+                  </button>
+                </div>
               )}
             </div>
 
@@ -603,9 +587,6 @@ const Register3 = () => {
                       <li
                         key={idtype.idTypeName}
                         onClick={() => {
-                          console.log(idtype);
-                          console.log(idtype.idTypeName);
-                          
                           setSelectedIdType(idtype.idTypeName);
                           setSelectedIdTypeError("");
                         }}
@@ -706,15 +687,9 @@ const Register3 = () => {
                 <button
                   type="submit"
                   className="btn btn-primary w-100 loginBtn"
+                  disabled={loading}
                 >
-                  Sign Up{" "}
-                  {/* <ClipLoader
-                      color="#fff"
-                      size={18}
-                      speedMultiplier={0.5}
-                      loading={loading}
-                      className="loginLoader"
-                    /> */}
+                  Create Account
                 </button>
               </div>
               <div className="text-center">
@@ -727,55 +702,6 @@ const Register3 = () => {
               </div>
             </div>
           </div>
-          {/* Successfully user created modal */}
-          {/* {userCreatedSuccessfully && (
-              <div
-                className="modal fade"
-                id="registerModal"
-                aria-labelledby="registerModalLabel"
-                aria-hidden="true"
-              >
-                <div className="modal-dialog modal-dialog-centered">
-                  <div className="modal-content">
-                    <div className="modal-header">
-                      <h3 className="modal-title text-center w-100">
-                        Congratulations!{" "}
-                        <i className="pi pi-check-circle text-success ms-2"></i>
-                      </h3>
-                      <button
-                        type="button"
-                        className="btn-close"
-                        data-bs-dismiss="modal"
-                        aria-label="Close"
-                      ></button>
-                    </div>
-                    <div className="modal-body text-center">
-                      <p className="lead mb-4">
-                        Your account has been successfully created. You can now
-                        log in to access your account.
-                      </p>
-                      <div className="d-flex justify-content-center gap-3">
-                        <button
-                          type="button"
-                          className="btn btn-light w-50"
-                          data-bs-dismiss="modal"
-                        >
-                          Close
-                        </button>
-                        <Link
-                          type="button"
-                          className="btn btn-primary w-50"
-                          onClick={navigate(routes.login3)}
-                          data-bs-dismiss="modal"
-                        >
-                          Go to Login
-                        </Link>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )} */}
         </form>
       </div>
     </div>
