@@ -17,7 +17,7 @@ const SponsorDashboardProvider = ({ children }) => {
   const GET_ALL_STUDENTS_TO_SPONSER = async () => {
     try {
       const response = await axios.get(
-        `${API_BASE_URL}/sponsers/1/available_students/`
+        `${API_BASE_URL}/sponsers/available_students/`
       );
       if (response.status == 200) {
         setUserDataToSponsor(response.data.students_to_sponsor);
@@ -46,7 +46,7 @@ const SponsorDashboardProvider = ({ children }) => {
   const GET_READY_FOR_RECRUITMENT = async () => {
     try {
       const response = await axios.get(
-        `${API_BASE_URL}/recruiter/1/ready_for_recruitment/`
+        `${API_BASE_URL}/recruiter/ready_for_recruitment/`
       );
 
       if (response.status === 200) {
