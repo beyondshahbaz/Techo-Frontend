@@ -81,6 +81,7 @@ const AuthProvider = ({ children }) => {
     }
   };
 
+
     const LoginUser = async (userData) => {
       setLoginError("");
       setLoading(true);
@@ -113,7 +114,20 @@ const AuthProvider = ({ children }) => {
       } finally {
         setLoading(false);
       }
-    };
+    } catch (error) {
+      // Check for different error response structures
+      const errorMessage =
+        error.response?.data?.error || // Case: {"error": "..."}
+        error.response?.data?.non_field_errors?.[0] || // Case: {"non_field_errors": ["..."]}
+        "Login failed. Please try again."; // Fallback message
+  
+      setLoginError(errorMessage); // Store the error in state
+      console.error("Login Error:", error.response?.data);
+      throw error; // Re-throw to allow component-level handling
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const GetUser = async () => {
     if (!accessToken) {

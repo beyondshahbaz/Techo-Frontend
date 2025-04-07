@@ -474,7 +474,8 @@
 input[type="text"],
 input[type="email"],
 input[type="file"],
-input[type="password"] {
+input[type="password"],
+input[type="tel"] {
   border-color: #e9edf4 !important;
   color: #202c4b;
   background-color: #ffffff;
@@ -1824,7 +1825,55 @@ td {
   background-color: #00334c;
   color: white !important;
 }
-=======
+
+
+
+.profileImg{
+  height: 100px;
+  width: 100px;
+  border-radius: 50%;
+  margin-bottom: 2px;
+}
+
+.profileView{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0px 20px;
+}
+
+.profileView .profileName{
+  font-size: 24px;
+  font-weight: 600;
+}
+.profileView .profileEmail{
+  font-size: 18px;
+  font-weight: 500;
+}
+
+
+
+input[disabled] {
+  background-color: #f8f9fa !important;
+  color: #6c757d;
+  cursor: not-allowed;
+  border: 1px solid #ced4da;
+}
+
+/* Enabled input style */
+input:not([disabled]) {
+  background-color: #ffffff;
+  color: #212529;
+  cursor: text;
+  border: 1px solid #ced4da;
+}
+
+.contributionTxt{
+  font-size: 1rem !important;
+  font-weight: 400;
+  margin-bottom: 10px;
+} 
+
 /* table css ends */
 
 /* StudentBatche component start by hasnen */

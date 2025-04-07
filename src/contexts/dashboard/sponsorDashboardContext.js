@@ -13,10 +13,13 @@ const SponsorDashboardProvider = ({ children }) => {
   const { API_BASE_URL} = useContext(AuthContext);
   const accessToken = localStorage.getItem('accessToken');
 
+  const { API_BASE_URL, accessToken} = useContext(AuthContext);
+
 
   const GET_ALL_STUDENTS_TO_SPONSER = async () => {
     try {
       const response = await axios.get(
+
         `${API_BASE_URL}/sponsors/available_students/`, {
           headers: {
             'Authorization': `Bearer ${accessToken}`
@@ -70,6 +73,7 @@ const SponsorDashboardProvider = ({ children }) => {
     try {
       const response = await axios.get(`${API_BASE_URL}/sponsors/`, {
         headers: {
+          'Content-Type' : 'application/json',
           'Authorization': `Bearer ${accessToken}`
         }
       });

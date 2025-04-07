@@ -76,8 +76,8 @@ const Register3 = () => {
   };
 
   const validateMobileNumber = (number) => {
-    const mobileRegex = /^[0-9]{10}$/;
-    return mobileRegex.test(number);
+    const mobileRegex = /^[6-9]\d{9}$/; // Indian mobile numbers start with 6-9
+    return mobileRegex.test(number) && number.length === 10;
   };
 
   const togglePasswordVisibility = () => {
@@ -134,6 +134,12 @@ const Register3 = () => {
     if (imagePreview) {
       URL.revokeObjectURL(imagePreview);
     }
+  };
+
+  // Format mobile number for display
+  const formatMobileNumber = (value) => {
+    const cleaned = value.replace(/\D/g, '');
+    return cleaned.slice(0, 10);
   };
 
   useEffect(() => {
@@ -212,7 +218,7 @@ const Register3 = () => {
         setMobileNumberError("Mobile Number is Required");
         isValid = false;
       } else if (!validateMobileNumber(mobileNumber)) {
-        setMobileNumberError("Invalid Mobile Number");
+        setMobileNumberError("Please enter a valid 10-digit mobile number starting with 6-9");
         isValid = false;
       }
       if (!profileImage) {
@@ -238,7 +244,7 @@ const Register3 = () => {
         setproposerMobileError("Proposer Mobile Number is Required");
         isValid = false;
       } else if (!validateMobileNumber(proposerNumber)) {
-        setproposerMobileError("Invalid Proposer Mobile Number");
+        setproposerMobileError("Please enter a valid 10-digit mobile number starting with 6-9");
         isValid = false;
       }
     }
@@ -281,7 +287,7 @@ const Register3 = () => {
         formData.append('subrole', subroleMapping[selectedSubrole] || '');
       }
   
-      // Call RegisterUser with progress tracking
+
       await RegisterUser(formData);
       
     } catch (error) {
@@ -440,6 +446,29 @@ const Register3 = () => {
             </div>
 
             <div className="col-xxl-6 col-xl-6 col-md-6 mb-3">
+              <label className="form-label" htmlFor="mobileNumber">
+                Mobile Number <span className="text-danger">*</span>
+              </label>
+              <input
+                className="mb-0"
+                placeholder="Enter 10-digit mobile number"
+                id="mobileNumber"
+                type="tel"
+                pattern="[0-9]*"
+                maxLength="10"
+                value={mobileNumber}
+                onChange={(e) => {
+                  const formattedNumber = formatMobileNumber(e.target.value);
+                  setMobileNumber(formattedNumber);
+                  setMobileNumberError("");
+                }}
+              />
+              {mobilenumberError && (
+                <span className="text-danger">{mobilenumberError}</span>
+              )}
+            </div>
+
+            <div className="col-xxl-6 col-xl-6 col-md-6 mb-3">
               <label className="form-label" htmlFor="Roles">
                 Select Role <span className="text-danger">*</span>
               </label>
@@ -471,6 +500,7 @@ const Register3 = () => {
                 <span className="text-danger">{errorSelectedRole}</span>
               )}
             </div>
+
             <div
               className={`col-xxl-6 col-xl-6 col-md-6 mb-3 ${
                 newSelectedRole === "LEARNER" ? "d-none" : "d-block"
@@ -613,7 +643,7 @@ const Register3 = () => {
               )}
             </div>
 
-            <div className="col-xxl-4 col-xl-4 col-md-4  mb-3">
+            <div className="col-xxl-4 col-xl-4 col-md-4 mb-3">
               <label
                 className="form-label text-nowrap"
                 htmlFor="identityNumber"
@@ -656,7 +686,7 @@ const Register3 = () => {
               )}
             </div>
 
-            <div className="col-xxl-4 col-xl-4 col-md-4  mb-3">
+            <div className="col-xxl-4 col-xl-4 col-md-4 mb-3">
               <label
                 className="form-label text-nowrap"
                 htmlFor="proposerNumber"
@@ -666,11 +696,14 @@ const Register3 = () => {
               <input
                 className="mb-0"
                 id="proposerNumber"
-                placeholder="Enter Your Proposer Number"
-                type="text"
+                placeholder="Enter 10-digit mobile number"
+                type="tel"
+                pattern="[0-9]*"
+                maxLength="10"
                 value={proposerNumber}
                 onChange={(e) => {
-                  setProposerNumber(e.target.value);
+                  const formattedNumber = formatMobileNumber(e.target.value);
+                  setProposerNumber(formattedNumber);
                   setproposerMobileError("");
                 }}
               />
@@ -687,10 +720,11 @@ const Register3 = () => {
                 <button
                   type="submit"
                   className="btn btn-primary w-100 loginBtn"
+
                   disabled={loading}
                 >
                   Create Account
-                </button>
+                  </button>
               </div>
               <div className="text-center">
                 <h6 className="fw-normal text-dark mb-0">
