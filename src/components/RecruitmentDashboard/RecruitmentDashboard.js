@@ -13,6 +13,8 @@ export const RecruitmentDashboard = () => {
   const [availableStudent, setAvailableStudent] = useState(null);
   const [remarks, setRemarks] = useState("");
   const [error, setError] = useState("");
+  const accessToken = localStorage.getItem('accessToken');
+
 
   const handleSponsorClick = () => {
     const studentsSection = document.getElementById("studentsSection");
@@ -54,18 +56,19 @@ export const RecruitmentDashboard = () => {
   
     try {
       const response = await axios.post(
-        `${API_BASE_URL}/recruiter/1/select_students/`,
+        `${API_BASE_URL}/recruiter/select_students/`,
         JSON.stringify(payload), // Convert payload to JSON string
         {
           headers: {
-            "Content-Type": "application/json", // Ensure the server knows it's JSON
+            "Content-Type": "application/json",
+            'Authorization': `Bearer ${accessToken}`
           },
         }
       );
   
       if (response.status === 200) {
-        console.log("Students recruited successfully!");
-                setTechnology("Select Technology");
+        alert("Students recruited successfully!");
+        setTechnology("Select Technology");
         setStudentCount("");
         setRemarks("");
         setAvailableStudent(null);

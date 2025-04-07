@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useForm } from "react-hook-form";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { baseURL } from "../../utils/axios";
 
 interface Trainer {
   id: number;
@@ -21,17 +22,27 @@ const TrainerProfile: React.FC = () => {
   const [trainer, setTrainer] = useState<Trainer | null>(null);
   const [editMode, setEditMode] = useState(false);
   const [image, setImage] = useState<File | null>(null);
+  const [accessToken, setAccessToken] = useState<string>("");
 
   const { register, handleSubmit, reset } = useForm<Trainer>();
 
   useEffect(() => {
+    const token = localStorage.getItem("accessToken");
+    if (token) {
+      setAccessToken(token);
+    }
+
     axios
-      .get<Trainer[]>("https://gl8tx74f-8000.inc1.devtunnels.ms/auth/trainers/")
+      .get<Trainer>(`${baseURL}/trainers/`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then((response) => {
-        if (response.data.length > 2) {
-          const trainerData = response.data[2]; // Ensure index exists
+        if (response) {
+          const trainerData = response.data;
           setTrainer(trainerData);
-          reset(trainerData); // Pre-fill the form
+          reset(trainerData);
         } else {
           console.error("Trainer data is missing.");
         }
@@ -61,9 +72,14 @@ const TrainerProfile: React.FC = () => {
 
     try {
       await axios.put(
-        `https://gl8tx74f-8000.inc1.devtunnels.ms/auth/trainers/${trainer.id}/`,
+        `${baseURL}/trainers/${trainer.id}/`,
         formData,
-        { headers: { "Content-Type": "multipart/form-data" } }
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
       );
 
       alert("Profile updated successfully!");
@@ -85,7 +101,7 @@ const TrainerProfile: React.FC = () => {
         <div className="row align-items-center">
           <div className="col-sm-12 col-md-4 d-flex flex-column align-items-center justify-content-center mb-3">
             <img
-              src={`https://gl8tx74f-8000.inc1.devtunnels.ms/auth${trainer.user_profile}`}
+              src={`${baseURL}${trainer.user_profile}`}
               alt="Trainer Profile"
               className="img-thumbnail rounded-circle border border-primary"
               style={{ width: "180px", height: "180px", objectFit: "cover" }}
@@ -197,37 +213,38 @@ const TrainerProfile: React.FC = () => {
               </form>
             ) : (
               <div className="table-responsive">
-                <h3 className="fs-3 text-black">
-                  <span className="font-bold text-primary">Name</span>:{" "}
+                <h3 className="profile-headerHTP">
+                  <span className="font-bold text-primary px-3">Name</span>:{" "}
                   {trainer.first_name} {trainer.last_name}
                 </h3>
-                <p className="text-info fs-3 font-bold mb-3">
-                  {trainer.job_title}
+                <p className="profile-subheaderHTP mb-3">
+                  <span className="font-bold text-primary px-3">Job Title</span>
+                  : {trainer.job_title}
                 </p>
-                <table className="table table-borderless text-dark bg-light p-3 rounded shadow-sm">
+                <table className="custom-tableHTP px-2">
                   <tbody>
                     <tr>
-                      <th className="text-primary">Email:</th>
+                      <th>Email:</th>
                       <td>{trainer.email}</td>
                     </tr>
                     <tr>
-                      <th className="text-primary">Mobile:</th>
+                      <th>Mobile:</th>
                       <td>{trainer.mobile_no}</td>
                     </tr>
                     <tr>
-                      <th className="text-primary">Gender:</th>
+                      <th>Gender:</th>
                       <td>{trainer.gender}</td>
                     </tr>
                     <tr>
-                      <th className="text-primary">Qualification:</th>
+                      <th>Qualification:</th>
                       <td>{trainer.qualification}</td>
                     </tr>
                     <tr>
-                      <th className="text-primary">Address:</th>
+                      <th>Address:</th>
                       <td>{trainer.address}</td>
                     </tr>
                     <tr>
-                      <th className="text-primary">Date of Birth:</th>
+                      <th>Date of Birth:</th>
                       <td>{trainer.date_of_birth}</td>
                     </tr>
                   </tbody>

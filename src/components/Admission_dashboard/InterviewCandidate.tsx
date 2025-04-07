@@ -2,6 +2,7 @@ import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useForm, SubmitHandler } from "react-hook-form";
+import { baseURL } from "../../utils/axios";
 
 interface CandidateData {
   id: string;
@@ -41,12 +42,12 @@ const InterviewCandidate: React.FC = () => {
       subrole: candidateData?.subrole || "",
       gender: candidateData?.gender || "",
       batch: candidateData?.batch || "",
-      eng_comm_skills: candidateData?.eng_comm_skills || 0,
+      eng_comm_skills: candidateData?.eng_comm_skills || 1,
       humble_background: candidateData?.humble_background || "",
       laptop: candidateData?.laptop || "",
       profession: candidateData?.profession || "",
       selected_status: candidateData?.selected_status || "",
-      level: candidateData?.level || 0,
+      level: candidateData?.level || 1,
       source: candidateData?.source || "",
       remarks: candidateData?.remarks || "",
     },
@@ -56,7 +57,7 @@ const InterviewCandidate: React.FC = () => {
     console.log(data);
     try {
       const response = await axios.put(
-        `https://187gwsw1-8000.inc1.devtunnels.ms/auth/Learner/${data.id}/`,
+        `${baseURL}/Learner/${data.id}/`,
         data
       );
       console.log("Data updated successfully:", response.data);

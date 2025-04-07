@@ -7,14 +7,8 @@ import ClipLoader from "react-spinners/ClipLoader";
 
 const Login3 = () => {
   const routes = all_routes;
-  const {
-    LoginUser,
-    loading,
-    loginError,
-    responseSubrole,
-    userLoggedIN,
-    setLoginError,
-  } = useContext(AuthContext);
+
+  const { LoginUser, loading, loginError, responseSubrole, userLoggedIN, setLoginError , role } = useContext(AuthContext);
 
   const navigation = useNavigate();
   const [email, setEmail] = useState("");
@@ -30,19 +24,42 @@ const Login3 = () => {
       navigation("/Students_SponserDashboard");
     }
     if (userLoggedIN && responseSubrole === "STUDENT") {
-      navigation("/Students_batches");
+      navigation("/Students_profile");
+      window.location.reload();
     }
     if (userLoggedIN && responseSubrole === "TRAINER") {
-      navigation("/Trainer_profile");
+      navigation("/Trainer_batch");
+      window.location.reload();
+    }
+    if (userLoggedIN && role === "ADMIN") {
+      navigation("/AssessmentTable");
+      window.location.reload();
     }
     if (userLoggedIN && responseSubrole === "RECRUITER") {
       navigation("/ReadyToRecruitDashboard");
     }
-  }, [userLoggedIN, responseSubrole, navigation]);
 
+    
+  }, [userLoggedIN, responseSubrole,role , navigation]);
+
+  console.log(role)
+  console.log(responseSubrole)
   const validateEmail = (email) => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return re.test(String(email).toLowerCase());
+  };
+
+
+
+  const validatePassword = (password) => {
+    return password >= 8;
+  };
+
+  const togglePasswordVisibility = () => {
+    setPasswordVisibility((prevState) => ({
+      ...prevState,
+      password: !prevState.password,
+    }));
   };
 
   const loginUser = async (e) => {
@@ -177,6 +194,7 @@ const Login3 = () => {
                           className="loginLoader"
                         />
                       )}
+
                     </Link>
                     {loginError && (
                       <span className="text-danger d-block mt-2">{loginError}</span>

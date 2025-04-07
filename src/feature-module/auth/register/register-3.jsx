@@ -36,9 +36,7 @@ const Register3 = () => {
   const [proposerEmail, setProposerEmail] = useState("");
   const [proposerNumber, setProposerNumber] = useState("");
   const [selectedIdType, setSelectedIdType] = useState("Select an ID");
-  const [imagePreview, setImagePreview] = useState(null);
-  const [uploadProgress, setUploadProgress] = useState(0);
-  const [isUploading, setIsUploading] = useState(false);
+  const [imagePreview, setImagePreview] = useState("");
 
   // Error states
   const [errorFirstName, setErrorFirstName] = useState("");
@@ -60,9 +58,9 @@ const Register3 = () => {
   });
 
   const ID_TYPE_MAPPING = {
-    'PASSPORT': 1,
-    'VOTER_ID': 2,
-    'ADHAARCARD': 3
+    'PASSPORT': 2,
+    'VOTER_ID': 3,
+    'ADHAARCARD': 1
   };
 
   // Validation functions
@@ -124,15 +122,18 @@ const Register3 = () => {
       return;
     }
 
-    // Create preview
-    const reader = new FileReader();
-    reader.onload = () => {
-      setImagePreview(reader.result);
-    };
-    reader.readAsDataURL(file);
-
+    // If validations pass, set the file to state and create preview
     setProfileImage(file);
     setUserProfileError("");
+    setImagePreview(URL.createObjectURL(file));
+  };
+
+  const removeImage = () => {
+    setProfileImage(null);
+    setImagePreview("");
+    if (imagePreview) {
+      URL.revokeObjectURL(imagePreview);
+    }
   };
 
   // Format mobile number for display
@@ -144,6 +145,13 @@ const Register3 = () => {
   useEffect(() => {
     fetchNewSubrole();
     fetchIdType();
+    
+    // Clean up object URLs when component unmounts
+    return () => {
+      if (imagePreview) {
+        URL.revokeObjectURL(imagePreview);
+      }
+    };
   }, []);
 
   const onRegisterUser = async (e) => {
@@ -163,8 +171,7 @@ const Register3 = () => {
     setProposerEmailError("");
     setproposerMobileError("");
     setEmailExistsError("");
-    setUploadProgress(0);
-  
+
     let isValid = true;
   
     // Validation checks
@@ -244,8 +251,6 @@ const Register3 = () => {
   
     if (!isValid) return;
   
-    setIsUploading(true);
-  
     try {
       const formData = new FormData();
       
@@ -255,23 +260,23 @@ const Register3 = () => {
       formData.append('email', email.trim());
       formData.append('password', password);
       formData.append('mobile_no', mobileNumber);
-      
+
       if (newSelectedRole === "LEARNER") {
-        formData.append('role', '2');
+        formData.append('role', '6');
         formData.append('id_type', ID_TYPE_MAPPING[selectedIdType.toUpperCase()]);
         formData.append('identity', identity.trim());
         formData.append('subrole', 1);
         formData.append('proposer_email', proposerEmail.trim());
         formData.append('proposer_mobile_no', proposerNumber);
         
-        // Append the file directly with proper filename
+        // Append the file
         if (profileImage) {
-          formData.append('user_profile', profileImage, profileImage.name);
+          formData.append('user_profile', profileImage);
         }
       } else if (newSelectedRole === "ENABLER") {
-        formData.append('role', '3');
+        formData.append('role', '7');
         const subroleMapping = {
-          APPLICANT: 1,
+          APPLICANT: 1, 
           INTERVIEWEE: 2,
           STUDENT: 3,
           SPONSOR: 4,
@@ -282,6 +287,7 @@ const Register3 = () => {
         formData.append('subrole', subroleMapping[selectedSubrole] || '');
       }
   
+
       await RegisterUser(formData);
       
     } catch (error) {
@@ -309,8 +315,6 @@ const Register3 = () => {
           setMobileNumberError(errors.mobileNumber.join(', '));
         }
       }
-    } finally {
-      setIsUploading(false);
     }
   };
 
@@ -418,6 +422,26 @@ const Register3 = () => {
               ></span>
               {errorPassword && (
                 <span className="text-danger">{errorPassword}</span>
+              )}
+            </div>
+
+            <div className="col-xxl-6 col-xl-6 col-md-6  mb-3">
+              <label className="form-label" htmlFor="mobileNumber">
+                Mobile Number <span className="text-danger">*</span>
+              </label>
+              <input
+                className="mb-0"
+                placeholder="Enter Your Number"
+                id="mobileNumber"
+                type="text"
+                value={mobileNumber}
+                onChange={(e) => {
+                  setMobileNumber(e.target.value);
+                  setMobileNumberError("");
+                }}
+              />
+              {mobilenumberError && (
+                <span className="text-danger">{mobilenumberError}</span>
               )}
             </div>
 
@@ -549,11 +573,28 @@ const Register3 = () => {
                 type="file"
                 name="user_profile"
                 className="form-control mb-0"
-                accept="image/*"
+                accept="image/jpeg, image/png, image/jpg"
                 onChange={handleImageUpload}
               />
               {userProfileError && (
                 <span className="text-danger">{userProfileError}</span>
+              )}
+              {imagePreview && (
+                <div className="mt-2">
+                  <img 
+                    src={imagePreview} 
+                    alt="Preview" 
+                    style={{maxWidth: '100px', maxHeight: '100px', display: 'block'}}
+                    className="mb-2"
+                  />
+                  <button 
+                    type="button" 
+                    className="btn btn-sm btn-danger"
+                    onClick={removeImage}
+                  >
+                    Remove Image
+                  </button>
+                </div>
               )}
             </div>
 
@@ -679,23 +720,11 @@ const Register3 = () => {
                 <button
                   type="submit"
                   className="btn btn-primary w-100 loginBtn"
-                  disabled={isUploading}
+
+                  disabled={loading}
                 >
-                  {isUploading ? (
-                    <>
-                      <ClipLoader
-                        color="#fff"
-                        size={18}
-                        speedMultiplier={0.5}
-                        loading={isUploading}
-                        className="loginLoader"
-                      />
-                      {" Registering..."}
-                    </>
-                  ) : (
-                    "Sign Up"
-                  )}
-                </button>
+                  Create Account
+                  </button>
               </div>
               <div className="text-center">
                 <h6 className="fw-normal text-dark mb-0">

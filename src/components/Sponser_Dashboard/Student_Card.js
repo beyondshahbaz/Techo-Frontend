@@ -8,6 +8,9 @@ export const Student_Card = ({ filterStudent, selectAll, setSelectAll }) => {
   const [countStudent, setCountStudent] = useState(0);
   const [totalAmount, setTotalAmount] = useState(0);
   const { API_BASE_URL } = useContext(AuthContext);
+  const accessToken = localStorage.getItem('accessToken');
+
+
 
   const SPONSOR_STUDENT = async () => {
 
@@ -21,14 +24,14 @@ export const Student_Card = ({ filterStudent, selectAll, setSelectAll }) => {
       batch_ids: intSponsorStudentBatchId,
     };
 
-    try {
-      console.log(payload); 
+    try {    
       const response = await axios.post(
-        `${API_BASE_URL}/sponsers/2/sponsor_batch/`,
+        `${API_BASE_URL}/sponsors/sponsor_batch/`,
         payload,
         {
           headers: {
             "Content-Type": "application/json",
+            'Authorization': `Bearer ${accessToken}`
           },
         }
       );
@@ -38,11 +41,13 @@ export const Student_Card = ({ filterStudent, selectAll, setSelectAll }) => {
 
     } catch (error) {
       console.log("error", error);
+
       window.alert("There is some issue at the moment, please try again");
     }
   };
 
   const handleCheckboxClick = (e, studentId, batchId) => {
+
     const isChecked = e.target.checked;
     const student = filterStudent.find(
       (student) => student.student_id === studentId
@@ -57,9 +62,11 @@ export const Student_Card = ({ filterStudent, selectAll, setSelectAll }) => {
     } else {
       setSponsorStudentId((prev) => prev.filter((id) => id !== studentId));
       setSponsorStudentBatchId((prev) => prev.filter((id) => id !== batchId));
+
       setCountStudent((prev) => prev - 1);
       setTotalAmount((prev) => prev - studentFee);
     }
+
 
     if (selectAll && !isChecked) {
       setSelectAll(false);
@@ -86,6 +93,7 @@ export const Student_Card = ({ filterStudent, selectAll, setSelectAll }) => {
     } else {
       setSponsorStudentId([]);
       setSponsorStudentBatchId([]);
+
       setCountStudent(0);
       setTotalAmount(0);
     }
@@ -99,6 +107,7 @@ export const Student_Card = ({ filterStudent, selectAll, setSelectAll }) => {
             <th width="25%">Name</th>
             <th width="35%">Batch</th>
             <th className="text-end" width="15%">Fee</th>
+
             <th width="10%" className="text-center">
               Actions
             </th>
@@ -106,6 +115,7 @@ export const Student_Card = ({ filterStudent, selectAll, setSelectAll }) => {
         </thead>
         <tbody>
           {filterStudent && filterStudent.length > 0 ? (
+
             filterStudent.map((student, index) => (
               <tr key={index}>
                 <td>
@@ -118,6 +128,7 @@ export const Student_Card = ({ filterStudent, selectAll, setSelectAll }) => {
                       onChange={(e) =>
                         handleCheckboxClick(e, student.student_id, student.batch_id)
                       }
+
                     />
                     <label
                       className="form-check-label"
@@ -132,6 +143,7 @@ export const Student_Card = ({ filterStudent, selectAll, setSelectAll }) => {
                           { target: { checked: checkbox.checked } },
                           student.student_id,
                           student.batch_id
+
                         );
                       }}
                     >
@@ -141,6 +153,7 @@ export const Student_Card = ({ filterStudent, selectAll, setSelectAll }) => {
                 </td>
                 <td className="text-nowrap">{`${student.batch_name || ""} ${student.batch_id?.toString() || ""}`}</td>
                 <td className="text-end">₹{student.fee || 0}</td>
+
                 <td className="text-center">
                   <button className="btn btn-light text-nowrap">
                     Sponsor Now
@@ -170,8 +183,8 @@ export const Student_Card = ({ filterStudent, selectAll, setSelectAll }) => {
               </button>
             </th>
           </tr>
+
         </tfoot>
       </table>
     </div>
-  );
-};
+  )}

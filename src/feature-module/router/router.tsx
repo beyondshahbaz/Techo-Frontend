@@ -18,6 +18,15 @@ import { AuthContext } from "../../contexts/authContext";
 import { RecruitmentDashboard } from "../../components/RecruitmentDashboard/RecruitmentDashboard";
 import Sponsor_Profile from "../../components/Sponser_Dashboard/SponsorProfile";
 
+import AdmissionTable from "../../components/Admission_dashboard/Admission_table";
+import InterviewCandidate from "../../components/Admission_dashboard/InterviewCandidate";
+import AllIntervieweesInformation from "../../components/Admission_dashboard/AllIntervieweesInformation";
+import TrainerBatch from "../../components/Trainer_dashboard/TrainerBatch";
+import TrainerBatchDetail from "../../components/Trainer_dashboard/TrainerBatchDetail";
+import AssessmentTable from "../../components/Assessment_dashboard/AssessmentTable";
+import AssessmentCandidte from "../../components/Assessment_dashboard/AssessmentCandidte";
+
+
 const ALLRoutes: React.FC = () => {
   const routes = all_routes;
   const {userLoggedIN, accessToken} = useContext(AuthContext);
@@ -31,11 +40,19 @@ const ALLRoutes: React.FC = () => {
         
         <Route path={routes.login3} element={<Login />} />
         <Route path={routes.register3} element={<Register3 />} />
-        <Route path="/Students_profile" element={<StudentsProfile />} />
-        <Route path="/Sponsor_Profile" element={<Sponsor_Profile />} />
-        <Route path="/Students_batches" element={<StudentsBatches />} />
-        <Route path="/Trainer_profile" element={<TrainerProfile />} />
+        {userLoggedIN &&  accessToken  && <Route path="/Students_profile" element={<StudentsProfile />} /> } 
+        {userLoggedIN &&  accessToken  && <Route path="/Students_batches" element={<StudentsBatches />} /> }
+        {userLoggedIN &&  accessToken  && <Route path="/Trainer_profile" element={<TrainerProfile />} /> }
+        {userLoggedIN &&  accessToken  && <Route path="/Admission_table" element={<AdmissionTable />} /> } 
+        {userLoggedIN &&  accessToken  && <Route path="/interview-candidate/:id" element={<InterviewCandidate />} /> } 
+        {userLoggedIN &&  accessToken  && <Route path="/AllIntervieweesInformation" element={<AllIntervieweesInformation/>} /> } 
+        {userLoggedIN &&  accessToken  && <Route path="/Trainer_batch" element={<TrainerBatch/>} /> } 
+        {userLoggedIN &&  accessToken  && <Route path="/TrainerBatchDetail/:batchId" element={<TrainerBatchDetail />} /> }
+        {userLoggedIN &&  accessToken  && <Route path="/AssessmentTable" element={<AssessmentTable />} /> }
+        {userLoggedIN &&  accessToken  && <Route path="/AssessmentCandidte/:id" element={<AssessmentCandidte />} /> }
+
       </Route>
+
 
       {/* Public Routes */}
       <Route element={<Feature />}>

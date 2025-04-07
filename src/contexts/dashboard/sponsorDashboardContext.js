@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { AuthContext } from "../authContext";
 
+
 export const SponsorContext = createContext();
 
 const SponsorDashboardProvider = ({ children }) => {
@@ -9,14 +10,21 @@ const SponsorDashboardProvider = ({ children }) => {
   const [batchName, setBatchName] = useState([]);
   const [batchId, setBatchId] = useState(null);
   const [readyForRecruitment, setReadyForRecruitment] = useState([]);
-  const [sponsor, setSponsor] = useState([]);
+  const { API_BASE_URL} = useContext(AuthContext);
+  const accessToken = localStorage.getItem('accessToken');
 
   const { API_BASE_URL, accessToken} = useContext(AuthContext);
+
 
   const GET_ALL_STUDENTS_TO_SPONSER = async () => {
     try {
       const response = await axios.get(
-        `${API_BASE_URL}/sponsors/available_students/`
+
+        `${API_BASE_URL}/sponsors/available_students/`, {
+          headers: {
+            'Authorization': `Bearer ${accessToken}`
+          }
+        }
       );
       if (response.status == 200) {
         setUserDataToSponsor(response.data.students_to_sponsor);
@@ -31,6 +39,7 @@ const SponsorDashboardProvider = ({ children }) => {
     try {
       const response = await axios.get(`${API_BASE_URL}/batches/`);
 
+
       if (response.status == 200) {
         setBatchName(response.data);
         setBatchId(response.data.batch_id);
@@ -42,9 +51,14 @@ const SponsorDashboardProvider = ({ children }) => {
   };
 
   const GET_READY_FOR_RECRUITMENT = async () => {
+    console.log(accessToken);
     try {
       const response = await axios.get(
-        `${API_BASE_URL}/recruiter/1/ready_for_recruitment/`
+        `${API_BASE_URL}/recruiter/ready_for_recruitment/`, {
+          headers: {
+            'Authorization': `Bearer ${accessToken}`
+          }
+        }
       );
 
       if (response.status === 200) {
@@ -71,6 +85,7 @@ const SponsorDashboardProvider = ({ children }) => {
     }
   };
 
+
   useEffect(() => {
     GET_ALL_STUDENTS_TO_SPONSER();
     GET_BATCH();
@@ -84,6 +99,8 @@ const SponsorDashboardProvider = ({ children }) => {
     batchId,
     readyForRecruitment,
     FetchSponsor,
+
+
   };
 
   return (
