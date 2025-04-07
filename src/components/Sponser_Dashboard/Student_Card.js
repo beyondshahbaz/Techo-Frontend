@@ -8,6 +8,9 @@ export const Student_Card = ({ filterStudent, selectAll, setSelectAll }) => {
   const [countStudent, setCountStudent] = useState(0);
   const [totalAmount, setTotalAmount] = useState(0);
   const { API_BASE_URL } = useContext(AuthContext);
+  const accessToken = localStorage.getItem('accessToken');
+
+
 
   const SPONSOR_STUDENT = async () => {
 
@@ -21,15 +24,14 @@ export const Student_Card = ({ filterStudent, selectAll, setSelectAll }) => {
       batch_ids: intSponsorStudentBatchId,
     };
 
-    try {
-      console.log(payload); 
+    try {    
       const response = await axios.post(
-        `${API_BASE_URL}/sponsers/2/sponsor_batch/`,
-
+        `${API_BASE_URL}/sponsors/sponsor_batch/`,
         payload,
         {
           headers: {
             "Content-Type": "application/json",
+            'Authorization': `Bearer ${accessToken}`
           },
         }
       );
