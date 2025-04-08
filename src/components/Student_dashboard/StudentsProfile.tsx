@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useForm } from "react-hook-form";
+import { baseURL } from "../../utils/axios";
 
 interface Student {
   id: number;
@@ -20,24 +21,41 @@ const StudentsProfile: React.FC = () => {
   const [student, setStudent] = useState<Student | null>(null);
   const [editMode, setEditMode] = useState(false);
   const [image, setImage] = useState<File | null>(null);
+  const [accessToken, setAccessToken] = useState<string>("");
 
   const { register, handleSubmit, reset } = useForm<Student>();
 
   useEffect(() => {
-    axios
-      .get<Student[]>("https://gl8tx74f-8000.inc1.devtunnels.ms/auth/Students/")
-      .then((response) => {
-        const studentData = response.data[6]; // Adjust index as needed
+    const fetchStudentData = async (token: string) => {
+      try {
+        const response = await axios.get<Student>(
+          `${baseURL}/Students/`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        const studentData = response.data;
         setStudent(studentData);
-        reset(studentData); // Pre-fill the form
-      })
-      .catch((error) => {
+        reset(studentData);
+      } catch (error) {
         console.error("Error fetching student data:", error);
-      });
-  }, [reset]);
+      }
+    };
+  
+    const token = localStorage.getItem('accessToken');
+    if (token) {
+      setAccessToken(token);
+      fetchStudentData(token);
+    }
+  }, [reset]); 
 
   const onSubmit = async (data: Student) => {
-    if (!student) return;
+    if (!student || !accessToken) {
+      console.error("Student data or access token is missing");
+      return;
+    }
 
     const formData = new FormData();
     formData.append("first_name", data.first_name);
@@ -55,23 +73,29 @@ const StudentsProfile: React.FC = () => {
 
     try {
       await axios.put(
-        `https://gl8tx74f-8000.inc1.devtunnels.ms/auth/Students/${student.id}/`,
+        `${baseURL}/Students/${student.id}/`,
         formData,
-        { headers: { "Content-Type": "multipart/form-data" } }
+        { 
+          headers: { 
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${accessToken}`,
+          } 
+        }
       );
 
       alert("Profile updated successfully!");
       setEditMode(false);
-      setStudent({ ...data, user_profile: student.user_profile });
       window.location.reload();
     } catch (error) {
       console.error("Error updating profile:", error);
+      alert("Failed to update profile. Please try again.");
     }
   };
 
   if (!student) {
     return <div className="text-center mt-5">Loading...</div>;
   }
+
 
   return (
     <div className="container mt-5">
@@ -80,7 +104,7 @@ const StudentsProfile: React.FC = () => {
         <div className="col-md-4">
           <div className="card shadow-sm">
             <img
-              src={`https://gl8tx74f-8000.inc1.devtunnels.ms/auth${student.user_profile}`}
+              src={`${baseURL}${student.user_profile}`}
               className="card-img-top rounded-circle mx-auto mt-4"
               alt="Student"
               style={{ width: "150px", height: "150px", objectFit: "cover" }}

@@ -1,30 +1,43 @@
 import React, { useState, useEffect } from "react";
-import { DataTable } from "primereact/datatable";
-import { Column } from "primereact/column";
 import axios from "axios";
+import { baseURL } from "../../utils/axios";
+interface Student {
+  student_name: string;
+  student_id: number;
+  batch_name: string;
+  is_sponsored: boolean;
+}
 
 interface Batch {
   batch_name: string;
   start_date: string;
   trainer: string;
+  duration: string;
+  technologies: string[];
+  student: Student;
 }
 
 const StudentsBatches: React.FC = () => {
-  const [batches, setBatches] = useState<Batch[]>([]);
+  const [batch, setBatch] = useState<Batch | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
+    const token = localStorage.getItem("accessToken");
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "https://gl8tx74f-8000.inc1.devtunnels.ms/auth/batches/"
+          `${baseURL}/batches/students_in_batch/`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
-        console.log(response.data[0]);
-
-        setBatches(response.data[0] ? [response.data[0]] : []);
+        console.log(response.data);
+        setBatch(response.data);
       } catch (error) {
         console.error("Error fetching data:", error);
-        setBatches([]);
+        setBatch(null);
       } finally {
         setLoading(false);
       }
@@ -33,16 +46,59 @@ const StudentsBatches: React.FC = () => {
     fetchData();
   }, []);
 
+  if (loading) {
+    return (
+      <div className="loading-containerHSB">
+        <div className="loading-spinnerHSB"></div>
+        <p>Loading batch information...</p>
+      </div>
+    );
+  }
+
+  if (!batch) {
+    return (
+      <div className="error-containerHSB">
+        <div className="error-iconHSB">⚠️</div>
+        <h2>No batch data available</h2>
+        <p>Please check your connection or contact support</p>
+      </div>
+    );
+  }
+
   return (
-    <div className="container py-5">
-      <h1 className="text-center text-primary mb-4 fs-2">Students Batch</h1>
-      <div className="card shadow p-4 border border-danger m-6">
-        <div className="table-responsive">
-          <DataTable value={batches} loading={loading} className="table table-striped table-bordered fw-bold">
-            <Column field="batch_name" header="Batch Name" sortable headerClassName="bg-danger text-white" />
-            <Column field="start_date" header="Start Date" sortable headerClassName="bg-danger text-white" />
-            <Column field="trainer" header="Trainer" sortable headerClassName="bg-danger text-white" />
-          </DataTable>
+    <div className="batches-containerHSB">
+      <h1 className="batches-titleHSB">Student Batch Information</h1>
+      <div className="batches-gridHSB">
+        <div className="batch-cardHSB">
+          <div className="batch-card-headerHSB">
+            <h2 className="batch-nameHSB text-uppercase">{batch.batch_name}</h2>
+          </div>
+          <div className="batch-card-bodyHSB">
+            <div className="batch-infoHSB">
+              <div className="info-itemHSB">
+                <span className="info-labelHSB">Start Date:</span>
+                <span className="info-valueHSB">{batch.start_date}</span>
+              </div>
+              <div className="info-itemHSB">
+                <span className="info-labelHSB">Trainer:</span>
+                <span className="info-valueHSB">{batch.trainer}</span>
+              </div>
+              <div className="info-itemHSB">
+                <span className="info-labelHSB">Duration:</span>
+                <span className="info-valueHSB">{batch.duration}</span>
+              </div>
+              <div className="info-itemHSB">
+                <span className="info-labelHSB">Technologies:</span>
+                <div className="tech-tagsHSB">
+                  {batch.technologies.map((tech, index) => (
+                    <span key={index} className="tech-tagHSB">
+                      {tech}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -50,3 +106,4 @@ const StudentsBatches: React.FC = () => {
 };
 
 export default StudentsBatches;
+

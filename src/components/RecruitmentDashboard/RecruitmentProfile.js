@@ -3,8 +3,8 @@ import axios from "axios";
 import img1 from "../../assets/images/trainers/user.png";
 import { SponsorContext } from "../../contexts/dashboard/sponsorDashboardContext";
 
-const Sponsor_Profile = () => {
-  const { sponsorProfileDetails } = useContext(SponsorContext);
+const RecruitmentProfile = () => {
+  const { recruiterProfileDetails } = useContext(SponsorContext);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -16,9 +16,9 @@ const Sponsor_Profile = () => {
   // const [contributionValue, setContributionValue] = useState(0);
   const [isEditing, setIsEditing] = useState(false);
 
-  useEffect(()=>{
-    if (sponsorProfileDetails && sponsorProfileDetails.length > 0) {
-      const profile = sponsorProfileDetails[0];
+  useEffect(() => {
+    if (recruiterProfileDetails && recruiterProfileDetails.length > 0) {
+      const profile = recruiterProfileDetails[0];
       setFirstName(profile.first_name || "-");
       setLastName(profile.last_name || "-");
       setEmail(profile.email || "-");
@@ -26,10 +26,8 @@ const Sponsor_Profile = () => {
       setCompanyName(profile.company_name || "-");
       setDateOfBirth(profile.date_of_birth || "-");
       setGender(profile.gender || "-");
-    }    
-
-  }, [sponsorProfileDetails])
-
+    }
+  }, [recruiterProfileDetails]);
 
   return (
     <div className="container mt-5">
@@ -45,15 +43,14 @@ const Sponsor_Profile = () => {
                 {isEditing ? "Save" : "Edit"}
               </button>
             </div>
-            {
-              sponsorProfileDetails.map((items, idx)=>(
-                <div className="profileView" key={idx}>
-                <span className="profileName d-block">{items.first_name} {items.last_name}</span>
+            {recruiterProfileDetails.map((items, idx) => (
+              <div className="profileView" key={idx}>
+                <span className="profileName d-block">
+                  {items.first_name} {items.last_name}
+                </span>
                 <span className="profileEmail d-block">{items.email}</span>
               </div>
-              ))
-            }
-
+            ))}
           </div>
           <hr />
         </div>
@@ -152,53 +149,9 @@ const Sponsor_Profile = () => {
         </div>
         <div className="row">
           <div className="col-xxl-12 col-xl-12 col-md-12 text-end">
-            <button
-              className="btn btn-primary text-nowrap me-2"
-            >
+            <button className="btn btn-primary text-nowrap me-2">
               Submit Details
             </button>
-            <button
-              className="btn btn-light text-nowrap"
-              data-bs-toggle="modal"
-              data-bs-target="#sponsorContribution"
-            >
-              View Contribution
-            </button>
-          </div>
-        </div>
-      </div>
-      <div
-        className="modal fade"
-        id="sponsorContribution"
-        tabIndex="-1"
-        aria-labelledby="sponsorContribution"
-        aria-hidden="true"
-      >
-        <div className="modal-dialog modal-dialog-centered">
-          <div className="modal-content">
-            <div className="modal-header">
-              <button
-                type="button"
-                className="btn-close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              ></button>
-            </div>
-            <div className="modal-body">
-              {
-                sponsorProfileDetails.map((item, idx)=>(
-                  <div className="row" key={idx}>
-                  <div className="col-xxl-12 col-xl-12 col-md-12 contributionTxt">
-                    Contribution Type: <span className="fw-bold">{item.contribution_type}</span>
-                  </div>
-                  <div className="col-xxl-12 col-xl-12 col-md-12 contributionTxt">
-                    Contribution Value: <span className="fw-bold">{item.contribution_value}</span>
-                  </div>
-                </div>
-                ))
-              }
-
-            </div>
           </div>
         </div>
       </div>
@@ -206,4 +159,4 @@ const Sponsor_Profile = () => {
   );
 };
 
-export default Sponsor_Profile;
+export default RecruitmentProfile;

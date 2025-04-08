@@ -36,9 +36,7 @@ const Register3 = () => {
   const [proposerEmail, setProposerEmail] = useState("");
   const [proposerNumber, setProposerNumber] = useState("");
   const [selectedIdType, setSelectedIdType] = useState("Select an ID");
-  const [imagePreview, setImagePreview] = useState(null);
-  const [uploadProgress, setUploadProgress] = useState(0);
-  const [isUploading, setIsUploading] = useState(false);
+  const [imagePreview, setImagePreview] = useState("");
 
   // Error states
   const [errorFirstName, setErrorFirstName] = useState("");
@@ -60,9 +58,9 @@ const Register3 = () => {
   });
 
   const ID_TYPE_MAPPING = {
-    'PASSPORT': 1,
-    'VOTER_ID': 2,
-    'ADHAARCARD': 3
+    'PASSPORT': 2,
+    'VOTER_ID': 3,
+    'ADHAARCARD': 1
   };
 
   // Validation functions
@@ -78,8 +76,8 @@ const Register3 = () => {
   };
 
   const validateMobileNumber = (number) => {
-    const mobileRegex = /^[6-9]\d{9}$/; // Indian mobile numbers start with 6-9
-    return mobileRegex.test(number) && number.length === 10;
+    const mobileRegex = /^[0-9]{10}$/;
+    return mobileRegex.test(number);
   };
 
   const togglePasswordVisibility = () => {
@@ -124,26 +122,30 @@ const Register3 = () => {
       return;
     }
 
-    // Create preview
-    const reader = new FileReader();
-    reader.onload = () => {
-      setImagePreview(reader.result);
-    };
-    reader.readAsDataURL(file);
-
+    // If validations pass, set the file to state and create preview
     setProfileImage(file);
     setUserProfileError("");
+    setImagePreview(URL.createObjectURL(file));
   };
 
-  // Format mobile number for display
-  const formatMobileNumber = (value) => {
-    const cleaned = value.replace(/\D/g, '');
-    return cleaned.slice(0, 10);
+  const removeImage = () => {
+    setProfileImage(null);
+    setImagePreview("");
+    if (imagePreview) {
+      URL.revokeObjectURL(imagePreview);
+    }
   };
 
   useEffect(() => {
     fetchNewSubrole();
     fetchIdType();
+    
+    // Clean up object URLs when component unmounts
+    return () => {
+      if (imagePreview) {
+        URL.revokeObjectURL(imagePreview);
+      }
+    };
   }, []);
 
   const onRegisterUser = async (e) => {
@@ -163,8 +165,7 @@ const Register3 = () => {
     setProposerEmailError("");
     setproposerMobileError("");
     setEmailExistsError("");
-    setUploadProgress(0);
-  
+
     let isValid = true;
   
     // Validation checks
@@ -211,7 +212,7 @@ const Register3 = () => {
         setMobileNumberError("Mobile Number is Required");
         isValid = false;
       } else if (!validateMobileNumber(mobileNumber)) {
-        setMobileNumberError("Please enter a valid 10-digit mobile number starting with 6-9");
+        setMobileNumberError("Invalid Mobile Number");
         isValid = false;
       }
       if (!profileImage) {
@@ -237,14 +238,12 @@ const Register3 = () => {
         setproposerMobileError("Proposer Mobile Number is Required");
         isValid = false;
       } else if (!validateMobileNumber(proposerNumber)) {
-        setproposerMobileError("Please enter a valid 10-digit mobile number starting with 6-9");
+        setproposerMobileError("Invalid Proposer Mobile Number");
         isValid = false;
       }
     }
   
     if (!isValid) return;
-  
-    setIsUploading(true);
   
     try {
       const formData = new FormData();
@@ -255,23 +254,23 @@ const Register3 = () => {
       formData.append('email', email.trim());
       formData.append('password', password);
       formData.append('mobile_no', mobileNumber);
-      
+
       if (newSelectedRole === "LEARNER") {
-        formData.append('role', '2');
+        formData.append('role', '6');
         formData.append('id_type', ID_TYPE_MAPPING[selectedIdType.toUpperCase()]);
         formData.append('identity', identity.trim());
         formData.append('subrole', 1);
         formData.append('proposer_email', proposerEmail.trim());
         formData.append('proposer_mobile_no', proposerNumber);
         
-        // Append the file directly with proper filename
+        // Append the file
         if (profileImage) {
-          formData.append('user_profile', profileImage, profileImage.name);
+          formData.append('user_profile', profileImage);
         }
       } else if (newSelectedRole === "ENABLER") {
-        formData.append('role', '3');
+        formData.append('role', '7');
         const subroleMapping = {
-          APPLICANT: 1,
+          APPLICANT: 1, 
           INTERVIEWEE: 2,
           STUDENT: 3,
           SPONSOR: 4,
@@ -282,6 +281,7 @@ const Register3 = () => {
         formData.append('subrole', subroleMapping[selectedSubrole] || '');
       }
   
+      // Call RegisterUser with progress tracking
       await RegisterUser(formData);
       
     } catch (error) {
@@ -309,8 +309,6 @@ const Register3 = () => {
           setMobileNumberError(errors.mobileNumber.join(', '));
         }
       }
-    } finally {
-      setIsUploading(false);
     }
   };
 
@@ -421,21 +419,18 @@ const Register3 = () => {
               )}
             </div>
 
-            <div className="col-xxl-6 col-xl-6 col-md-6 mb-3">
+            <div className="col-xxl-6 col-xl-6 col-md-6  mb-3">
               <label className="form-label" htmlFor="mobileNumber">
                 Mobile Number <span className="text-danger">*</span>
               </label>
               <input
                 className="mb-0"
-                placeholder="Enter 10-digit mobile number"
+                placeholder="Enter Your Number"
                 id="mobileNumber"
-                type="tel"
-                pattern="[0-9]*"
-                maxLength="10"
+                type="text"
                 value={mobileNumber}
                 onChange={(e) => {
-                  const formattedNumber = formatMobileNumber(e.target.value);
-                  setMobileNumber(formattedNumber);
+                  setMobileNumber(e.target.value);
                   setMobileNumberError("");
                 }}
               />
@@ -476,7 +471,6 @@ const Register3 = () => {
                 <span className="text-danger">{errorSelectedRole}</span>
               )}
             </div>
-
             <div
               className={`col-xxl-6 col-xl-6 col-md-6 mb-3 ${
                 newSelectedRole === "LEARNER" ? "d-none" : "d-block"
@@ -549,11 +543,28 @@ const Register3 = () => {
                 type="file"
                 name="user_profile"
                 className="form-control mb-0"
-                accept="image/*"
+                accept="image/jpeg, image/png, image/jpg"
                 onChange={handleImageUpload}
               />
               {userProfileError && (
                 <span className="text-danger">{userProfileError}</span>
+              )}
+              {imagePreview && (
+                <div className="mt-2">
+                  <img 
+                    src={imagePreview} 
+                    alt="Preview" 
+                    style={{maxWidth: '100px', maxHeight: '100px', display: 'block'}}
+                    className="mb-2"
+                  />
+                  <button 
+                    type="button" 
+                    className="btn btn-sm btn-danger"
+                    onClick={removeImage}
+                  >
+                    Remove Image
+                  </button>
+                </div>
               )}
             </div>
 
@@ -602,7 +613,7 @@ const Register3 = () => {
               )}
             </div>
 
-            <div className="col-xxl-4 col-xl-4 col-md-4 mb-3">
+            <div className="col-xxl-4 col-xl-4 col-md-4  mb-3">
               <label
                 className="form-label text-nowrap"
                 htmlFor="identityNumber"
@@ -645,7 +656,7 @@ const Register3 = () => {
               )}
             </div>
 
-            <div className="col-xxl-4 col-xl-4 col-md-4 mb-3">
+            <div className="col-xxl-4 col-xl-4 col-md-4  mb-3">
               <label
                 className="form-label text-nowrap"
                 htmlFor="proposerNumber"
@@ -655,14 +666,11 @@ const Register3 = () => {
               <input
                 className="mb-0"
                 id="proposerNumber"
-                placeholder="Enter 10-digit mobile number"
-                type="tel"
-                pattern="[0-9]*"
-                maxLength="10"
+                placeholder="Enter Your Proposer Number"
+                type="text"
                 value={proposerNumber}
                 onChange={(e) => {
-                  const formattedNumber = formatMobileNumber(e.target.value);
-                  setProposerNumber(formattedNumber);
+                  setProposerNumber(e.target.value);
                   setproposerMobileError("");
                 }}
               />
@@ -679,22 +687,9 @@ const Register3 = () => {
                 <button
                   type="submit"
                   className="btn btn-primary w-100 loginBtn"
-                  disabled={isUploading}
+                  disabled={loading}
                 >
-                  {isUploading ? (
-                    <>
-                      <ClipLoader
-                        color="#fff"
-                        size={18}
-                        speedMultiplier={0.5}
-                        loading={isUploading}
-                        className="loginLoader"
-                      />
-                      {" Registering..."}
-                    </>
-                  ) : (
-                    "Sign Up"
-                  )}
+                  Create Account
                 </button>
               </div>
               <div className="text-center">

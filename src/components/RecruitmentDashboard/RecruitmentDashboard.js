@@ -13,6 +13,8 @@ export const RecruitmentDashboard = () => {
   const [availableStudent, setAvailableStudent] = useState(null);
   const [remarks, setRemarks] = useState("");
   const [error, setError] = useState("");
+  const accessToken = localStorage.getItem('accessToken');
+
 
   const handleSponsorClick = () => {
     const studentsSection = document.getElementById("studentsSection");
@@ -35,12 +37,7 @@ export const RecruitmentDashboard = () => {
     setStudentCount(value);
   };
 
-  const filteredTechnology = readyForRecruitment.filter((technologies) => {
-    const match =
-      technology == "Select Technology" ||
-      technologies.technology.toLowerCase().includes(technology.toLowerCase());
-    return match;
-  });
+
 
   const handleRecruitStudent = async (e) => {
     e.preventDefault();
@@ -48,24 +45,25 @@ export const RecruitmentDashboard = () => {
   
     const payload = {
       technologies: [technology],
-      num_students: parseInt(studentCount), // Ensure it's a number
+      num_students: parseInt(studentCount),
       remarks: remarks,
     };
   
     try {
       const response = await axios.post(
-        `${API_BASE_URL}/recruiter/1/select_students/`,
-        JSON.stringify(payload), // Convert payload to JSON string
+        `${API_BASE_URL}/recruiter/select_students/`,
+        JSON.stringify(payload),
         {
           headers: {
-            "Content-Type": "application/json", // Ensure the server knows it's JSON
+            "Content-Type": "application/json",
+            'Authorization': `Bearer ${accessToken}`
           },
         }
       );
   
       if (response.status === 200) {
-        console.log("Students recruited successfully!");
-                setTechnology("Select Technology");
+        alert("Students recruited successfully!");
+        setTechnology("Select Technology");
         setStudentCount("");
         setRemarks("");
         setAvailableStudent(null);

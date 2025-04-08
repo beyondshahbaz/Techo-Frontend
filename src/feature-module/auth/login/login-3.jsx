@@ -7,78 +7,49 @@ import ClipLoader from "react-spinners/ClipLoader";
 
 const Login3 = () => {
   const routes = all_routes;
-  const {
-    LoginUser,
-    loading,
-    loginError,
-    responseSubrole,
-    userLoggedIN,
-    setLoginError,
-  } = useContext(AuthContext);
+  const { LoginUser, loading, loginError, responseSubrole, userLoggedIN, setLoginError , role } = useContext(AuthContext);
 
   const navigation = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
+
   const [passwordVisibility, setPasswordVisibility] = useState({
     password: false,
   });
-
   useEffect(() => {
     if (userLoggedIN && responseSubrole === "SPONSOR") {
       navigation("/Students_SponserDashboard");
     }
     if (userLoggedIN && responseSubrole === "STUDENT") {
-      navigation("/Students_batches");
+      navigation("/Students_profile");
+      window.location.reload();
     }
     if (userLoggedIN && responseSubrole === "TRAINER") {
-      navigation("/Trainer_profile");
+      navigation("/Trainer_batch");
+      window.location.reload();
+    }
+    if (userLoggedIN && role === "ADMIN") {
+      navigation("/AssessmentTable");
+      window.location.reload();
     }
     if (userLoggedIN && responseSubrole === "RECRUITER") {
       navigation("/ReadyToRecruitDashboard");
     }
-  }, [userLoggedIN, responseSubrole, navigation]);
+    
+  }, [userLoggedIN, responseSubrole,role , navigation]);
 
+  console.log(role)
+  console.log(responseSubrole)
   const validateEmail = (email) => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return re.test(String(email).toLowerCase());
   };
 
-  const loginUser = async (e) => {
-    e.preventDefault();
-    setEmailError("");
-    setPasswordError("");
-    setLoginError("");
-    
-    // Validate inputs
-    let isValid = true;
-    
-    if (!email) {
-      setEmailError("Email is required");
-      isValid = false;
-    } else if (!validateEmail(email)) {
-      setEmailError("Enter a Valid Email Address");
-      isValid = false;
-    }
 
-    if (!password) {
-      setPasswordError("Password is Required");
-      isValid = false;
-    } else if (password.length < 8) {
-      setPasswordError("Password must be at least 8 characters");
-      isValid = false;
-    }
-
-    if (!isValid) return;
-
-    try {
-      const userData = { email, password };
-      await LoginUser(userData);
-    } catch (error) {
-      // The error is already handled in AuthContext and stored in loginError
-      console.error("Login error:", error);
-    }
+  const validatePassword = (password) => {
+    return password >= 8;
   };
 
   const togglePasswordVisibility = () => {
@@ -86,6 +57,47 @@ const Login3 = () => {
       ...prevState,
       password: !prevState.password,
     }));
+  };
+
+  const loginUser = async (e) => {
+    
+    e.preventDefault();
+
+    setEmailError("");
+    setPasswordError("");
+
+    let isValid = true;
+
+    if (!email) {
+      setEmailError("Email is required");
+      isValid = false;
+    } else if (!validateEmail) {
+      setEmailError("Enter a Valid Email Address");
+      isValid = false;
+    }
+
+    if (!password) {
+      setPasswordError("Password is Required");
+      isValid = false;
+    } else if (!validatePassword) {
+      setPasswordError("Enter a Valid Password");
+      isValid = false;
+    }
+
+    if (!isValid) {
+      return;
+    }
+
+    try {
+      let userData = {
+        email,
+        password,
+      };
+      await LoginUser(userData);
+      console.log('responsesubrole', responseSubrole);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -117,7 +129,8 @@ const Login3 = () => {
                       setEmail(e.target.value);
                       setEmailError("");
                       setLoginError("");
-                    }}
+                    }
+                    }
                     className="mb-0"
                   />
                   {emailError && (
@@ -136,11 +149,7 @@ const Login3 = () => {
                     placeholder="Enter Your Password"
                     type={passwordVisibility.password ? "text" : "password"}
                     value={password}
-                    onChange={(e) => {
-                      setPassword(e.target.value);
-                      setPasswordError("");
-                      setLoginError("");
-                    }}
+                    onChange={(e) => {setPassword(e.target.value); setPasswordError(""); setLoginError("");}}
                   />
                   <span
                     className={`ti toggle-passwordsSignup ${
@@ -169,26 +178,26 @@ const Login3 = () => {
                       onClick={loginUser}
                     >
                       <span>Sign In</span>
-                      {loading && (
-                        <ClipLoader
-                          color="#fff"
-                          size={18}
-                          speedMultiplier={0.5}
-                          className="loginLoader"
-                        />
-                      )}
+                      {/* <ClipLoader
+
+                        color="#fff"
+                        size={18}
+                        speedMultiplier={0.5}
+                        loading={loading}
+                        className="loginLoader"
+                      /> */}
+
                     </Link>
-                    {loginError && (
-                      <span className="text-danger d-block mt-2">{loginError}</span>
-                    )}
+                    {loginError && <span className="text-danger">{loginError}</span>}
                   </div>
                 </div>
 
                 <div className="col-xxl-12 col-xl-12 col-md-12 mb-3">
                   <div className="text-center">
                     <h6 className="fw-normal text-dark mb-0">
-                      Don't have an account?{" "}
+                      Don’t have an account?{" "}
                       <Link to={routes.register3} className="hover-a">
+                        {" "}
                         Create Account
                       </Link>
                     </h6>
