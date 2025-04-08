@@ -43,7 +43,7 @@ const TrainerBatch = () => {
   return (
     <>
       <div>
-        <Card title="Assigned Batches" className="custom-cardH3 m-5 text-black">
+        <Card title="Your Batches" className="custom-cardH3 m-5 text-black">
           <h3 className="m-0 text-black">For Trainer</h3>
         </Card>
 
