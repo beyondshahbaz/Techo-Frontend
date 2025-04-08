@@ -22,6 +22,7 @@ const AuthProvider = ({ children }) => {
   // const API_BASE_URL = "https://gl8tx74f-8000.inc1.devtunnels.ms/auth";
   // const API_BASE_URL = "https://p9777pv7-8000.inc1.devtunnels.ms/auth";
 
+
   useEffect(() => {
     const storedAccessToken = localStorage.getItem("accessToken");
     const storedRefreshToken = localStorage.getItem("refreshToken");
@@ -72,37 +73,41 @@ const AuthProvider = ({ children }) => {
         throw new Error(error.response.data.user_profile.join(', '));
       }
       
+
       throw error;
     } finally {
       setLoading(false);
     }
   };
 
-  const LoginUser = async (userData) => {
-    setLoginError("");
-    setLoading(true);
-    try {
-      const response = await axios.post(`${API_BASE_URL}/login/`, userData, {
-        headers: { "Content-Type": "application/json" },
-      });
 
-      setAccessToken(response.data.access);
-      setRefreshToken(response.data.refresh);
-      setUserID(response.data.user_id);
-      setResponseSubrole(response.data.subrole);
-      setRole(response.data.role);
-      localStorage.setItem("accessToken", response.data.access);
-      localStorage.setItem("refreshToken", response.data.refresh);
-      localStorage.setItem("userID", response.data.user_id);
-      localStorage.setItem("role", response.data.role);
-      localStorage.setItem("subrole", response.data.subrole);
 
-      if (response.status === 200) {
-        console.log('data', response.data);
-        setUserLoggedIN(true);
-        return response.data;
-      }
-    } catch (error) {
+    const LoginUser = async (userData) => {
+      setLoginError("");
+      setLoading(true);
+      try {
+        const response = await axios.post(`${API_BASE_URL}/login/`, userData, {
+          headers: { "Content-Type": "application/json" },
+        });
+
+        setAccessToken(response.data.access);
+        setRefreshToken(response.data.refresh);
+        setUserID(response.data.user_id);
+        setResponseSubrole(response.data.subrole);
+        setRole(response.data.role);
+        localStorage.setItem("accessToken", response.data.access);
+        localStorage.setItem("refreshToken", response.data.refresh);
+        localStorage.setItem("userID", response.data.user_id);
+        localStorage.setItem("role", response.data.role);
+        localStorage.setItem("subrole", response.data.subrole);
+
+        if (response.status === 200) {
+          console.log('data', response.data);
+
+          setUserLoggedIN(true);
+          return response.data;
+        }
+      } catch (error) {
       // Check for different error response structures
       const errorMessage =
         error.response?.data?.error || // Case: {"error": "..."}
@@ -119,11 +124,13 @@ const AuthProvider = ({ children }) => {
 
   const GetUser = async () => {
     if (!accessToken) {
+
       return;
     }
     setLoading(true);
     try {
       const response = await axios.get(`${API_BASE_URL}/User/${userID}`);
+
       
       if (response.status === 200) {
         setUser(response.data);
@@ -142,6 +149,7 @@ const AuthProvider = ({ children }) => {
       
       if (response.status === 200) {
         console.log("Subroles fetched successfully:", response.data);
+
         setNewSubRole(response.data);
       }
     } catch (error) {

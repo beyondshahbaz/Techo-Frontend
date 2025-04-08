@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { AuthContext } from "../authContext";
 
+
 export const SponsorContext = createContext();
 
 const SponsorDashboardProvider = ({ children }) => {
@@ -13,6 +14,7 @@ const SponsorDashboardProvider = ({ children }) => {
   const [recruiterProfileDetails, setRecruiterProfileDetails] = useState([]);
   const { API_BASE_URL, userLoggedIN, accessToken } = useContext(AuthContext);
 
+
   const GET_ALL_STUDENTS_TO_SPONSER = async () => {
     try {
       const response = await axios.get(
@@ -21,6 +23,7 @@ const SponsorDashboardProvider = ({ children }) => {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
+
         }
       );
       if (response.status == 200) {
@@ -38,6 +41,7 @@ const SponsorDashboardProvider = ({ children }) => {
           Authorization: `Bearer ${accessToken}`,
         },
       });
+
       if (response.status == 200) {
         setBatchName(response.data);
         setBatchId(response.data.batch_id);
@@ -48,13 +52,14 @@ const SponsorDashboardProvider = ({ children }) => {
   };
 
   const GET_READY_FOR_RECRUITMENT = async () => {
+    console.log(accessToken);
     try {
       const response = await axios.get(
-        `${API_BASE_URL}/recruiter/ready_for_recruitment/`,
-        {
+
+        `${API_BASE_URL}/recruiter/ready_for_recruitment/`, {
           headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
+            'Authorization': `Bearer ${accessToken}`
+          }
         }
       );
       if (response.status === 200) {
@@ -112,6 +117,7 @@ const SponsorDashboardProvider = ({ children }) => {
     }
   };
 
+
   useEffect(() => {
     fetchAllData();
   }, [userLoggedIN, accessToken]); // Add both userLoggedIN and accessToken as dependencies
@@ -125,6 +131,7 @@ const SponsorDashboardProvider = ({ children }) => {
     fetchAllData, // Export if you need to manually refresh data
     sponsorProfileDetails,
     recruiterProfileDetails
+
   };
 
   return (

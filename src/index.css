@@ -2148,4 +2148,310 @@ td {
   color: #495057; /* Slightly lighter gray for subheaders */
 }
 
+
+/* table css ends */
+
+/* StudentBatche component start by hasnen */
+.batches-containerHSB {
+  padding: 2rem;
+  background: linear-gradient(135deg, #f5f7fa 0%, #e4e8eb 100%);
+  min-height: 100vh;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  width: 100%;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.batches-titleHSB {
+  text-align: center;
+  font-size: 2.5rem;
+  color: #2c3e50;
+  margin-bottom: 2rem;
+  font-weight: 700;
+  letter-spacing: -0.05em;
+  position: relative;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.batches-titleHSB::after {
+  content: "";
+  display: block;
+  width: 120px;
+  height: 4px;
+  background: linear-gradient(135deg, #3498db, #2980b9);
+  margin: 0.5rem auto 1.5rem;
+  border-radius: 2px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.batches-gridHSB {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2rem;
+  padding: 0 1rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.batch-cardHSB {
+  background-color: #ffffff;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  border: none;
+  position: relative;
+}
+
+.batch-cardHSB::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #3498db, #9b59b6);
+}
+
+.batch-cardHSB:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
+}
+
+.batch-card-headerHSB {
+  background: linear-gradient(135deg, #3498db, #2980b9);
+  color: #ffffff;
+  padding: 1.75rem 1.5rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.batch-card-headerHSB::after {
+  content: '';
+  position: absolute;
+  bottom: -20px;
+  right: -20px;
+  width: 60px;
+  height: 60px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 50%;
+}
+
+.batch-card-headerHSB h2 {
+  margin: 0;
+  font-size: 1.75rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  position: relative;
+  z-index: 1;
+}
+
+.batch-nameHSB {
+  color: #ffffff;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+}
+
+.batch-card-bodyHSB {
+  padding: 2rem 1.5rem;
+}
+
+.batch-infoHSB {
+  font-size: 1rem;
+  color: #333;
+  line-height: 1.6;
+}
+
+.info-itemHSB {
+  display: flex;
+  margin-bottom: 1.25rem;
+  align-items: flex-start;
+}
+
+.info-labelHSB {
+  font-weight: 600;
+  color: #2c3e50;
+  min-width: 120px;
+  padding-right: 1rem;
+  font-size: 1.1rem;
+}
+
+.info-valueHSB {
+  flex: 1;
+  font-size: 1.1rem;
+  color: #4a5568;
+}
+
+.tech-tagsHSB {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.25rem;
+}
+
+.tech-tagHSB {
+  background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+  color: #1976d2;
+  padding: 0.35rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  border: 1px solid rgba(25, 118, 210, 0.2);
+}
+
+.loading-containerHSB {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: #f5f7fa;
+}
+
+.loading-spinnerHSB {
+  width: 50px;
+  height: 50px;
+  border: 5px solid #f3f3f3;
+  border-top: 5px solid #3498db;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+.error-containerHSB {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: #f5f7fa;
+  text-align: center;
+}
+
+.error-iconHSB {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  color: #e74c3c;
+}
+
+.error-containerHSB h2 {
+  color: #2c3e50;
+  margin-bottom: 0.5rem;
+}
+
+.error-containerHSB p {
+  color: #7f8c8d;
+  font-size: 1.1rem;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@media (max-width: 768px) {
+  .batches-gridHSB {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  
+  .batches-titleHSB {
+    font-size: 2rem;
+  }
+  
+  .batch-card-headerHSB h2 {
+    font-size: 1.5rem;
+  }
+  
+  .info-labelHSB, .info-valueHSB {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .batches-containerHSB {
+    padding: 1.5rem;
+  }
+  
+  .batches-titleHSB {
+    font-size: 1.75rem;
+  }
+  
+  .info-itemHSB {
+    flex-direction: column;
+    margin-bottom: 1rem;
+  }
+  
+  .info-labelHSB {
+    margin-bottom: 0.25rem;
+    min-width: auto;
+  }
+}
+/* StudentBatche component End by hasnen */
+
+/* TrainerProfile Start by hasnen */
+
+.custom-tableHTP {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 10px; /* Adds space between rows */
+  margin-top: 20px;
+}
+
+.custom-tableHTP th,
+.custom-tableHTP td {
+  padding: 12px 15px;
+  text-align: left;
+}
+
+.custom-tableHTP th {
+  background-color: #3498db; /* Primary color for headers */
+  color: white;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  width: 150px; /* Adjust this value as needed */
+  max-width: 150px; /* Ensures the header doesn't exceed this width */
+  white-space: nowrap; /* Prevents text from wrapping */
+  overflow: hidden; /* Hides overflow text */
+  text-overflow: ellipsis; /* Adds ellipsis for overflow text */
+}
+
+.custom-tableHTP td {
+  background-color: #f8f9fa; /* Light background for table cells */
+  border: 1px solid #dee2e6; /* Light border for cells */
+}
+
+.custom-tableHTP tr:hover td {
+  background-color: #e9ecef; /* Hover effect for rows */
+}
+
+.custom-tableHTP th:first-child,
+.custom-tableHTP td:first-child {
+  border-top-left-radius: 8px;
+  border-bottom-left-radius: 8px;
+}
+
+.custom-tableHTP th:last-child,
+.custom-tableHTP td:last-child {
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+
+.profile-headerHTP {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #343a40; /* Dark gray for headers */
+}
+
+.profile-subheaderHTP {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #495057; /* Slightly lighter gray for subheaders */
+}
+
 /* TrainerProfile End by hasnen */
