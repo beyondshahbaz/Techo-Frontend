@@ -10,15 +10,9 @@ export const Student_Card = ({ filterStudent, selectAll, setSelectAll }) => {
   const { API_BASE_URL } = useContext(AuthContext);
   const accessToken = localStorage.getItem('accessToken');
 
-
-
   const SPONSOR_STUDENT = async () => {
-
     const uniqueBatchIds = [...new Set(sponsorStudentBatchId)];
-
-
     const intSponsorStudentBatchId = uniqueBatchIds.map((item) => Number(item));
-
     const payload = {
       student_ids: sponsorStudentId,
       batch_ids: intSponsorStudentBatchId,
@@ -38,14 +32,12 @@ export const Student_Card = ({ filterStudent, selectAll, setSelectAll }) => {
       if (response.status === 200) {
         window.alert("Successfully Sponsored");
       }
-
     } catch (error) {
       console.log("error", error);
 
       window.alert("There is some issue at the moment, please try again");
     }
   };
-
   const handleCheckboxClick = (e, studentId, batchId) => {
 
     const isChecked = e.target.checked;
@@ -72,12 +64,10 @@ export const Student_Card = ({ filterStudent, selectAll, setSelectAll }) => {
       setSelectAll(false);
     }
   };
-
   const handleSponsorship = (e) => {
     e.preventDefault();
     SPONSOR_STUDENT();
   };
-
   useEffect(() => {
     if (selectAll) {
       const allStudentIds = filterStudent.map((student) => student.student_id);
@@ -188,3 +178,4 @@ export const Student_Card = ({ filterStudent, selectAll, setSelectAll }) => {
       </table>
     </div>
   )}
+

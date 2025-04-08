@@ -4,8 +4,9 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { Button } from "primereact/button";
+import { InputText } from "primereact/inputtext";
 import { Dropdown } from "primereact/dropdown";
-import { useNavigate } from "react-router-dom";
+\import { useNavigate } from "react-router-dom";
 import { baseURL } from "../../utils/axios";
 
 interface AdmissionData {
@@ -26,7 +27,6 @@ interface AdmissionData {
   source: string;
   remarks: string;
   interview_by: string | null;
-}
 
 interface Trainer {
   id: number;
@@ -36,6 +36,7 @@ interface Trainer {
 
 const AdmissionTable: React.FC = () => {
   const [data, setData] = useState<AdmissionData[]>([]);
+
   const [trainers, setTrainers] = useState<Trainer[]>([]);
   const navigate = useNavigate();
   const [hoveredRow, setHoveredRow] = useState<string | null>(null);
@@ -46,6 +47,7 @@ const AdmissionTable: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+
         const [learnersResponse, trainersResponse] = await Promise.all([
           axios.get(`${baseURL}/Learner/`),
           axios.get(`${baseURL}/trainers/`)
@@ -78,6 +80,7 @@ const AdmissionTable: React.FC = () => {
     <span style={{ color: "black", fontWeight: "bold" }}>
       {rowData.mobile_no}
     </span>
+
   );
 
   const interviewByTemplate = (rowData: AdmissionData) => (
@@ -114,6 +117,7 @@ const AdmissionTable: React.FC = () => {
 
   const editInterviewerTemplate = (rowData: AdmissionData) => {
     return (
+
       <Dropdown
         value={selectedInterviewers[rowData.id] || null}
         options={trainerOptions}
@@ -140,6 +144,7 @@ const AdmissionTable: React.FC = () => {
     if (rowData.interview_by === null) {
       return (
         <Button
+
           label="Select Interviewer"
           icon="pi pi-user-plus"
           className="p-button-sm custom-edit-button"
@@ -151,6 +156,7 @@ const AdmissionTable: React.FC = () => {
           }}
           onMouseEnter={() => setHoveredRow(rowData.id)}
           onMouseLeave={() => setHoveredRow(null)}
+
           onClick={() => handleEditInterviewer(rowData)}
         />
       );
@@ -209,6 +215,7 @@ const AdmissionTable: React.FC = () => {
             sortable
           ></Column>
           <Column
+
             header="Select Interviewer"
             body={editInterviewerTemplate}
           ></Column>

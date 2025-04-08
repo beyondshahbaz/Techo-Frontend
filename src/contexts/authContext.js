@@ -16,7 +16,6 @@ const AuthProvider = ({ children }) => {
   const [newSubrole, setNewSubRole] = useState([]);
   const [loading, setLoading] = useState(false);
   const [emailAlreadyCreated, setEmailAlreadyCreated] = useState(false);
-
   const [loginError, setLoginError] = useState("");
 
   const API_BASE_URL = "https://techie01.pythonanywhere.com/auth";
@@ -82,6 +81,7 @@ const AuthProvider = ({ children }) => {
   };
 
 
+
     const LoginUser = async (userData) => {
       setLoginError("");
       setLoading(true);
@@ -113,7 +113,7 @@ const AuthProvider = ({ children }) => {
         error.response?.data?.error || // Case: {"error": "..."}
         error.response?.data?.non_field_errors?.[0] || // Case: {"non_field_errors": ["..."]}
         "Login failed. Please try again."; // Fallback message
-  
+
       setLoginError(errorMessage); // Store the error in state
       console.error("Login Error:", error.response?.data);
       throw error; // Re-throw to allow component-level handling
@@ -130,7 +130,7 @@ const AuthProvider = ({ children }) => {
     setLoading(true);
     try {
       const response = await axios.get(`${API_BASE_URL}/User/${userID}`);
-     
+
       
       if (response.status === 200) {
         setUser(response.data);
@@ -149,7 +149,6 @@ const AuthProvider = ({ children }) => {
       
       if (response.status === 200) {
         console.log("Subroles fetched successfully:", response.data);
-
 
         setNewSubRole(response.data);
       }
@@ -202,9 +201,7 @@ const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider
-      value={value}
-    >
+    <AuthContext.Provider value={value}>
       {children}
     </AuthContext.Provider>
   );

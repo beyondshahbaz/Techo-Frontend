@@ -25,11 +25,16 @@ import TrainerBatch from "../../components/Trainer_dashboard/TrainerBatch";
 import TrainerBatchDetail from "../../components/Trainer_dashboard/TrainerBatchDetail";
 import AssessmentTable from "../../components/Assessment_dashboard/AssessmentTable";
 import AssessmentCandidte from "../../components/Assessment_dashboard/AssessmentCandidte";
+import { Forbidden } from "../../components/Forbidden/Forbidden";
+import RecruitmentProfile from "../../components/RecruitmentDashboard/RecruitmentProfile";
+
 
 
 const ALLRoutes: React.FC = () => {
   const routes = all_routes;
-  const {userLoggedIN, accessToken} = useContext(AuthContext);
+  const {userLoggedIN} = useContext(AuthContext);
+  const accessToken = localStorage.getItem('accessToken');
+
 
   return (
     <Routes>
@@ -41,6 +46,9 @@ const ALLRoutes: React.FC = () => {
         <Route path={routes.login3} element={<Login />} />
         <Route path={routes.register3} element={<Register3 />} />
         {userLoggedIN &&  accessToken  && <Route path="/Students_profile" element={<StudentsProfile />} /> } 
+        {userLoggedIN &&  accessToken  && <Route path="/Recruitment_Profile" element={< RecruitmentProfile/>} /> } 
+        {userLoggedIN &&  accessToken  && <Route path="/Sponsor_Profile" element={<Sponsor_Profile />} /> } 
+
         {userLoggedIN &&  accessToken  && <Route path="/Students_batches" element={<StudentsBatches />} /> }
         {userLoggedIN &&  accessToken  && <Route path="/Trainer_profile" element={<TrainerProfile />} /> }
         {userLoggedIN &&  accessToken  && <Route path="/Admission_table" element={<AdmissionTable />} /> } 

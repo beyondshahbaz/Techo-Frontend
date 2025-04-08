@@ -10,24 +10,24 @@ const SponsorDashboardProvider = ({ children }) => {
   const [batchName, setBatchName] = useState([]);
   const [batchId, setBatchId] = useState(null);
   const [readyForRecruitment, setReadyForRecruitment] = useState([]);
-  const accessToken = localStorage.getItem('accessToken');
-
-  const { API_BASE_URL} = useContext(AuthContext);
+  const [sponsorProfileDetails, setSponsorProfileDetails] = useState([]);
+  const [recruiterProfileDetails, setRecruiterProfileDetails] = useState([]);
+  const { API_BASE_URL, userLoggedIN, accessToken } = useContext(AuthContext);
 
 
   const GET_ALL_STUDENTS_TO_SPONSER = async () => {
     try {
       const response = await axios.get(
-
-        `${API_BASE_URL}/sponsors/available_students/`, {
+        `${API_BASE_URL}/sponsors/available_students/`,
+        {
           headers: {
-            'Authorization': `Bearer ${accessToken}`
-          }
+            Authorization: `Bearer ${accessToken}`,
+          },
+
         }
       );
       if (response.status == 200) {
         setUserDataToSponsor(response.data.students_to_sponsor);
-        console.log("data", response);
       }
     } catch (error) {
       console.log(error);
@@ -36,8 +36,11 @@ const SponsorDashboardProvider = ({ children }) => {
 
   const GET_BATCH = async () => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/batches/`);
-
+      const response = await axios.get(`${API_BASE_URL}/batches/`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
 
       if (response.status == 200) {
         setBatchName(response.data);
@@ -45,7 +48,6 @@ const SponsorDashboardProvider = ({ children }) => {
       }
     } catch (error) {
       console.log("batch error", error);
-      // throw error;
     }
   };
 
@@ -53,13 +55,13 @@ const SponsorDashboardProvider = ({ children }) => {
     console.log(accessToken);
     try {
       const response = await axios.get(
+
         `${API_BASE_URL}/recruiter/ready_for_recruitment/`, {
           headers: {
             'Authorization': `Bearer ${accessToken}`
           }
         }
       );
-
       if (response.status === 200) {
         setReadyForRecruitment(response.data.technologies_usage);
       }
@@ -72,25 +74,53 @@ const SponsorDashboardProvider = ({ children }) => {
     try {
       const response = await axios.get(`${API_BASE_URL}/sponsors/`, {
         headers: {
-          'Content-Type' : 'application/json',
-          'Authorization': `Bearer ${accessToken}`
-        }
+          Authorization: `Bearer ${accessToken}`,
+        },
       });
       if (response.status === 200) {
-        console.log("sponsor data", response.data);
+        console.log(response.data);
+        setSponsorProfileDetails(response.data);
+      }
+    } catch (error) {
+      console.log("sponsor error", error);
+    }
+  };
+  const FetchRecuiter = async () => {
+    try {
+      const response = await axios.get(`${API_BASE_URL}/recruiter/`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      if (response.status === 200) {
+        console.log('recruiter data', response.data);
+        setRecruiterProfileDetails(response.data);
       }
     } catch (error) {
       console.log("sponsor error", error);
     }
   };
 
+  const fetchAllData = async () => {
+    if (userLoggedIN && accessToken) {
+      try {
+        await Promise.all([
+          GET_ALL_STUDENTS_TO_SPONSER(),
+          GET_BATCH(),
+          GET_READY_FOR_RECRUITMENT(),
+          FetchSponsor(),
+          FetchRecuiter()
+        ]);
+      } catch (error) {
+        console.log("Error fetching sponsor data:", error);
+      }
+    }
+  };
+
 
   useEffect(() => {
-    GET_ALL_STUDENTS_TO_SPONSER();
-    GET_BATCH();
-    GET_READY_FOR_RECRUITMENT();
-    FetchSponsor();
-  }, []);
+    fetchAllData();
+  }, [userLoggedIN, accessToken]); // Add both userLoggedIN and accessToken as dependencies
 
   const value = {
     usersDataToSponsor,
@@ -98,7 +128,9 @@ const SponsorDashboardProvider = ({ children }) => {
     batchId,
     readyForRecruitment,
     FetchSponsor,
-
+    fetchAllData, // Export if you need to manually refresh data
+    sponsorProfileDetails,
+    recruiterProfileDetails
 
   };
 

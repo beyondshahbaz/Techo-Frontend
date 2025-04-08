@@ -15,10 +15,10 @@ const Login3 = () => {
   const [password, setPassword] = useState("");
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
+
   const [passwordVisibility, setPasswordVisibility] = useState({
     password: false,
   });
-
   useEffect(() => {
     if (userLoggedIN && responseSubrole === "SPONSOR") {
       navigation("/Students_SponserDashboard");
@@ -38,9 +38,9 @@ const Login3 = () => {
     if (userLoggedIN && responseSubrole === "RECRUITER") {
       navigation("/ReadyToRecruitDashboard");
     }
-
     
   }, [userLoggedIN, responseSubrole,role , navigation]);
+
 
   console.log(role)
   console.log(responseSubrole)
@@ -63,18 +63,18 @@ const Login3 = () => {
   };
 
   const loginUser = async (e) => {
+    
     e.preventDefault();
+
     setEmailError("");
     setPasswordError("");
-    setLoginError("");
-    
-    // Validate inputs
+
     let isValid = true;
-    
+
     if (!email) {
       setEmailError("Email is required");
       isValid = false;
-    } else if (!validateEmail(email)) {
+    } else if (!validateEmail) {
       setEmailError("Enter a Valid Email Address");
       isValid = false;
     }
@@ -82,22 +82,26 @@ const Login3 = () => {
     if (!password) {
       setPasswordError("Password is Required");
       isValid = false;
-    } else if (password.length < 8) {
-      setPasswordError("Password must be at least 8 characters");
+    } else if (!validatePassword) {
+      setPasswordError("Enter a Valid Password");
       isValid = false;
     }
 
-    if (!isValid) return;
+    if (!isValid) {
+      return;
+    }
 
     try {
-      const userData = { email, password };
+      let userData = {
+        email,
+        password,
+      };
       await LoginUser(userData);
+      console.log('responsesubrole', responseSubrole);
     } catch (error) {
-      // The error is already handled in AuthContext and stored in loginError
-      console.error("Login error:", error);
+      console.log(error);
     }
   };
-
 
 
   return (
@@ -129,7 +133,8 @@ const Login3 = () => {
                       setEmail(e.target.value);
                       setEmailError("");
                       setLoginError("");
-                    }}
+                    }
+                    }
                     className="mb-0"
                   />
                   {emailError && (
@@ -148,11 +153,7 @@ const Login3 = () => {
                     placeholder="Enter Your Password"
                     type={passwordVisibility.password ? "text" : "password"}
                     value={password}
-                    onChange={(e) => {
-                      setPassword(e.target.value);
-                      setPasswordError("");
-                      setLoginError("");
-                    }}
+                    onChange={(e) => {setPassword(e.target.value); setPasswordError(""); setLoginError("");}}
                   />
                   <span
                     className={`ti toggle-passwordsSignup ${
@@ -181,6 +182,7 @@ const Login3 = () => {
                       onClick={loginUser}
                     >
                       <span>Sign In</span>
+
                       {loading && (
                         <ClipLoader
                           color="#fff"
@@ -191,17 +193,16 @@ const Login3 = () => {
                       )}
 
                     </Link>
-                    {loginError && (
-                      <span className="text-danger d-block mt-2">{loginError}</span>
-                    )}
+                    {loginError && <span className="text-danger">{loginError}</span>}
                   </div>
                 </div>
 
                 <div className="col-xxl-12 col-xl-12 col-md-12 mb-3">
                   <div className="text-center">
                     <h6 className="fw-normal text-dark mb-0">
-                      Don't have an account?{" "}
+                      Don’t have an account?{" "}
                       <Link to={routes.register3} className="hover-a">
+                        {" "}
                         Create Account
                       </Link>
                     </h6>

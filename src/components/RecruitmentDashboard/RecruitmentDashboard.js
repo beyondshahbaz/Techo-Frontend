@@ -37,12 +37,7 @@ export const RecruitmentDashboard = () => {
     setStudentCount(value);
   };
 
-  const filteredTechnology = readyForRecruitment.filter((technologies) => {
-    const match =
-      technology == "Select Technology" ||
-      technologies.technology.toLowerCase().includes(technology.toLowerCase());
-    return match;
-  });
+
 
   const handleRecruitStudent = async (e) => {
     e.preventDefault();
@@ -50,7 +45,7 @@ export const RecruitmentDashboard = () => {
   
     const payload = {
       technologies: [technology],
-      num_students: parseInt(studentCount), // Ensure it's a number
+      num_students: parseInt(studentCount),
       remarks: remarks,
     };
   
