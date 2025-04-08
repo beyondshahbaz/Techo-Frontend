@@ -10,7 +10,6 @@ const SponsorDashboardProvider = ({ children }) => {
   const [batchName, setBatchName] = useState([]);
   const [batchId, setBatchId] = useState(null);
   const [readyForRecruitment, setReadyForRecruitment] = useState([]);
-  const { API_BASE_URL} = useContext(AuthContext);
   const accessToken = localStorage.getItem('accessToken');
 
   const { API_BASE_URL, accessToken} = useContext(AuthContext);
