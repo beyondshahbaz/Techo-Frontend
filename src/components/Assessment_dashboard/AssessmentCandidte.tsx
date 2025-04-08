@@ -99,7 +99,7 @@ const AssessmentCandidateWithForm: React.FC = () => {
       payload.admin_name = data.admin_name;
       payload.admin_score = data.admin_score;
       payload.admin_feedback = data.admin_feedback;
-      payload.admin_selected = data.admin_selected === "Yes";
+      payload.admin_selected = data.admin_selected;
     }
 
     try {
