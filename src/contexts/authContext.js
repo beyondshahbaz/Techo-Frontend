@@ -1,6 +1,5 @@
 import axios from "axios";
 import { createContext, useEffect, useState } from "react";
-import { baseURL } from "../utils/axios";
 
 export const AuthContext = createContext();
 
@@ -19,30 +18,74 @@ const AuthProvider = ({ children }) => {
   const [loginError, setLoginError] = useState("");
 
   const API_BASE_URL = "https://techie01.pythonanywhere.com/auth";
-  // const API_BASE_URL = "https://gl8tx74f-8000.inc1.devtunnels.ms/auth";
-  // const API_BASE_URL = "https://p9777pv7-8000.inc1.devtunnels.ms/auth";
 
-
+  // Initialize auth state from localStorage
   useEffect(() => {
     const storedAccessToken = localStorage.getItem("accessToken");
     const storedRefreshToken = localStorage.getItem("refreshToken");
     const storedUserID = localStorage.getItem("userID");
     const storedRole = localStorage.getItem("role");
+    const storedSubrole = localStorage.getItem("subrole");
 
     if (storedAccessToken && storedRefreshToken && storedUserID && storedRole) {
       setAccessToken(storedAccessToken);
       setRefreshToken(storedRefreshToken);
       setUserID(storedUserID);
       setRole(storedRole);
+      setResponseSubrole(storedSubrole);
       setUserLoggedIN(true);
     }
   }, []);
+
+  // Set up Axios interceptors
+  useEffect(() => {
+    // Request interceptor to add auth token to headers
+    const requestInterceptor = axios.interceptors.request.use(
+      config => {
+        if (accessToken) {
+          config.headers.Authorization = `Bearer ${accessToken}`;
+        }
+        return config;
+      },
+      error => Promise.reject(error)
+    );
+
+    // Response interceptor to handle token refresh
+    const responseInterceptor = axios.interceptors.response.use(
+      response => response,
+      async error => {
+        const originalRequest = error.config;
+        
+        // If error is 401 and we haven't already retried
+        if (error.response?.status === 401 && !originalRequest._retry) {
+          originalRequest._retry = true;
+          
+          try {
+            const newAccessToken = await GenerateNewAccessToken();
+            originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+            return axios(originalRequest); // Retry the original request
+          } catch (refreshError) {
+            // If refresh fails, logout the user
+            LogoutUser();
+            return Promise.reject(refreshError);
+          }
+        }
+        
+        return Promise.reject(error);
+      }
+    );
+
+    return () => {
+      // Clean up interceptors when component unmounts
+      axios.interceptors.request.eject(requestInterceptor);
+      axios.interceptors.response.eject(responseInterceptor);
+    };
+  }, [accessToken, refreshToken]);
 
   const RegisterUser = async (userData) => {
     setLoading(true);
     setUserCreatedSuccessfully(false);
     try {
-      // Determine if we're sending FormData (file upload) or JSON
       const isFormData = userData instanceof FormData;
       
       const config = {
@@ -68,69 +111,58 @@ const AuthProvider = ({ children }) => {
       }
       console.log('Registration error:', error);
       
-      // Handle file upload specific errors
       if (error.response?.status === 400 && error.response?.data?.user_profile) {
         throw new Error(error.response.data.user_profile.join(', '));
       }
       
-
       throw error;
     } finally {
       setLoading(false);
     }
   };
 
+  const LoginUser = async (userData) => {
+    setLoginError("");
+    setLoading(true);
+    try {
+      const response = await axios.post(`${API_BASE_URL}/login/`, userData, {
+        headers: { "Content-Type": "application/json" },
+      });
 
+      setAccessToken(response.data.access);
+      setRefreshToken(response.data.refresh);
+      setUserID(response.data.user_id);
+      setResponseSubrole(response.data.subrole);
+      setRole(response.data.role);
+      localStorage.setItem("accessToken", response.data.access);
+      localStorage.setItem("refreshToken", response.data.refresh);
+      localStorage.setItem("userID", response.data.user_id);
+      localStorage.setItem("role", response.data.role);
+      localStorage.setItem("subrole", response.data.subrole);
 
-    const LoginUser = async (userData) => {
-      setLoginError("");
-      setLoading(true);
-      try {
-        const response = await axios.post(`${API_BASE_URL}/login/`, userData, {
-          headers: { "Content-Type": "application/json" },
-        });
-
-        setAccessToken(response.data.access);
-        setRefreshToken(response.data.refresh);
-        setUserID(response.data.user_id);
-        setResponseSubrole(response.data.subrole);
-        setRole(response.data.role);
-        localStorage.setItem("accessToken", response.data.access);
-        localStorage.setItem("refreshToken", response.data.refresh);
-        localStorage.setItem("userID", response.data.user_id);
-        localStorage.setItem("role", response.data.role);
-        localStorage.setItem("subrole", response.data.subrole);
-
-        if (response.status === 200) {
-          console.log('data', response.data);
-
-          setUserLoggedIN(true);
-          return response.data;
-        }
-      } catch (error) {
-      // Check for different error response structures
+      if (response.status === 200) {
+        setUserLoggedIN(true);
+        return response.data;
+      }
+    } catch (error) {
       const errorMessage =
-        error.response?.data?.error || // Case: {"error": "..."}
-        error.response?.data?.non_field_errors?.[0] || // Case: {"non_field_errors": ["..."]}
-        "Login failed. Please try again."; // Fallback message
+        error.response?.data?.error ||
+        error.response?.data?.non_field_errors?.[0] ||
+        "Login failed. Please try again.";
 
-      setLoginError(errorMessage); // Store the error in state
+      setLoginError(errorMessage);
       console.error("Login Error:", error.response?.data);
-      throw error; // Re-throw to allow component-level handling
+      throw error;
     } finally {
       setLoading(false);
     }
   };
 
   const GetUser = async () => {
-    if (!accessToken) {
-
-      return;
-    }
+    if (!accessToken) return;
     setLoading(true);
     try {
       const response = await axios.get(`${API_BASE_URL}/User/${userID}`);
-
       
       if (response.status === 200) {
         setUser(response.data);
@@ -149,7 +181,6 @@ const AuthProvider = ({ children }) => {
       
       if (response.status === 200) {
         console.log("Subroles fetched successfully:", response.data);
-
         setNewSubRole(response.data);
       }
     } catch (error) {
@@ -169,8 +200,36 @@ const AuthProvider = ({ children }) => {
     setAccessToken(null);
     setRefreshToken(null);
     setUserID(null);
+    setRole(null);
+    setResponseSubrole(null);
+    setUser(null);
   };
 
+  const GenerateNewAccessToken = async () => {
+    if (!refreshToken) {
+      LogoutUser();
+      throw new Error("No refresh token available");
+    }
+    
+    try {
+      const response = await axios.post(`${API_BASE_URL}/token/refresh/`, {
+        refresh: refreshToken
+      });
+      
+      if (response.data.access) {
+        const newAccessToken = response.data.access;
+        setAccessToken(newAccessToken);
+        localStorage.setItem("accessToken", newAccessToken);
+        return newAccessToken;
+      }
+    } catch (error) {
+      console.error("Token refresh failed:", error);
+      LogoutUser();
+      throw error;
+    }
+  };
+
+  // Fetch user data when accessToken or userID changes
   useEffect(() => {
     if (accessToken && userID) {
       GetUser();
@@ -198,6 +257,7 @@ const AuthProvider = ({ children }) => {
     emailAlreadyCreated,
     setLoginError,
     API_BASE_URL,
+    GenerateNewAccessToken,
   };
 
   return (
