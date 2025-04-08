@@ -108,13 +108,6 @@ const AuthProvider = ({ children }) => {
           return response.data;
         }
       } catch (error) {
-
-        setLoginError(error.response.data.non_field_errors[0]);
-        throw error;
-      } finally {
-        setLoading(false);
-      }
-    } catch (error) {
       // Check for different error response structures
       const errorMessage =
         error.response?.data?.error || // Case: {"error": "..."}
