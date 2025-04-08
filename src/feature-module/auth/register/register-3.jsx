@@ -137,13 +137,7 @@ const Register3 = () => {
     }
   };
 
-  const removeImage = () => {
-    setProfileImage(null);
-    setImagePreview("");
-    if (imagePreview) {
-      URL.revokeObjectURL(imagePreview);
-    }
-  };
+
 
   useEffect(() => {
     fetchNewSubrole();
