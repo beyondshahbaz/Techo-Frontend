@@ -6,7 +6,7 @@ import { Column } from "primereact/column";
 import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
 import { Dropdown } from "primereact/dropdown";
-\import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { baseURL } from "../../utils/axios";
 
 interface AdmissionData {
