@@ -12,7 +12,7 @@ const SponsorDashboardProvider = ({ children }) => {
   const [readyForRecruitment, setReadyForRecruitment] = useState([]);
   const accessToken = localStorage.getItem('accessToken');
 
-  const { API_BASE_URL, accessToken} = useContext(AuthContext);
+  const { API_BASE_URL} = useContext(AuthContext);
 
 
   const GET_ALL_STUDENTS_TO_SPONSER = async () => {
