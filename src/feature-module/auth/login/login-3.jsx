@@ -98,12 +98,7 @@ const Login3 = () => {
     }
   };
 
-  const togglePasswordVisibility = () => {
-    setPasswordVisibility((prevState) => ({
-      ...prevState,
-      password: !prevState.password,
-    }));
-  };
+
 
   return (
     <div className="row bgLoginScreen m-0">
