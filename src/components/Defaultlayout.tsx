@@ -40,14 +40,7 @@ const Defaultlayout = () => {
     }
   }, []);
 
-    if (userRole) {
-      setRole(userRole);
-    }
-    if (userSubrole) {
-      setSubrole(userSubrole);
-    }
-  }, []);
-  
+
   const StudentsItems = [
     { path: "/Students_profile", label: "PROFILE" },
     { path: "/Students_batches", label: "BATCH" },
