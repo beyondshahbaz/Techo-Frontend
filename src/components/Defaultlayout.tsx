@@ -29,14 +29,10 @@ const Defaultlayout = () => {
   useEffect(() => {
     const userRole = localStorage.getItem("role");
     const userSubrole = localStorage.getItem("subrole");
-
-    if (userRole) {
-      setRole(userRole);
-    }
-    if (userSubrole) {
-      setSubrole(userSubrole);
-    }
-  }, [role, subrole]);
+  
+    setRole(userRole || "");
+    setSubrole(userSubrole || "");
+  }, [userLoggedIN]); // Change dependency to userLoggedIN
 
   // Define all menu items outside the return statement
   const menuItems = {
@@ -102,12 +98,14 @@ const Defaultlayout = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
+
   const handleLogout = () => {
     setVisible(false);
+    setRole("");
+    setSubrole("");
     LogoutUser();
     navigate("/login-3");
   };
-
   const renderMenuItems = () => {
     if (!subrole) return null;
 
