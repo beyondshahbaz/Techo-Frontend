@@ -27,7 +27,7 @@ interface AdmissionData {
   source: string;
   remarks: string;
   interview_by: string | null;
-
+}
 interface Trainer {
   id: number;
   first_name: string;
