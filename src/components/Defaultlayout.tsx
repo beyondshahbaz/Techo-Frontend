@@ -36,7 +36,7 @@ const Defaultlayout = () => {
     if (userSubrole) {
       setSubrole(userSubrole);
     }
-  }, []);
+  }, [role, subrole]);
 
   // Define all menu items outside the return statement
   const menuItems = {
