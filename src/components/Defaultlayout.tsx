@@ -246,84 +246,88 @@ const Defaultlayout = () => {
               </>
             )}
 
-            <div className="authFuncCont">
-              {userLoggedIN && (
-                <>
-                  <div className="me-2">
-                    <i
-                      className="pi pi-sign-out"
-                      style={{ fontSize: "2rem", color: "#dc3545" }}
-                    ></i>
+return (
+  <>
+    {userLoggedIN ? (
+      <>
+        <div className="authFuncCont">
+          <>
+            <div className="me-2">
+              <i
+                className="pi pi-sign-out"
+                style={{ fontSize: "2rem", color: "#dc3545" }}
+              ></i>
+            </div>
+            <div className="d-flex flex-column">
+              <span className="text-muted">Ready to leave?</span>
+              <span
+                className="btnLogout"
+                data-bs-toggle="modal"
+                data-bs-target="#logoutModal"
+                onClick={() => setVisible(false)}
+              >
+                Logout
+              </span>
+            </div>
+          </>
+        </div>
+
+        <Sidebar />
+
+        <div className="row mx-0">
+          <div className="col-xxl-12 col-xl-12 col-md-12 sticky-header-top px-0">
+            <Header setVisible={setVisible} toggleSidebar={toggleSidebar} />
+          </div>
+          <div className="col-xxl-12 col-xl-12 col-md-12 px-0">
+            <Outlet />
+          </div>
+        </div>
+
+        {/* Logout Modal */}
+        <div
+          className="modal fade"
+          id="logoutModal"
+          aria-labelledby="logoutModalLabel"
+          aria-hidden="true"
+        >
+          <div className="modal-dialog modal-dialog-centered">
+            <div className="modal-content">
+              <div className="modal-body">
+                <h3 className="text-center">
+                  Are you sure you want to logout?
+                </h3>
+                <hr />
+                <div className="row">
+                  <div className="col-xxl-6 col-xl-6 col-md-6">
+                    <button
+                      type="button"
+                      className="btn btn-light w-100"
+                      data-bs-dismiss="modal"
+                    >
+                      Cancel
+                    </button>
                   </div>
-                  <div className="d-flex flex-column">
-                    <span className="text-muted">Ready to leave?</span>
-                    <span
-                      className="btnLogout"
-                      data-bs-toggle="modal"
-                      data-bs-target="#logoutModal"
-                      onClick={() => setVisible(false)}
+                  <div className="col-xxl-6 col-xl-6 col-md-6">
+                    <button
+                      type="button"
+                      className="btn btn-primary w-100"
+                      onClick={handleLogout}
+                      data-bs-dismiss="modal"
                     >
                       Logout
-                    </span>
-                  </div>
-                </>
-              )}
-            </div>
-          </Sidebar>
-
-          <div className="row mx-0">
-            <div className="col-xxl-12 col-xl-12 col-md-12 sticky-header-top px-0">
-              <Header setVisible={setVisible} toggleSidebar={toggleSidebar} />
-            </div>
-            <div className="col-xxl-12 col-xl-12 col-md-12 px-0">
-              <Outlet />
-            </div>
-          </div>
-
-          {/* Logout Modal */}
-          <div
-            className="modal fade"
-            id="logoutModal"
-            aria-labelledby="logoutModalLabel"
-            aria-hidden="true"
-          >
-            <div className="modal-dialog modal-dialog-centered">
-              <div className="modal-content">
-                <div className="modal-body">
-                  <h3 className="text-center">
-                    Are you sure you want to logout?
-                  </h3>
-                  <hr />
-                  <div className="row">
-                    <div className="col-xxl-6 col-xl-6 col-md-6">
-                      <button
-                        type="button"
-                        className="btn btn-light w-100"
-                        data-bs-dismiss="modal"
-                      >
-                        Cancel
-                      </button>
-                    </div>
-                    <div className="col-xxl-6 col-xl-6 col-md-6">
-                      <button
-                        type="button"
-                        className="btn btn-primary w-100"
-                        onClick={handleLogout}
-                        data-bs-dismiss="modal"
-                      >
-                        Logout
-                      </button>
-                    </div>
+                    </button>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </>
-      ) : (
-        <Offline />
-      )}
-    </>
+        </div>
+      </>
+    ) : (
+      <Offline />
+    )}
+  </>
+
   );
 };
 
