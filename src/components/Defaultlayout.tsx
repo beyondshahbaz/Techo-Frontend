@@ -147,48 +147,46 @@ const Defaultlayout = () => {
           </>
         )}
 
-        <div className="authFuncCont">
-          {userLoggedIN && (
-            <>
-              <div className="me-2">
-                <i
-                  className="pi pi-sign-out"
-                  style={{ fontSize: "2rem", color: "#dc3545" }}
-                ></i>
-              </div>
-              <div className="d-flex flex-column">
-                <span className="text-muted">Ready to leave?</span>
-                <span
-                  className="btnLogout"
-                  data-bs-toggle="modal"
-                  data-bs-target="#logoutModal"
-                  onClick={() => setVisible(false)}
-                >
-                  Logout
-                </span>
-                <div className="sidebarHeaderContainer">
-                  <span className="sidebarRole">WELCOME,</span>
-                  <span className="sidebarName"></span>
-                  <span className="sidebarName text-muted">
-                    {userLoggedIN &&
-                      user &&
-                      `${user.first_name} ${user.last_name}`}
-                  </span>
-                </div>
-              </div>
-            }
-          >
-            {/* Show STUDENT Dashboard only for STUDENT */}
-            {subrole === "STUDENT" && (
-              <>
-                <Dropdown
-                  key="student-dashboard"
-                  title="Student Dashboard"
-                  items={StudentsItems}
-                  icon={faSchool}
-                />
-              </>
-            )}
+       <div className="authFuncCont">
+  {userLoggedIN && (
+    <>
+      <div className="me-2">
+        <i
+          className="pi pi-sign-out"
+          style={{ fontSize: "2rem", color: "#dc3545" }}
+        ></i>
+      </div>
+      <div className="d-flex flex-column">
+        <span className="text-muted">Ready to leave?</span>
+        <span
+          className="btnLogout"
+          data-bs-toggle="modal"
+          data-bs-target="#logoutModal"
+          onClick={() => setVisible(false)}
+        >
+          Logout
+        </span>
+        <div className="sidebarHeaderContainer">
+          <span className="sidebarRole">WELCOME,</span>
+          <span className="sidebarName"></span>
+          <span className="sidebarName text-muted">
+            {user && `${user.first_name} ${user.last_name}`}
+          </span>
+        </div>
+      </div>
+    </>
+  )}
+
+  {/* Show STUDENT Dashboard only for STUDENT */}
+  {subrole === "STUDENT" && (
+    <Dropdown
+      key="student-dashboard"
+      title="Student Dashboard"
+      items={StudentsItems}
+      icon={faSchool}
+    />
+  )}
+</div>
 
             {/* Show Trainer Dashboard, Admission, and Assessment only for TRAINER */}
             {subrole === "TRAINER" && (
