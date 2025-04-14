@@ -15,6 +15,8 @@ const RecruitmentProfile = () => {
   // const [contributionType, setContributionType] = useState("");
   // const [contributionValue, setContributionValue] = useState(0);
   const [isEditing, setIsEditing] = useState(false);
+    const [disabled, setDisabled] = useState(true);
+  
 
   useEffect(() => {
     if (recruiterProfileDetails && recruiterProfileDetails.length > 0) {
@@ -29,6 +31,10 @@ const RecruitmentProfile = () => {
     }
   }, [recruiterProfileDetails]);
 
+  const toggleDisabled = ()=>{
+    setDisabled(!disabled);
+  }
+
   return (
     <div className="container mt-5">
       <div className="card p-3">
@@ -38,7 +44,7 @@ const RecruitmentProfile = () => {
               <img src={img1} className="profileImg mb-2" alt="Profile" />
               <button
                 className="btn btn-light w-100"
-                onClick={() => setIsEditing(!isEditing)}
+                onClick={() => {setIsEditing(!isEditing); toggleDisabled()}}
               >
                 {isEditing ? "Save" : "Edit"}
               </button>
@@ -149,8 +155,11 @@ const RecruitmentProfile = () => {
         </div>
         <div className="row">
           <div className="col-xxl-12 col-xl-12 col-md-12 text-end">
-            <button className="btn btn-primary text-nowrap me-2">
-              Submit Details
+          <button
+              className="btn btn-primary text-nowrap me-2"
+              disabled = {disabled}
+            >
+              Submit Change
             </button>
           </div>
         </div>

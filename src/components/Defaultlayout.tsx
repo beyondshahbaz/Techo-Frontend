@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
-import { Outlet, useNavigate, Link } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import Header from "./Header";
 
 import {
@@ -29,46 +29,136 @@ const Defaultlayout = () => {
   useEffect(() => {
     const userRole = localStorage.getItem("role");
     const userSubrole = localStorage.getItem("subrole");
-
-    if (userRole) {
-      setRole(userRole);
-    }
-    if (userSubrole) {
-      setSubrole(userSubrole);
-    }
-  }, []);
   
-  const StudentsItems = [
-    { path: "/Students_profile", label: "PROFILE" },
-    { path: "/Students_batches", label: "BATCH" },
-  ];
-  const SponsorItems = [
-    { path: "/Sponsor_Profile", label: "PROFILE" },
-    { path: "/Students_SponserDashboard", label: "DASHBOARD" },
-  ];
-  const RecruitmentItems = [
-    { path: "/Recruitment_Profile", label: "PROFILE" },
-    { path: "/ReadyToRecruitDashboard", label: "DASHBOARD" },
-  ];
+    setRole(userRole || "");
+    setSubrole(userSubrole || "");
+  }, [userLoggedIN]); // Change dependency to userLoggedIN
 
-  const TrainerItems = [
-    { path: "/Trainer_profile", label: "PROFILE" },
-    { path: "/Trainer_batch", label: "BATCH" },
-  ];
+  // Define all menu items outside the return statement
+  const menuItems = {
+    STUDENT: {
+      title: "Student Dashboard",
+      items: [
+        { path: "/Students_profile", label: "PROFILE" },
+        { path: "/Students_batches", label: "BATCH" },
+      ],
+      icon: faSchool,
+      key: "student-dashboard"
+    },
+    TRAINER: [
+      {
+        title: "Trainer Dashboard",
+        items: [
+          { path: "/Trainer_profile", label: "PROFILE" },
+          { path: "/Trainer_batch", label: "BATCH" },
+        ],
+        icon: faChalkboardUser,
+        key: "trainer-dashboard"
+      },
+      {
+        title: "Admission Process",
+        items: [{ path: "/Admission_table", label: "INTERVIEW" }],
+        icon: faTicket,
+        key: "admission-process"
+      },
+      {
+        title: "Assessment Process",
+        items: [{ path: "/AssessmentTable", label: "ASSESSMENT CANDIDATE" }],
+        icon: faCubes,
+        key: "assessment-process"
+      }
+    ],
+    RECRUITER: {
+      title: "Recruitment",
+      items: [
+        { path: "/Recruitment_Profile", label: "PROFILE" },
+        { path: "/ReadyToRecruitDashboard", label: "DASHBOARD" },
+      ],
+      icon: faChalkboardUser,
+      key: "recruiter-dashboard"
+    },
+    SPONSOR: {
+      title: "SPONSOR",
+      items: [
+        { path: "/Sponsor_Profile", label: "PROFILE" },
+        { path: "/Students_SponserDashboard", label: "DASHBOARD" },
+      ],
+      icon: faCubes,
+      key: "sponsor-dashboard"
+    },
+    ADMIN: {
+      title: "Assessment Process",
+      items: [{ path: "/AssessmentTable", label: "ASSESSMENT CANDIDATE" }],
+      icon: faCubes,
+      key: "admin-assessment-process"
+    }
+  };
 
-  const Admission = [{ path: "/Admission_table", label: "INTERVIEW" }];
-
-  const Assessment = [
-    { path: "/AssessmentTable", label: "ASSESSMENT CANDIDATE" },
-  ];
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
+
   const handleLogout = () => {
     setVisible(false);
+    setRole("");
+    setSubrole("");
     LogoutUser();
     navigate("/login-3");
+  };
+  const renderMenuItems = () => {
+    if (!subrole) return null;
+
+    switch (subrole) {
+      case "STUDENT":
+        return (
+          <Dropdown
+            key={menuItems.STUDENT.key}
+            title={menuItems.STUDENT.title}
+            items={menuItems.STUDENT.items}
+            icon={menuItems.STUDENT.icon}
+          />
+        );
+      case "TRAINER":
+        return menuItems.TRAINER.map(item => (
+          <Dropdown
+            key={item.key}
+            title={item.title}
+            items={item.items}
+            icon={item.icon}
+          />
+        ));
+      case "RECRUITER":
+        return (
+          <Dropdown
+            key={menuItems.RECRUITER.key}
+            title={menuItems.RECRUITER.title}
+            items={menuItems.RECRUITER.items}
+            icon={menuItems.RECRUITER.icon}
+          />
+        );
+      case "SPONSOR":
+        return (
+          <Dropdown
+            key={menuItems.SPONSOR.key}
+            title={menuItems.SPONSOR.title}
+            items={menuItems.SPONSOR.items}
+            icon={menuItems.SPONSOR.icon}
+          />
+        );
+      default:
+        if (role === "ADMIN") {
+          return (
+            <Dropdown
+              key={menuItems.ADMIN.key}
+              title={menuItems.ADMIN.title}
+              items={menuItems.ADMIN.items}
+              icon={menuItems.ADMIN.icon}
+            />
+          );
+        }
+        return null;
+    }
   };
 
   return (
@@ -96,75 +186,7 @@ const Defaultlayout = () => {
               </div>
             }
           >
-            {/* Show STUDENT Dashboard only for STUDENT */}
-            {subrole === "STUDENT" && (
-              <>
-                <Dropdown
-                  key="student-dashboard"
-                  title="Student Dashboard"
-                  items={StudentsItems}
-                  icon={faSchool}
-                />
-              </>
-            )}
-
-            {/* Show Trainer Dashboard, Admission, and Assessment only for TRAINER */}
-            {subrole === "TRAINER" && (
-              <>
-                <Dropdown
-                  key="trainer-dashboard"
-                  title="Trainer Dashboard"
-                  items={TrainerItems}
-                  icon={faChalkboardUser}
-                />
-                <Dropdown
-                  key="admission-process"
-                  title="Admission Process"
-                  items={Admission}
-                  icon={faTicket}
-                />
-                <Dropdown
-                  key="assessment-process"
-                  title="Assessment Process"
-                  items={Assessment}
-                  icon={faCubes}
-                />
-              </>
-            )}
-
-            {subrole === "RECRUITER" && (
-              <>
-                <Dropdown
-                  key="trainer-dashboard"
-                  title="Recruitment"
-                  items={RecruitmentItems}
-                  icon={faChalkboardUser}
-                />
-              </>
-            )}
-
-            {/* Show ADMIN Dashboard, Assessment only ADMIN */}
-            {subrole === "SPONSOR" && (
-              <>
-                <Dropdown
-                  key="assessment-process"
-                  title="SPONSOR"
-                  items={SponsorItems}
-                  icon={faCubes}
-                />
-              </>
-            )}
-            
-            {role === "ADMIN" && (
-              <>
-                <Dropdown
-                  key="assessment-process"
-                  title="Assessment Process"
-                  items={Assessment}
-                  icon={faCubes}
-                />
-              </>
-            )}
+            {renderMenuItems()}
 
             <div className="authFuncCont">
               {userLoggedIN && (
