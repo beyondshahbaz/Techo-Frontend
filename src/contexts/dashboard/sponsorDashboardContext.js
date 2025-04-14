@@ -159,7 +159,7 @@ const SponsorDashboardProvider = ({ children }) => {
     sponsorProfileDetails,
     recruiterProfileDetails,
     trainerDetails,
-    batchSummary
+    batchSummary,
     recruiterProfileDetails
 
 
