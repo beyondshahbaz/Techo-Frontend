@@ -29,6 +29,7 @@ import { Forbidden } from "../../components/Forbidden/Forbidden";
 import RecruitmentProfile from "../../components/RecruitmentDashboard/RecruitmentProfile";
 
 
+
 const ALLRoutes: React.FC = () => {
   const routes = all_routes;
   const {userLoggedIN} = useContext(AuthContext);
@@ -47,6 +48,7 @@ const ALLRoutes: React.FC = () => {
         {userLoggedIN &&  accessToken  && <Route path="/Students_profile" element={<StudentsProfile />} /> } 
         {userLoggedIN &&  accessToken  && <Route path="/Recruitment_Profile" element={< RecruitmentProfile/>} /> } 
         {userLoggedIN &&  accessToken  && <Route path="/Sponsor_Profile" element={<Sponsor_Profile />} /> } 
+
         {userLoggedIN &&  accessToken  && <Route path="/Students_batches" element={<StudentsBatches />} /> }
         {userLoggedIN &&  accessToken  && <Route path="/Trainer_profile" element={<TrainerProfile />} /> }
         {userLoggedIN &&  accessToken  && <Route path="/Admission_table" element={<AdmissionTable />} /> } 
