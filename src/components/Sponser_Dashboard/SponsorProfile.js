@@ -15,6 +15,7 @@ const Sponsor_Profile = () => {
   // const [contributionType, setContributionType] = useState("");
   // const [contributionValue, setContributionValue] = useState(0);
   const [isEditing, setIsEditing] = useState(false);
+  const [disabled, setDisabled] = useState(true);
 
   useEffect(()=>{
     if (sponsorProfileDetails && sponsorProfileDetails.length > 0) {
@@ -30,6 +31,10 @@ const Sponsor_Profile = () => {
 
   }, [sponsorProfileDetails])
 
+  const toggleDisabled = ()=>{
+    setDisabled(!disabled);
+  }
+
 
   return (
     <div className="container mt-5">
@@ -40,7 +45,7 @@ const Sponsor_Profile = () => {
               <img src={img1} className="profileImg mb-2" alt="Profile" />
               <button
                 className="btn btn-light w-100"
-                onClick={() => setIsEditing(!isEditing)}
+                onClick={() => {setIsEditing(!isEditing); toggleDisabled()}}
               >
                 {isEditing ? "Save" : "Edit"}
               </button>
@@ -154,8 +159,9 @@ const Sponsor_Profile = () => {
           <div className="col-xxl-12 col-xl-12 col-md-12 text-end">
             <button
               className="btn btn-primary text-nowrap me-2"
+              disabled = {disabled}
             >
-              Submit Details
+              Submit Change
             </button>
             <button
               className="btn btn-light text-nowrap"

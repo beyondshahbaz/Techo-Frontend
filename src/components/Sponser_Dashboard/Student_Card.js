@@ -8,7 +8,7 @@ export const Student_Card = ({ filterStudent, selectAll, setSelectAll }) => {
   const [countStudent, setCountStudent] = useState(0);
   const [totalAmount, setTotalAmount] = useState(0);
   const { API_BASE_URL } = useContext(AuthContext);
-  const accessToken = localStorage.getItem('accessToken');
+  const accessToken = localStorage.getItem("accessToken");
 
   const SPONSOR_STUDENT = async () => {
     const uniqueBatchIds = [...new Set(sponsorStudentBatchId)];
@@ -17,20 +17,21 @@ export const Student_Card = ({ filterStudent, selectAll, setSelectAll }) => {
       student_ids: sponsorStudentId,
       batch_ids: intSponsorStudentBatchId,
     };
+    try {
 
-    try {    
       const response = await axios.post(
         `${API_BASE_URL}/sponsors/sponsor_batch/`,
         payload,
         {
           headers: {
             "Content-Type": "application/json",
-            'Authorization': `Bearer ${accessToken}`
+            Authorization: `Bearer ${accessToken}`,
           },
         }
       );
       if (response.status === 200) {
         window.alert("Successfully Sponsored");
+        window.location.reload();
       }
     } catch (error) {
       console.log("error", error);
@@ -39,7 +40,6 @@ export const Student_Card = ({ filterStudent, selectAll, setSelectAll }) => {
     }
   };
   const handleCheckboxClick = (e, studentId, batchId) => {
-
     const isChecked = e.target.checked;
     const student = filterStudent.find(
       (student) => student.student_id === studentId
@@ -59,7 +59,6 @@ export const Student_Card = ({ filterStudent, selectAll, setSelectAll }) => {
       setTotalAmount((prev) => prev - studentFee);
     }
 
-
     if (selectAll && !isChecked) {
       setSelectAll(false);
     }
@@ -71,7 +70,9 @@ export const Student_Card = ({ filterStudent, selectAll, setSelectAll }) => {
   useEffect(() => {
     if (selectAll) {
       const allStudentIds = filterStudent.map((student) => student.student_id);
-      const allBatchIds = filterStudent.map((student) => student.batch_id || ""); 
+      const allBatchIds = filterStudent.map(
+        (student) => student.batch_id || ""
+      );
       const totalFee = filterStudent.reduce(
         (sum, student) => sum + (student.fee || 0),
         0
@@ -96,16 +97,13 @@ export const Student_Card = ({ filterStudent, selectAll, setSelectAll }) => {
           <tr>
             <th width="25%">Name</th>
             <th width="35%">Batch</th>
-            <th className="text-end" width="15%">Fee</th>
-
-            <th width="10%" className="text-center">
-              Actions
+            <th className="text-end" width="15%">
+              Fee
             </th>
           </tr>
         </thead>
         <tbody>
           {filterStudent && filterStudent.length > 0 ? (
-
             filterStudent.map((student, index) => (
               <tr key={index}>
                 <td>
@@ -116,9 +114,12 @@ export const Student_Card = ({ filterStudent, selectAll, setSelectAll }) => {
                       id={`${student.student_id}`}
                       checked={sponsorStudentId.includes(student.student_id)}
                       onChange={(e) =>
-                        handleCheckboxClick(e, student.student_id, student.batch_id)
+                        handleCheckboxClick(
+                          e,
+                          student.student_id,
+                          student.batch_id
+                        )
                       }
-
                     />
                     <label
                       className="form-check-label"
@@ -133,7 +134,6 @@ export const Student_Card = ({ filterStudent, selectAll, setSelectAll }) => {
                           { target: { checked: checkbox.checked } },
                           student.student_id,
                           student.batch_id
-
                         );
                       }}
                     >
@@ -141,14 +141,10 @@ export const Student_Card = ({ filterStudent, selectAll, setSelectAll }) => {
                     </label>
                   </div>
                 </td>
-                <td className="text-nowrap">{`${student.batch_name || ""} ${student.batch_id?.toString() || ""}`}</td>
+                <td className="text-nowrap">{`${student.batch_name || ""} ${
+                  student.batch_id?.toString() || ""
+                }`}</td>
                 <td className="text-end">₹{student.fee || 0}</td>
-
-                <td className="text-center">
-                  <button className="btn btn-light text-nowrap">
-                    Sponsor Now
-                  </button>
-                </td>
               </tr>
             ))
           ) : (
@@ -162,9 +158,8 @@ export const Student_Card = ({ filterStudent, selectAll, setSelectAll }) => {
         <tfoot>
           <tr className="fixedTableBottom">
             <th>Total: {countStudent}</th>
-            <th></th>
-            <th className="text-end">₹{totalAmount}</th>
-            <th className="text-center">
+            <th>
+              {" "}
               <button
                 className="btn btn-primary text-nowrap"
                 onClick={handleSponsorship}
@@ -172,10 +167,11 @@ export const Student_Card = ({ filterStudent, selectAll, setSelectAll }) => {
                 Sponsor Selected
               </button>
             </th>
+            <th className="text-end">₹{totalAmount}</th>
           </tr>
-
         </tfoot>
       </table>
     </div>
-  )}
+  );
+};
 
