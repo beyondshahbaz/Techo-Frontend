@@ -8,7 +8,7 @@ import BeatLoader from "react-spinners/BeatLoader";
 import { Tooltip } from "primereact/tooltip";
 import { Badge } from "primereact/badge";
 
-const Register3 = () => {
+const Register = () => {
   const { API_BASE_URL } = useContext(AuthContext);
   const routes = all_routes;
   const navigate = useNavigate();
@@ -16,8 +16,6 @@ const Register3 = () => {
   // CONTEXT API
   const {
     RegisterUser,
-    newSubrole,
-    fetchNewSubrole,
     loading,
     emailAlreadyCreated,
   } = useContext(AuthContext);
@@ -27,30 +25,23 @@ const Register3 = () => {
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [newSelectedRole, setNewSelectedRole] = useState("ENABLER");
-  const [selectedSubrole, setSelectedSubrole] = useState("Choose Your Subrole");
   const [mobileNumber, setMobileNumber] = useState("");
   const [profileImage, setProfileImage] = useState(null);
   const [idTypes, setIdType] = useState([]);
   const [identity, setIdentity] = useState("");
-  // const [proposerEmail, setProposerEmail] = useState("");
-  // const [proposerNumber, setProposerNumber] = useState("");
   const [selectedIdType, setSelectedIdType] = useState("Select an ID");
   const [imagePreview, setImagePreview] = useState("");
+  const [subrole, setSubrole] = useState("1"); // Default to Learner (1)
 
   // Error states
   const [errorFirstName, setErrorFirstName] = useState("");
   const [errorLastName, setErrorLastName] = useState("");
   const [errorEmail, setErrorEmail] = useState("");
   const [errorPassword, setErrorPassword] = useState("");
-  const [errorSelectedRole, setErrorSelectedRole] = useState("");
-  const [errorSelectedSubRole, setErrorSelectedSubsRole] = useState("");
   const [mobilenumberError, setMobileNumberError] = useState("");
   const [userProfileError, setUserProfileError] = useState("");
   const [idTypeError, setSelectedIdTypeError] = useState("");
   const [idNumberError, setIdNumberError] = useState("");
-  // const [proposerEmailError, setProposerEmailError] = useState("");
-  // const [proposerMobileError, setproposerMobileError] = useState("");
   const [emailExistsError, setEmailExistsError] = useState("");
 
   const [passwordVisibility, setPasswordVisibility] = useState({
@@ -61,6 +52,11 @@ const Register3 = () => {
     'PASSPORT': 2,
     'VOTER_ID': 3,
     'ADHAARCARD': 1
+  };
+
+  // SUBROLE MAPPING
+  const SUBROLE_MAPPING = {
+    '1': 'Learner'
   };
 
   // Validation functions
@@ -85,11 +81,6 @@ const Register3 = () => {
       ...prevState,
       password: !prevState.password,
     }));
-  };
-
-  const handleSelectRole = (role) => {
-    setNewSelectedRole(role);
-    setErrorSelectedRole("");
   };
 
   // Fetch ID types from API
@@ -137,7 +128,6 @@ const Register3 = () => {
   };
 
   useEffect(() => {
-    fetchNewSubrole();
     fetchIdType();
     
     // Clean up object URLs when component unmounts
@@ -156,14 +146,10 @@ const Register3 = () => {
     setErrorLastName("");
     setErrorEmail("");
     setErrorPassword("");
-    setErrorSelectedRole("");
-    setErrorSelectedSubsRole("");
     setMobileNumberError("");
     setUserProfileError("");
     setSelectedIdTypeError("");
     setIdNumberError("");
-    // setProposerEmailError("");
-    // setproposerMobileError("");
     setEmailExistsError("");
 
     let isValid = true;
@@ -197,103 +183,61 @@ const Register3 = () => {
       isValid = false;
     }
   
-    if (!newSelectedRole) {
-      setErrorSelectedRole("Select a Role");
+    if (!mobileNumber) {
+      setMobileNumberError("Mobile Number is Required");
+      isValid = false;
+    } else if (!validateMobileNumber(mobileNumber)) {
+      setMobileNumberError("Invalid Mobile Number");
       isValid = false;
     }
-  
-    if (newSelectedRole === "ENABLER") {
-      if (!selectedSubrole || selectedSubrole === "Choose Your Subrole") {
-        setErrorSelectedSubsRole("Select a subrole");
-        isValid = false;
-      }
-    } else if (newSelectedRole === "LEARNER") {
-      if (!mobileNumber) {
-        setMobileNumberError("Mobile Number is Required");
-        isValid = false;
-      } else if (!validateMobileNumber(mobileNumber)) {
-        setMobileNumberError("Invalid Mobile Number");
-        isValid = false;
-      }
-      if (!profileImage) {
-        setUserProfileError("Profile Image is Required");
-        isValid = false;
-      }
-      if (!selectedIdType || selectedIdType === "Select an ID") {
-        setSelectedIdTypeError("Id Type is Required");
-        isValid = false;
-      }
-      if (!identity.trim()) {
-        setIdNumberError("ID Number is Required");
-        isValid = false;
-      }
-      // if (!proposerEmail.trim()) {
-      //   setProposerEmailError("Proposer Email is Required");
-      //   isValid = false;
-      // } else if (!validateEmail(proposerEmail)) {
-      //   setProposerEmailError("Invalid Proposer Email Format");
-      //   isValid = false;
-      // }
-      // if (!proposerNumber) {
-      //   setproposerMobileError("Proposer Mobile Number is Required");
-      //   isValid = false;
-      // } else if (!validateMobileNumber(proposerNumber)) {
-      //   setproposerMobileError("Invalid Proposer Mobile Number");
-      //   isValid = false;
-      // }
+    
+    if (!profileImage) {
+      setUserProfileError("Profile Image is Required");
+      isValid = false;
+    }
+    
+    if (!selectedIdType || selectedIdType === "Select an ID") {
+      setSelectedIdTypeError("Id Type is Required");
+      isValid = false;
+    }
+    
+    if (!identity.trim()) {
+      setIdNumberError("ID Number is Required");
+      isValid = false;
     }
   
     if (!isValid) return;
   
     try {
       const formData = new FormData();
-
+      
+      // Add all regular fields
       formData.append('first_name', firstName.trim());
       formData.append('last_name', lastName.trim());
       formData.append('email', email.trim());
       formData.append('password', password);
       formData.append('mobile_no', mobileNumber);
-
-      if (newSelectedRole === "LEARNER") {
-        formData.append('role', '6');
-        formData.append('id_type', ID_TYPE_MAPPING[selectedIdType.toUpperCase()]);
-        formData.append('identity', identity.trim());
-        formData.append('subrole', 1);
-        if (profileImage) {
-          formData.append('user_profile', profileImage);
-        }
-      } else if (newSelectedRole === "ENABLER") {
-        formData.append('role', '7');
-        const subroleMapping = {
-          APPLICANT: 1, 
-          INTERVIEWEE: 2,
-          STUDENT: 3,
-          SPONSOR: 4,
-          TRAINER: 5,
-          RECRUITER: 6,
-          "GUEST LECTURER": 7,
-        };
-        formData.append('subrole', subroleMapping[selectedSubrole] || '');
+      formData.append('role', '6');
+      formData.append('id_type', ID_TYPE_MAPPING[selectedIdType.toUpperCase()]);
+      formData.append('identity', identity.trim());
+      formData.append('subrole', subrole); 
+          if (profileImage) {
+        formData.append('user_profile', profileImage);
       }
-  
-      // Call RegisterUser with progress tracking
-      await RegisterUser(formData);
-      
+      await RegisterUser(formData);    
     } catch (error) {
       console.error("Registration error:", error);
-      
+     
       if (emailAlreadyCreated) {
         setEmailExistsError("This email is already registered. Please use a different email.");
       }
-      
-      // Handle file upload specific errors
+
       if (error.response?.data?.user_profile) {
         setUserProfileError(error.response.data.user_profile.join(', '));
       } else if (error.message.includes('user_profile')) {
         setUserProfileError(error.message);
       }
-      
-      // Handle other API errors
+
       if (error.response?.data) {
         const errors = error.response.data;
         
@@ -383,7 +327,6 @@ const Register3 = () => {
                 Password <span className="text-danger">*</span>
               </label>
               <Tooltip target=".custom-target-icon" />
-
               <i
                 className="custom-target-icon pi pi-info-circle p-text-secondary ms-5"
                 data-pr-tooltip="Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, one number, and one special character"
@@ -435,101 +378,6 @@ const Register3 = () => {
             </div>
 
             <div className="col-xxl-6 col-xl-6 col-md-6 mb-3">
-              <label className="form-label" htmlFor="Roles">
-                Select Role <span className="text-danger">*</span>
-              </label>
-              <div className="dropdown">
-                <button
-                  className="btnDropdown dropdown-toggle form-control"
-                  type="button"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                >
-                  {newSelectedRole}
-                </button>
-                <ul className="dropdown-menu w-100">
-                  <li
-                    className="dropdown-item c-pointer"
-                    onClick={() => handleSelectRole("LEARNER")}
-                  >
-                    LEARNER
-                  </li>
-                  <li
-                    className="dropdown-item c-pointer"
-                    onClick={() => handleSelectRole("ENABLER")}
-                  >
-                    ENABLER
-                  </li>
-                </ul>
-              </div>
-              {errorSelectedRole && (
-                <span className="text-danger">{errorSelectedRole}</span>
-              )}
-            </div>
-            <div
-              className={`col-xxl-6 col-xl-6 col-md-6 mb-3 ${
-                newSelectedRole === "LEARNER" ? "d-none" : "d-block"
-              }`}
-            >
-              <label className="form-label" htmlFor="Roles">
-                Select Subrole <span className="text-danger">*</span>
-              </label>
-              <div className="dropdown">
-                <button
-                  className="btnDropdown dropdown-toggle form-control"
-                  type="button"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                >
-                  {selectedSubrole}
-                </button>
-                <ul className="dropdown-menu w-100">
-                  {newSubrole.length > 0 ? (
-                    newSubrole
-                      .filter(
-                        (subrole) =>
-                          subrole.name === "SPONSOR" ||
-                          subrole.name === "TRAINER" ||
-                          subrole.name === "RECRUITER" ||
-                          subrole.name === "GUEST LECTURER"
-                      )
-                      .map((subrole) => (
-                        <li
-                          className="dropdown-item c-pointer"
-                          key={subrole.id}
-                          onClick={() => {
-                            setSelectedSubrole(subrole.name);
-                            setErrorSelectedSubsRole("");
-                          }}
-                        >
-                          {subrole.name}
-                        </li>
-                      ))
-                  ) : (
-                    <li className="dropdown-item dropdownLoader">
-                      Loading{" "}
-                      <BeatLoader
-                        size={5}
-                        speedMultiplier={0.5}
-                        loading={loading}
-                        className="loginLoader"
-                      />
-                    </li>
-                  )}
-                </ul>
-              </div>
-              {errorSelectedSubRole && (
-                <span className="text-danger">{errorSelectedSubRole}</span>
-              )}
-            </div>
-          </div>
-
-          <div
-            className={`row ${
-              newSelectedRole === "ENABLER" ? "d-none" : "d-flex mt-4"
-            }`}
-          >
-            <div className="col-xxl-4 col-xl-4 col-md-4 mb-3">
               <label className="form-label" htmlFor="user_profile">
                 User Profile Image <span className="text-danger">*</span>
               </label>
@@ -562,8 +410,22 @@ const Register3 = () => {
                 </div>
               )}
             </div>
+          </div>
 
-            <div className="col-xxl-4 col-xl-4 col-md-4">
+          <div className="row">
+            <div className="col-xxl-6 col-xl-6 col-md-6 mb-3">
+              <label className="form-label">
+                Selected Role <span className="text-danger">*</span>
+              </label>
+              <input
+                className="form-control mb-0"
+                type="text"
+                value={SUBROLE_MAPPING[subrole] || "Learner"}
+                disabled
+              />
+            </div>
+
+            <div className="col-xxl-6 col-xl-6 col-md-6">
               <label className="form-label">
                 ID Type <span className="text-danger">*</span>
               </label>
@@ -608,7 +470,7 @@ const Register3 = () => {
               )}
             </div>
 
-            <div className="col-xxl-4 col-xl-4 col-md-4  mb-3">
+            <div className="col-xxl-6 col-xl-6 col-md-6  mb-3">
               <label
                 className="form-label text-nowrap"
                 htmlFor="identityNumber"
@@ -630,49 +492,6 @@ const Register3 = () => {
                 <span className="text-danger">{idNumberError}</span>
               )}
             </div>
-
-            {/* <div className="col-xxl-4 col-xl-4 col-md-4 mb-3">
-              <label className="form-label text-nowrap" htmlFor="proposerEmail">
-                Proposer Email <span className="text-danger">*</span>
-              </label>
-              <input
-                className="mb-0"
-                id="proposerEmail"
-                placeholder="Enter Your Proposer Email"
-                type="email"
-                value={proposerEmail}
-                onChange={(e) => {
-                  setProposerEmail(e.target.value);
-                  setProposerEmailError("");
-                }}
-              />
-              {proposerEmailError && (
-                <span className="text-danger">{proposerEmailError}</span>
-              )}
-            </div> */}
-
-            {/* <div className="col-xxl-4 col-xl-4 col-md-4  mb-3">
-              <label
-                className="form-label text-nowrap"
-                htmlFor="proposerNumber"
-              >
-                Proposer Mobile No <span className="text-danger">*</span>
-              </label>
-              <input
-                className="mb-0"
-                id="proposerNumber"
-                placeholder="Enter Your Proposer Number"
-                type="text"
-                value={proposerNumber}
-                onChange={(e) => {
-                  setProposerNumber(e.target.value);
-                  setproposerMobileError("");
-                }}
-              />
-              {proposerMobileError && (
-                <span className="text-danger">{proposerMobileError}</span>
-              )}
-            </div> */}
           </div>
 
           <hr />
@@ -703,4 +522,4 @@ const Register3 = () => {
   );
 };
 
-export default Register3;
+export default Register;

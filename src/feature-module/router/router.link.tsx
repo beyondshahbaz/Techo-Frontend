@@ -151,7 +151,6 @@ import ResetPassword3 from "../auth/resetPassword/resetPassword-3";
 import TwoStepVerification2 from "../auth/twoStepVerification/twoStepVerification-2";
 import TwoStepVerification3 from "../auth/twoStepVerification/twoStepVerification-3";
 import Register2 from "../auth/register/register-2";
-import Register3 from "../auth/register/register-3";
 import ForgotPassword2 from "../auth/forgotPassword/forgotPassword-2";
 import ForgotPassword3 from "../auth/forgotPassword/forgotPassword-3";
 import ResetPasswordSuccess from "../auth/resetPasswordSuccess/resetPasswordSuccess";
@@ -248,6 +247,7 @@ import EmailVerification3 from "../auth/emailVerification/emailVerification-3";
 import NotificationActivities from "../pages/profile/activities";
 import Videocallss from "../application/call/videocalls";
 import Videocall from "../application/call/videoCall";
+import Register3 from "../auth/register/register-3";
 
 const routes = all_routes;
 

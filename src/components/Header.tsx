@@ -11,6 +11,7 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ toggleSidebar, setVisible }) => {
   const routes = all_routes;
+  const storedRole = localStorage.getItem("role");
   const { userLoggedIN, accessToken, refreshToken, userID } =
     useContext(AuthContext);
   const [isNavbarOpen, setIsNavbarOpen] = useState(false);
@@ -18,7 +19,7 @@ const Header: React.FC<HeaderProps> = ({ toggleSidebar, setVisible }) => {
     <nav className="navbar">
       <div className="navbar-logo">
         <Link to="/">
-          <h1 className="logoHeading">technohub</h1>
+          <h1 className="logoHeading">LGSTechnoHub</h1>
         </Link>
       </div>
 
@@ -29,18 +30,15 @@ const Header: React.FC<HeaderProps> = ({ toggleSidebar, setVisible }) => {
       />
 
       <div className={`navbar-links ${isNavbarOpen ? "active" : ""}`}>
-        {/* <Link to="/" className="navbar-link">
-          Home
-        </Link> */}
         {!userLoggedIN && !accessToken && !refreshToken && (
           <Link to={routes.login3} className="btn btn-light">
             Login
           </Link>
         )}
 
-        <Link to={routes.register3} className="btn btn-primary">
+        {storedRole !== "ADMIN" && <Link to={routes.register} className="btn btn-primary">
           Register
-        </Link>
+        </Link>}
         {userLoggedIN && accessToken && refreshToken && userID && (
           <Button
             icon="pi pi-th-large"

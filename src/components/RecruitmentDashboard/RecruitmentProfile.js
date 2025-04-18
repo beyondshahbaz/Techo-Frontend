@@ -2,21 +2,20 @@ import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import img1 from "../../assets/images/trainers/user.png";
 import { SponsorContext } from "../../contexts/dashboard/sponsorDashboardContext";
+import { AuthContext } from "../../contexts/authContext";
 
 const RecruitmentProfile = () => {
+  const { API_BASE_URL } = useContext(AuthContext);
+  const accessToken = localStorage.getItem("accessToken");
   const { recruiterProfileDetails } = useContext(SponsorContext);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [companyName, setCompanyName] = useState("");
-  const [dateOfBirth, setDateOfBirth] = useState("");
   const [gender, setGender] = useState("");
-  // const [contributionType, setContributionType] = useState("");
-  // const [contributionValue, setContributionValue] = useState(0);
   const [isEditing, setIsEditing] = useState(false);
-    const [disabled, setDisabled] = useState(true);
-  
+  const [disabled, setDisabled] = useState(true);
 
   useEffect(() => {
     if (recruiterProfileDetails && recruiterProfileDetails.length > 0) {
@@ -26,14 +25,66 @@ const RecruitmentProfile = () => {
       setEmail(profile.email || "-");
       setPhoneNumber(profile.mobile_no || "-");
       setCompanyName(profile.company_name || "-");
-      setDateOfBirth(profile.date_of_birth || "-");
       setGender(profile.gender || "-");
     }
   }, [recruiterProfileDetails]);
 
-  const toggleDisabled = ()=>{
+  const toggleDisabled = () => {
     setDisabled(!disabled);
-  }
+  };
+
+  const handleRecruiterUpdate = async () => {
+    try {
+      const currentProfile = recruiterProfileDetails[0];
+
+      const payload = {
+        ...currentProfile,
+        first_name: firstName,
+        last_name: lastName,
+        email: email,
+        mobile_no: phoneNumber,
+        company_name: companyName,
+        gender: gender,
+        id_type: currentProfile.id_type || 0,
+        identity: currentProfile.identity || "",
+        qualification: currentProfile.qualification || "",
+        address: currentProfile.address || "",
+        user_profile: currentProfile.user_profile || null,
+        date_of_birth: currentProfile.date_of_birth || null,
+      };
+
+      const cleanPayload = Object.fromEntries(
+        Object.entries(payload).filter(([_, value]) => value !== undefined)
+      );
+
+      console.log("Final recruiter payload:", cleanPayload);
+
+      const response = await axios.put(
+        `${API_BASE_URL}/recruiter/Recruiter_update/`,
+        cleanPayload,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        window.alert("Successfully updated the profile");
+        setIsEditing(false);
+        setDisabled(true);
+      }
+    } catch (error) {
+      console.error("Error updating recruiter:", error);
+      if (error.response) {
+        console.error("Server response:", error.response.data);
+        window.alert(`Update failed: ${JSON.stringify(error.response.data)}`);
+      } else {
+        window.alert("Failed to update profile. Please check your connection.");
+      }
+    }
+  };
 
   return (
     <div className="container mt-5">
@@ -44,7 +95,10 @@ const RecruitmentProfile = () => {
               <img src={img1} className="profileImg mb-2" alt="Profile" />
               <button
                 className="btn btn-light w-100"
-                onClick={() => {setIsEditing(!isEditing); toggleDisabled()}}
+                onClick={() => {
+                  setIsEditing(!isEditing);
+                  toggleDisabled();
+                }}
               >
                 {isEditing ? "Save" : "Edit"}
               </button>
@@ -127,19 +181,6 @@ const RecruitmentProfile = () => {
             />
           </div>
           <div className="col-xxl-6 col-xl-6 col-md-6 mb-3">
-            <label htmlFor="dateOfBirth" className="form-label">
-              Date of birth
-            </label>
-            <input
-              type="text"
-              disabled={!isEditing}
-              id="dateOfBirth"
-              className="form-control"
-              onChange={(e) => setDateOfBirth(e.target.value)}
-              value={dateOfBirth}
-            />
-          </div>
-          <div className="col-xxl-6 col-xl-6 col-md-6 mb-3">
             <label htmlFor="gender" className="form-label">
               Gender
             </label>
@@ -155,9 +196,10 @@ const RecruitmentProfile = () => {
         </div>
         <div className="row">
           <div className="col-xxl-12 col-xl-12 col-md-12 text-end">
-          <button
+            <button
               className="btn btn-primary text-nowrap me-2"
-              disabled = {disabled}
+              disabled={disabled}
+              onClick={handleRecruiterUpdate}
             >
               Submit Change
             </button>
