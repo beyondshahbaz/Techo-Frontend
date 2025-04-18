@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { Button } from "primereact/button";
-import { InputText } from "primereact/inputtext";
 import { useNavigate } from "react-router-dom";
 import { baseURL } from "../../utils/axios";
+import { AuthContext } from "../../contexts/authContext";
 
 interface AdmissionData {
   id: string;
@@ -32,16 +32,14 @@ const AdmissionTable: React.FC = () => {
   const [data, setData] = useState<AdmissionData[]>([]);
   const navigate = useNavigate();
   const [hoveredRow, setHoveredRow] = useState<string | null>(null);
-  const [interviewerNames, setInterviewerNames] = useState<{
-    [key: string]: string;
-  }>({});
+
+  const { trainers } = useContext(AuthContext);
+  const trainerName = trainers;
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          `${baseURL}/Learner/`
-        );
+        const response = await axios.get(`https://187gwsw1-8000.inc1.devtunnels.ms/auth/Learner/`);
         setData(response.data);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -50,7 +48,7 @@ const AdmissionTable: React.FC = () => {
 
     fetchData();
   }, []);
-
+  
   const nameTemplate = (rowData: AdmissionData) => (
     <span style={{ color: "black", fontWeight: "bold" }}>{rowData.name}</span>
   );
@@ -71,24 +69,17 @@ const AdmissionTable: React.FC = () => {
     </span>
   );
 
-  const handleEditInterviewer = (
-    rowData: AdmissionData,
-    newInterviewer: string
-  ) => {
+  const handleEditInterviewer = (rowData: AdmissionData) => {
     const updatedData = data.map((item) =>
-      item.id === rowData.id ? { ...item, interview_by: newInterviewer } : item
+      item.id === rowData.id ? { ...item, interview_by: trainerName } : item
     );
     setData(updatedData);
 
-    // Send the updated data to the backend
     axios
-      .put(
-        `${baseURL}/Learner/${rowData.id}/`,
-        {
-          ...rowData,
-          interview_by: newInterviewer,
-        }
-      )
+      .put(`https://187gwsw1-8000.inc1.devtunnels.ms/auth/Learner/${rowData.id}/`, {
+        ...rowData,
+        interview_by: trainerName,
+      })
       .then((response) => {
         console.log("Interviewer updated successfully:", response.data);
       })
@@ -97,18 +88,18 @@ const AdmissionTable: React.FC = () => {
       });
   };
 
-  const editInterviewerTemplate = (rowData: AdmissionData) => {
+  const interviewerDisplayTemplate = (rowData: AdmissionData) => {
     return (
-      <InputText
-        value={interviewerNames[rowData.id] || ""}
-        onChange={(e) => {
-          setInterviewerNames((prev) => ({
-            ...prev,
-            [rowData.id]: e.target.value,
-          }));
-        }}
-        placeholder="Enter Interviewer Name"
-      />
+      <span style={{ 
+        color: "#2a2a2a", 
+        fontWeight: "600",
+        fontSize: "1.1em",
+        padding: "0.2em 0.4em",
+        fontFamily: "'Segoe UI', Roboto, sans-serif", 
+        letterSpacing: "0.5px"
+      }}>
+        {trainerName}
+      </span>
     );
   };
 
@@ -123,9 +114,9 @@ const AdmissionTable: React.FC = () => {
     if (rowData.interview_by === null) {
       return (
         <Button
-          label="Select Interviewer  "
+          label="Assign Interviewer"
           icon="pi pi-user-plus"
-          className="p-button-sm custom-edit-button "
+          className="p-button-sm custom-edit-button"
           style={{
             background:
               hoveredRow === rowData.id
@@ -134,9 +125,7 @@ const AdmissionTable: React.FC = () => {
           }}
           onMouseEnter={() => setHoveredRow(rowData.id)}
           onMouseLeave={() => setHoveredRow(null)}
-          onClick={() =>
-            handleEditInterviewer(rowData, interviewerNames[rowData.id] || "")
-          }
+          onClick={() => handleEditInterviewer(rowData)}
         />
       );
     } else {
@@ -154,10 +143,19 @@ const AdmissionTable: React.FC = () => {
   const handleAllIntervieweesInformationClick = () => {
     navigate("/AllIntervieweesInformation");
   };
+  const handleAssignBatchClick = () => {
+    navigate("/AssignBatch");
+  };
 
   return (
     <div className="container mt-4">
       <div className="header-containerH">
+        <Button
+          className="header-buttonL mb-1"
+          label="Assign Batch For Students"
+          severity="info"
+          onClick={handleAssignBatchClick} 
+        />
         <h2 className="header-titleH">INTERVIEWEES</h2>
         <Button
           className="header-buttonH mb-1"
@@ -194,8 +192,8 @@ const AdmissionTable: React.FC = () => {
             sortable
           ></Column>
           <Column
-            header="Enter Interviewer Name"
-            body={editInterviewerTemplate}
+            header="Assigned Interviewer"
+            body={interviewerDisplayTemplate}
           ></Column>
           <Column header="Actions" body={editTemplate}></Column>
         </DataTable>

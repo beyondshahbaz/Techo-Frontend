@@ -16,8 +16,9 @@ const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const [emailAlreadyCreated, setEmailAlreadyCreated] = useState(false);
   const [loginError, setLoginError] = useState("");
+  const [trainers, setTrainers] = useState([]);
 
-  const API_BASE_URL = "https://techie01.pythonanywhere.com/auth";
+  const API_BASE_URL = "https://gl8tx74f-8000.inc1.devtunnels.ms/auth";
 
   // Initialize auth state from localStorage
   useEffect(() => {
@@ -81,6 +82,30 @@ const AuthProvider = ({ children }) => {
       axios.interceptors.response.eject(responseInterceptor);
     };
   }, [accessToken, refreshToken]);
+
+  useEffect(() => {
+    const fetchTrainers = async () => {
+      setLoading(true);
+      try {
+        const response = await axios.get(`${API_BASE_URL}/trainers/` , {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
+        if (response.status === 200) {
+          setTrainers(response.data.first_name + " " + response.data.last_name);
+        }
+      } catch (error) {
+        console.error("Error fetching trainers:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (accessToken) {
+      fetchTrainers();
+    }
+  }, [accessToken])
 
   const RegisterUser = async (userData) => {
     setLoading(true);
@@ -258,6 +283,7 @@ const AuthProvider = ({ children }) => {
     setLoginError,
     API_BASE_URL,
     GenerateNewAccessToken,
+    trainers,
   };
 
   return (

@@ -57,7 +57,7 @@ const InterviewCandidate: React.FC = () => {
     console.log(data);
     try {
       const response = await axios.put(
-        `${baseURL}/Learner/${data.id}/`,
+        `https://187gwsw1-8000.inc1.devtunnels.ms/auth/Learner/${data.id}/`,
         data
       );
       console.log("Data updated successfully:", response.data);
@@ -165,9 +165,9 @@ const InterviewCandidate: React.FC = () => {
             <label className="form-label fw-bold">Batch</label>
              <select className="form-select" {...register("batch")}>
               <option value="">Select batch</option>
-              <option value="1">Java</option>
-              <option value="2">Python</option>
-              <option value="3">Full stack development</option>
+              <option value="103">Java</option>
+              <option value="101">Python</option>
+              <option value="102">Full stack development</option>
             </select>
           </div>
 
@@ -220,6 +220,7 @@ const InterviewCandidate: React.FC = () => {
               <option value="">Select</option>
               <option value="Y">Yes</option>
               <option value="N">No</option>
+              <option value="TBD">To Be Determined</option>
             </select>
           </div>
 

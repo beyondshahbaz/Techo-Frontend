@@ -765,6 +765,31 @@ input[type="file"]::file-selector-button {
   outline: none; /* Removes default outline */
   box-shadow: 0px 0px 10px rgba(23, 162, 184, 0.5); /* Glowing effect */
 }
+.header-buttonL {
+  background-color: var(--bs-info); /* Bootstrap info color */
+  border: 2px solid var(--bs-info); /* Adds a border */
+  color: white; /* Text color */
+  padding: 5px 10px; /* Padding for a better look */
+  font-size: 16px; /* Font size */
+  font-weight: 500; /* Medium bold text */
+  border-radius: 30px; /* More rounded corners */
+  transition: all 0.3s ease-in-out; /* Smooth transitions */
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  position: absolute; /* Positions the button absolutely */
+  left: 10px;
+}
+
+.header-buttonL:hover {
+  background-color: rgb(92, 160, 232); /* Inverts colors on hover */
+  border-color: var(--bs-info); /* Keeps the border */
+  transform: translateY(-2px); /* Lifts the button slightly */
+  box-shadow: 0px 6px 10px rgba(239, 199, 199, 0.2); /* Increases shadow */
+}
+
+.header-buttonL:focus {
+  outline: none; /* Removes default outline */
+  box-shadow: 0px 0px 10px rgba(23, 162, 184, 0.5); /* Glowing effect */
+}
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
@@ -924,7 +949,8 @@ input[type="file"]::file-selector-button {
 
 .trainer-batch-cardH2 {
   width: 18rem;
-  margin: 20px;
+  margin: 10px;
+  height: 350px;
   border-radius: 15px;
   overflow: hidden;
   background: linear-gradient(145deg, #ffffff, #f0f0f0);
@@ -992,6 +1018,7 @@ input[type="file"]::file-selector-button {
   transition: all 0.3s ease-in-out;
   position: relative;
   overflow: hidden;
+  height: 180px;
 }
 
 .custom-cardH3::before {
@@ -1093,10 +1120,13 @@ input[type="file"]::file-selector-button {
 
 /* Stylish heading inside batch-header */
 .batch-headerTBD h2 {
+  display: flex;
+  justify-content: space-between;
   font-size: 34px;
   font-weight: 700;
   color: #fff;
   margin: 0;
+  padding: 20px 50px ;
   text-transform: uppercase;
   letter-spacing: 1px;
   position: relative;
@@ -2455,3 +2485,77 @@ td {
 }
 
 /* TrainerProfile End by hasnen */
+
+/* AssignBatch Start by hasnen */
+
+/* Dialog styles */
+.dialog-overlayA {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.dialog-boxA {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 400px;
+  max-width: 90%;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+}
+
+.dialog-boxA h3 {
+  margin-top: 0;
+}
+
+.dialog-actionsA {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.form-selectA {
+  width: 100%;
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  margin-top: 10px;
+}
+
+.assign-batch-container-with-bg {
+  background-image: url('../src/assets/images/Assien/BG.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+.assign-batch-container {
+  background-color: rgba(255, 255, 255, 0.9); /* semi-transparent white background */
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.table-responsiveA {
+  margin: 20px 0;
+}
+
+.action-buttonsA {
+  margin-top: 20px;
+}
+
+.tableA th, .tableA td {
+  vertical-align: middle;
+}
+
+/* AssignBatch End by hasnen */
