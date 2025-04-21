@@ -13,6 +13,8 @@ const SponsorDashboardProvider = ({ children }) => {
   const [sponsorProfileDetails, setSponsorProfileDetails] = useState([]);
   const [recruiterProfileDetails, setRecruiterProfileDetails] = useState([]);
   const { API_BASE_URL, userLoggedIN, accessToken } = useContext(AuthContext);
+  const [trainerDetails, setTrainerDetails] = useState([]);
+  const [batchSummary, setBatchSummary] = useState([]);
 
 
   const GET_ALL_STUDENTS_TO_SPONSER = async () => {
@@ -117,20 +119,49 @@ const SponsorDashboardProvider = ({ children }) => {
     }
   };
 
+  const GetTrainerBatches = async ()=>{
+    try {
+      const response = await axios.get(`${API_BASE_URL}/trainers/`);
+      if(response.status === 200){
+        setTrainerDetails(response.data);
+      }
+    } catch (error) {
+      console.log('TrainerBatches error', error);
+    }
+  }
+
+  const GetBatchSummary = async ()=>{
+    try {
+      const response = await axios.get(`${API_BASE_URL}/batches/center-summary/`);
+      if(response.status === 200){
+        setBatchSummary(response.data);
+      }
+    } catch (error) {
+      console.log('Batch Summary error', error);
+    }
+  }
+  useEffect(()=>{
+    GetTrainerBatches();
+    GetBatchSummary();
+  }, [])
+
 
   useEffect(() => {
     fetchAllData();
-  }, [userLoggedIN, accessToken]); // Add both userLoggedIN and accessToken as dependencies
-
+  }, [userLoggedIN, accessToken]); 
   const value = {
     usersDataToSponsor,
     batchName,
     batchId,
     readyForRecruitment,
     FetchSponsor,
-    fetchAllData, // Export if you need to manually refresh data
+    fetchAllData,
     sponsorProfileDetails,
+    recruiterProfileDetails,
+    trainerDetails,
+    batchSummary,
     recruiterProfileDetails
+
 
   };
 
