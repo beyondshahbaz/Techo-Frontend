@@ -80,7 +80,6 @@ const SponsorDashboardProvider = ({ children }) => {
         },
       });
       if (response.status === 200) {
-        console.log(response.data);
         setSponsorProfileDetails(response.data);
       }
     } catch (error) {
@@ -92,14 +91,18 @@ const SponsorDashboardProvider = ({ children }) => {
       const response = await axios.get(`${API_BASE_URL}/recruiter/`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
-        },
+        }
       });
       if (response.status === 200) {
-        console.log('recruiter data', response.data);
-        setRecruiterProfileDetails(response.data);
+        // Ensure we always set an array
+        const data = Array.isArray(response.data) 
+          ? response.data 
+          : [response.data];
+        setRecruiterProfileDetails(data);
       }
     } catch (error) {
-      console.log("sponsor error", error);
+      console.error("Recruiter fetch error:", error.response?.data || error.message);
+      setRecruiterProfileDetails([]); // Reset to empty array on error
     }
   };
 
@@ -140,6 +143,8 @@ const SponsorDashboardProvider = ({ children }) => {
       console.log('Batch Summary error', error);
     }
   }
+
+
   useEffect(()=>{
     GetTrainerBatches();
     GetBatchSummary();

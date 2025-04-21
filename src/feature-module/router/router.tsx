@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Route, Routes } from "react-router";
+import { Navigate, Route, Routes } from "react-router";
 import { authRoutes, publicRoutes } from "./router.link";
 import { Student } from "./student_routes";
 import Feature from "../feature";
@@ -27,66 +27,73 @@ import AssessmentTable from "../../components/Assessment_dashboard/AssessmentTab
 import AssessmentCandidte from "../../components/Assessment_dashboard/AssessmentCandidte";
 import { Forbidden } from "../../components/Forbidden/Forbidden";
 import RecruitmentProfile from "../../components/RecruitmentDashboard/RecruitmentProfile";
+import Register from "../auth/register/register";
+import { ProtectedRoute } from "../../components/PrivateRoute/Private";
+
 import AssignBatch from "../../components/Admission_dashboard/AssignBatch";
 
 
 
 const ALLRoutes: React.FC = () => {
-  const routes = all_routes;
-  const {userLoggedIN} = useContext(AuthContext);
-  const accessToken = localStorage.getItem('accessToken');
-
-
+  const routes = all_routes;  
   return (
     <Routes>
+      {/* Public routes */}
       <Route path="/" element={<Defaultlayout />}>
-        <Route path="" element={<Landing_page />} />
-        {userLoggedIN &&  accessToken &&  <Route path="/Students_SponserDashboard" element={<Students_SponserDashboard />} />}
-        {userLoggedIN &&  accessToken && <Route path="/ReadyToRecruitDashboard" element={<RecruitmentDashboard/>} />}
-        
+        <Route index element={<Landing_page />} />
         <Route path={routes.login3} element={<Login />} />
         <Route path={routes.register3} element={<Register3 />} />
-        {userLoggedIN &&  accessToken  && <Route path="/Students_profile" element={<StudentsProfile />} /> } 
-        {userLoggedIN &&  accessToken  && <Route path="/Recruitment_Profile" element={< RecruitmentProfile/>} /> } 
-        {userLoggedIN &&  accessToken  && <Route path="/Sponsor_Profile" element={<Sponsor_Profile />} /> } 
+        <Route path={routes.register} element={<Register />} />
 
-        {userLoggedIN &&  accessToken  && <Route path="/Students_batches" element={<StudentsBatches />} /> }
-        {userLoggedIN &&  accessToken  && <Route path="/Trainer_profile" element={<TrainerProfile />} /> }
-        {userLoggedIN &&  accessToken  && <Route path="/Admission_table" element={<AdmissionTable />} /> } 
-        {userLoggedIN &&  accessToken  && <Route path="/interview-candidate/:id" element={<InterviewCandidate />} /> } 
-        {userLoggedIN &&  accessToken  && <Route path="/AllIntervieweesInformation" element={<AllIntervieweesInformation/>} /> } 
-        {userLoggedIN &&  accessToken  && <Route path="/Trainer_batch" element={<TrainerBatch/>} /> } 
-        {userLoggedIN &&  accessToken  && <Route path="/TrainerBatchDetail/:batchId" element={<TrainerBatchDetail />} /> }
-        {userLoggedIN &&  accessToken  && <Route path="/AssessmentTable" element={<AssessmentTable />} /> }
-        {userLoggedIN &&  accessToken  && <Route path="/AssessmentCandidte/:id" element={<AssessmentCandidte />} /> }
-        {userLoggedIN &&  accessToken  && <Route path="/AssignBatch" element={<AssignBatch/>} /> }
-         
-         
       </Route>
 
 
-      {/* Public Routes */}
+      <Route element={<ProtectedRoute />}>
+        <Route path="/" element={<Defaultlayout />}>
+          <Route path="/Students_SponserDashboard" element={<Students_SponserDashboard />} />
+          <Route path="/ReadyToRecruitDashboard" element={<RecruitmentDashboard />} />
+          <Route path="/Students_profile" element={<StudentsProfile />} />
+          <Route path="/Recruitment_Profile" element={<RecruitmentProfile />} />
+          <Route path="/Sponsor_Profile" element={<Sponsor_Profile />} />
+          <Route path="/Students_batches" element={<StudentsBatches />} />
+          <Route path="/Trainer_profile" element={<TrainerProfile />} />
+          <Route path="/Admission_table" element={<AdmissionTable />} />
+          <Route path="/interview-candidate/:id" element={<InterviewCandidate />} />
+          <Route path="/AllIntervieweesInformation" element={<AllIntervieweesInformation />} />
+          <Route path="/Trainer_batch" element={<TrainerBatch />} />
+          <Route path="/TrainerBatchDetail/:batchId" element={<TrainerBatchDetail />} />
+          <Route path="/AssessmentTable" element={<AssessmentTable />} />
+          <Route path="/AssessmentCandidte/:id" element={<AssessmentCandidte />} />
+        </Route>
+      </Route>
+
+      {/* Feature-based route groups */}
       <Route element={<Feature />}>
         {publicRoutes.map((route, idx) => (
           <Route path={route.path} element={route.element} key={idx} />
         ))}
       </Route>
 
-      {/* Authenticated Routes */}
-      <Route element={<AuthFeature />}>
-        {authRoutes.map((route, idx) => (
-          <Route path={route.path} element={route.element} key={idx} />
-        ))}
+      <Route element={<ProtectedRoute />}>
+        <Route element={<AuthFeature />}>
+          {authRoutes.map((route, idx) => (
+            <Route path={route.path} element={route.element} key={idx} />
+          ))}
+        </Route>
       </Route>
 
-      {/* Student Routes */}
-      <Route element={<StudentFeature />}>
-        {Student.map((route, idx) => (
-          <Route path={route.path} element={route.element} key={idx} />
-        ))}
+      <Route element={<ProtectedRoute />}>
+        <Route element={<StudentFeature />}>
+          {Student.map((route, idx) => (
+            <Route path={route.path} element={route.element} key={idx} />
+          ))}
+        </Route>
       </Route>
+
+      {/* Fallback routes */}
+      <Route path="/forbidden" element={<Forbidden />} />
+      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
-
   );
 };
 

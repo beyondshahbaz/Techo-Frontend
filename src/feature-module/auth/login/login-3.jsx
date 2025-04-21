@@ -25,15 +25,12 @@ const Login3 = () => {
     }
     if (userLoggedIN && responseSubrole === "STUDENT") {
       navigation("/Students_profile");
-      window.location.reload();
     }
     if (userLoggedIN && responseSubrole === "TRAINER") {
       navigation("/Trainer_batch");
-      window.location.reload();
     }
     if (userLoggedIN && role === "ADMIN") {
       navigation("/AssessmentTable");
-      window.location.reload();
     }
     if (userLoggedIN && responseSubrole === "RECRUITER") {
       navigation("/ReadyToRecruitDashboard");

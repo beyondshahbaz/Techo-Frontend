@@ -2,39 +2,90 @@ import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import img1 from "../../assets/images/trainers/user.png";
 import { SponsorContext } from "../../contexts/dashboard/sponsorDashboardContext";
+import { AuthContext } from "../../contexts/authContext";
 
 const Sponsor_Profile = () => {
   const { sponsorProfileDetails } = useContext(SponsorContext);
+  const { API_BASE_URL } = useContext(AuthContext);
+  const accessToken = localStorage.getItem("accessToken");
+    
+
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [companyName, setCompanyName] = useState("");
-  const [dateOfBirth, setDateOfBirth] = useState("");
   const [gender, setGender] = useState("");
-  // const [contributionType, setContributionType] = useState("");
-  // const [contributionValue, setContributionValue] = useState(0);
   const [isEditing, setIsEditing] = useState(false);
   const [disabled, setDisabled] = useState(true);
 
-  useEffect(()=>{
+  useEffect(() => {
     if (sponsorProfileDetails && sponsorProfileDetails.length > 0) {
       const profile = sponsorProfileDetails[0];
-      setFirstName(profile.first_name || "-");
-      setLastName(profile.last_name || "-");
-      setEmail(profile.email || "-");
-      setPhoneNumber(profile.mobile_no || "-");
-      setCompanyName(profile.company_name || "-");
-      setDateOfBirth(profile.date_of_birth || "-");
-      setGender(profile.gender || "-");
-    }    
+      setFirstName(profile.first_name || "");
+      setLastName(profile.last_name || "");
+      setEmail(profile.email || "");
+      setPhoneNumber(profile.mobile_no || "");
+      setCompanyName(profile.company_name || "");
+      setGender(profile.gender || "");
+    }
+  }, [sponsorProfileDetails]);
 
-  }, [sponsorProfileDetails])
-
-  const toggleDisabled = ()=>{
+  const toggleDisabled = () => {
     setDisabled(!disabled);
-  }
+  };
+  const handleSponsorUpdate = async () => { 
+    try {
+      const currentProfile = sponsorProfileDetails[0];
+      
+      const payload = {
+        ...currentProfile,
+        first_name: firstName,
+        last_name: lastName,
+        email: email,
+        mobile_no: Number(phoneNumber),
+        company_name: companyName,
+        gender: gender,
+        contribution_details: currentProfile.contribution_details || ""
+      }; 
+      const cleanPayload = Object.fromEntries(
+        Object.entries(payload).filter(([_, value]) => value !== null)
+      ); 
+      const response = await axios.put(
+        `${API_BASE_URL}/sponsors/Sponser_update/`,
+        cleanPayload,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${accessToken}`,
+          },
+        }
+      );
+      
+      if (response.status === 200) {
+        window.alert("Successfully updated the profile");
+        setIsEditing(false);
+        setDisabled(true);
+      }
+    } catch (error) {
+      console.error("Error updating sponsor:", error);
+      if (error.response) {
+        console.error("Server response:", error.response.data);
+        window.alert(`Update failed: ${JSON.stringify(error.response.data)}`);
+      } else {
+        window.alert("Failed to update profile. Please check your connection.");
+      }
+    }
+  };
 
+  const handleEditClick = () => {
+    if (isEditing) {
+      handleSponsorUpdate();
+    } else {
+      setIsEditing(true);
+      toggleDisabled();
+    }
+  };
 
   return (
     <div className="container mt-5">
@@ -45,20 +96,19 @@ const Sponsor_Profile = () => {
               <img src={img1} className="profileImg mb-2" alt="Profile" />
               <button
                 className="btn btn-light w-100"
-                onClick={() => {setIsEditing(!isEditing); toggleDisabled()}}
+                onClick={handleEditClick}
               >
                 {isEditing ? "Save" : "Edit"}
               </button>
             </div>
-            {
-              sponsorProfileDetails.map((items, idx)=>(
-                <div className="profileView" key={idx}>
-                <span className="profileName d-block">{items.first_name} {items.last_name}</span>
+            {sponsorProfileDetails && sponsorProfileDetails.map((items, idx) => (
+              <div className="profileView" key={idx}>
+                <span className="profileName d-block">
+                  {items.first_name} {items.last_name}
+                </span>
                 <span className="profileEmail d-block">{items.email}</span>
               </div>
-              ))
-            }
-
+            ))}
           </div>
           <hr />
         </div>
@@ -129,19 +179,6 @@ const Sponsor_Profile = () => {
             />
           </div>
           <div className="col-xxl-6 col-xl-6 col-md-6 mb-3">
-            <label htmlFor="dateOfBirth" className="form-label">
-              Date of birth
-            </label>
-            <input
-              type="text"
-              disabled={!isEditing}
-              id="dateOfBirth"
-              className="form-control"
-              onChange={(e) => setDateOfBirth(e.target.value)}
-              value={dateOfBirth}
-            />
-          </div>
-          <div className="col-xxl-6 col-xl-6 col-md-6 mb-3">
             <label htmlFor="gender" className="form-label">
               Gender
             </label>
@@ -159,7 +196,8 @@ const Sponsor_Profile = () => {
           <div className="col-xxl-12 col-xl-12 col-md-12 text-end">
             <button
               className="btn btn-primary text-nowrap me-2"
-              disabled = {disabled}
+              disabled={disabled}
+              onClick={handleSponsorUpdate}
             >
               Submit Change
             </button>
@@ -191,19 +229,18 @@ const Sponsor_Profile = () => {
               ></button>
             </div>
             <div className="modal-body">
-              {
-                sponsorProfileDetails.map((item, idx)=>(
-                  <div className="row" key={idx}>
+              {sponsorProfileDetails && sponsorProfileDetails.map((item, idx) => (
+                <div className="row" key={idx}>
                   <div className="col-xxl-12 col-xl-12 col-md-12 contributionTxt">
-                    Contribution Type: <span className="fw-bold">{item.contribution_type}</span>
+                    Contribution Type:{" "}
+                    <span className="fw-bold">{item.contribution_type}</span>
                   </div>
                   <div className="col-xxl-12 col-xl-12 col-md-12 contributionTxt">
-                    Contribution Value: <span className="fw-bold">{item.contribution_value}</span>
+                    Contribution Value:{" "}
+                    <span className="fw-bold">{item.contribution_value}</span>
                   </div>
                 </div>
-                ))
-              }
-
+              ))}
             </div>
           </div>
         </div>

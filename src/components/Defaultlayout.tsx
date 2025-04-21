@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 import Header from "./Header";
 
 import {
@@ -29,12 +29,9 @@ const Defaultlayout = () => {
   useEffect(() => {
     const userRole = localStorage.getItem("role");
     const userSubrole = localStorage.getItem("subrole");
-  
     setRole(userRole || "");
     setSubrole(userSubrole || "");
-  }, [userLoggedIN]); // Change dependency to userLoggedIN
-
-  // Define all menu items outside the return statement
+  }, [userLoggedIN]); 
   const menuItems = {
     STUDENT: {
       title: "Student Dashboard",
@@ -43,7 +40,7 @@ const Defaultlayout = () => {
         { path: "/Students_batches", label: "BATCH" },
       ],
       icon: faSchool,
-      key: "student-dashboard"
+      key: "student-dashboard",
     },
     TRAINER: [
       {
@@ -53,20 +50,20 @@ const Defaultlayout = () => {
           { path: "/Trainer_batch", label: "BATCH" },
         ],
         icon: faChalkboardUser,
-        key: "trainer-dashboard"
+        key: "trainer-dashboard",
       },
       {
         title: "Admission Process",
         items: [{ path: "/Admission_table", label: "INTERVIEW" }],
         icon: faTicket,
-        key: "admission-process"
+        key: "admission-process",
       },
       {
         title: "Assessment Process",
         items: [{ path: "/AssessmentTable", label: "ASSESSMENT CANDIDATE" }],
         icon: faCubes,
-        key: "assessment-process"
-      }
+        key: "assessment-process",
+      },
     ],
     RECRUITER: {
       title: "Recruitment",
@@ -75,29 +72,28 @@ const Defaultlayout = () => {
         { path: "/ReadyToRecruitDashboard", label: "DASHBOARD" },
       ],
       icon: faChalkboardUser,
-      key: "recruiter-dashboard"
+      key: "recruiter-dashboard",
     },
     SPONSOR: {
-      title: "SPONSOR",
+      title: "Sponsor",
       items: [
         { path: "/Sponsor_Profile", label: "PROFILE" },
         { path: "/Students_SponserDashboard", label: "DASHBOARD" },
       ],
       icon: faCubes,
-      key: "sponsor-dashboard"
+      key: "sponsor-dashboard",
     },
     ADMIN: {
       title: "Assessment Process",
       items: [{ path: "/AssessmentTable", label: "ASSESSMENT CANDIDATE" }],
       icon: faCubes,
-      key: "admin-assessment-process"
-    }
+      key: "admin-assessment-process",
+    },
   };
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
-
 
   const handleLogout = () => {
     setVisible(false);
@@ -109,6 +105,48 @@ const Defaultlayout = () => {
   const renderMenuItems = () => {
     if (!subrole) return null;
 
+    // If role is ADMIN, show all dropdowns
+    if (role === "ADMIN") {
+      return (
+        <>
+          {/* Student Dropdown */}
+          <Dropdown
+            key={menuItems.STUDENT.key}
+            title={menuItems.STUDENT.title}
+            items={menuItems.STUDENT.items}
+            icon={menuItems.STUDENT.icon}
+          />
+
+          {/* Trainer Dropdown(s) */}
+          {menuItems.TRAINER.map((item) => (
+            <Dropdown
+              key={item.key}
+              title={item.title}
+              items={item.items}
+              icon={item.icon}
+            />
+          ))}
+
+          {/* Recruiter Dropdown */}
+          <Dropdown
+            key={menuItems.RECRUITER.key}
+            title={menuItems.RECRUITER.title}
+            items={menuItems.RECRUITER.items}
+            icon={menuItems.RECRUITER.icon}
+          />
+
+          {/* Sponsor Dropdown */}
+          <Dropdown
+            key={menuItems.SPONSOR.key}
+            title={menuItems.SPONSOR.title}
+            items={menuItems.SPONSOR.items}
+            icon={menuItems.SPONSOR.icon}
+          />
+        </>
+      );
+    }
+
+    // For non-ADMIN roles, show only their specific dropdown
     switch (subrole) {
       case "STUDENT":
         return (
@@ -120,7 +158,7 @@ const Defaultlayout = () => {
           />
         );
       case "TRAINER":
-        return menuItems.TRAINER.map(item => (
+        return menuItems.TRAINER.map((item) => (
           <Dropdown
             key={item.key}
             title={item.title}
@@ -147,16 +185,6 @@ const Defaultlayout = () => {
           />
         );
       default:
-        if (role === "ADMIN") {
-          return (
-            <Dropdown
-              key={menuItems.ADMIN.key}
-              title={menuItems.ADMIN.title}
-              items={menuItems.ADMIN.items}
-              icon={menuItems.ADMIN.icon}
-            />
-          );
-        }
         return null;
     }
   };
@@ -187,6 +215,59 @@ const Defaultlayout = () => {
             }
           >
             {renderMenuItems()}
+
+            <Sidebar
+              className="posRel sidebarBg"
+              visible={visible}
+              onHide={() => setVisible(false)}
+              header={
+                <div>
+                  <span className="text_avatar_48 text-nowrap">
+                    {userLoggedIN && user && user.first_name.charAt(0)}
+                  </span>
+                  <div className="sidebarHeaderContainer">
+                    <span className="sidebarRole">WELCOME,</span>
+                    <span className="sidebarName"></span>
+                    <span className="sidebarName text-muted">
+                      {userLoggedIN &&
+                        user &&
+                        `${user.first_name} ${user.last_name}`}
+                    </span>
+                  </div>
+                </div>
+              }
+            >
+              {renderMenuItems()}
+
+             {role === "ADMIN" && <Link to={routes.register3} className="dropdownBtn">
+                <i className="pi pi-plus me-2"></i>
+                Create Enabler
+              </Link>}
+
+              <div className="authFuncCont">
+                {userLoggedIN && (
+                  <>
+                    <div className="me-2">
+                      <i
+                        className="pi pi-sign-out"
+                        style={{ fontSize: "2rem", color: "#dc3545" }}
+                      ></i>
+                    </div>
+                    <div className="d-flex flex-column">
+                      <span className="text-muted">Ready to leave?</span>
+                      <span
+                        className="btnLogout"
+                        data-bs-toggle="modal"
+                        data-bs-target="#logoutModal"
+                        onClick={() => setVisible(false)}
+                      >
+                        Logout
+                      </span>
+                    </div>
+                  </>
+                )}
+              </div>
+            </Sidebar>
 
             <div className="authFuncCont">
               {userLoggedIN && (
