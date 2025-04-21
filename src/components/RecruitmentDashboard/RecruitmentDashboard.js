@@ -52,7 +52,7 @@ export const RecruitmentDashboard = () => {
     try {
       const response = await axios.post(
         `${API_BASE_URL}/recruiter/select_students/`,
-        JSON.stringify(payload),
+        JSON.stringify(payload), // Convert payload to JSON string
         {
           headers: {
             "Content-Type": "application/json",

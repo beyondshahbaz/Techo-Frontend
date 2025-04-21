@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { AuthContext } from "../authContext";
 
+
 export const SponsorContext = createContext();
 
 const SponsorDashboardProvider = ({ children }) => {
@@ -15,6 +16,7 @@ const SponsorDashboardProvider = ({ children }) => {
   const [trainerDetails, setTrainerDetails] = useState([]);
   const [batchSummary, setBatchSummary] = useState([]);
 
+
   const GET_ALL_STUDENTS_TO_SPONSER = async () => {
     try {
       const response = await axios.get(
@@ -23,6 +25,7 @@ const SponsorDashboardProvider = ({ children }) => {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
+
         }
       );
       if (response.status == 200) {
@@ -40,6 +43,7 @@ const SponsorDashboardProvider = ({ children }) => {
           Authorization: `Bearer ${accessToken}`,
         },
       });
+
       if (response.status == 200) {
         setBatchName(response.data);
         setBatchId(response.data.batch_id);
@@ -50,13 +54,14 @@ const SponsorDashboardProvider = ({ children }) => {
   };
 
   const GET_READY_FOR_RECRUITMENT = async () => {
+    console.log(accessToken);
     try {
       const response = await axios.get(
-        `${API_BASE_URL}/recruiter/ready_for_recruitment/`,
-        {
+
+        `${API_BASE_URL}/recruiter/ready_for_recruitment/`, {
           headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
+            'Authorization': `Bearer ${accessToken}`
+          }
         }
       );
       if (response.status === 200) {
@@ -144,6 +149,8 @@ const SponsorDashboardProvider = ({ children }) => {
     GetTrainerBatches();
     GetBatchSummary();
   }, [])
+
+
   useEffect(() => {
     fetchAllData();
   }, [userLoggedIN, accessToken]); 
@@ -157,7 +164,10 @@ const SponsorDashboardProvider = ({ children }) => {
     sponsorProfileDetails,
     recruiterProfileDetails,
     trainerDetails,
-    batchSummary
+    batchSummary,
+    recruiterProfileDetails
+
+
   };
 
   return (
