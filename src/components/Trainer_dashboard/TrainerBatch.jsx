@@ -23,8 +23,7 @@ const TrainerBatch = () => {
             },
           }
         );
-        console.log(response);
-        setBatches(response.data.data);
+        setBatches(response.data.data.batches);
       } catch (error) {
         console.error("Error fetching batch data:", error);
       }
@@ -33,6 +32,7 @@ const TrainerBatch = () => {
     fetchBatches();
   }, []);
 
+  
   // Function to handle card click
   const handleCardClick = (batchId) => {
     console.log(batches);
@@ -65,7 +65,8 @@ const TrainerBatch = () => {
               <div className="card-bodyH2">
                 <h5 className="card-titleH2">{batch.batch_name}</h5>
                 <p className="card-textH2">
-                  Current Students: {batch.student_count}
+                  Current Students: {batch.student_count} <br/>
+                  Center: {batch.center}
                 </p>
               </div>
             </div>
