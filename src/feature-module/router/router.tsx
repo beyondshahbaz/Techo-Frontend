@@ -29,6 +29,7 @@ import { Forbidden } from "../../components/Forbidden/Forbidden";
 import RecruitmentProfile from "../../components/RecruitmentDashboard/RecruitmentProfile";
 import Register from "../auth/register/register";
 import { ProtectedRoute } from "../../components/PrivateRoute/Private";
+import { Interviewee } from "../../components/Interview/Interviewee";
 
 
 const ALLRoutes: React.FC = () => {
@@ -47,6 +48,7 @@ const ALLRoutes: React.FC = () => {
       <Route element={<ProtectedRoute />}>
         <Route path="/" element={<Defaultlayout />}>
           <Route path="/Students_SponserDashboard" element={<Students_SponserDashboard />} />
+          <Route path="/Interviewee" element={<Interviewee />} />
           <Route path="/ReadyToRecruitDashboard" element={<RecruitmentDashboard />} />
           <Route path="/Students_profile" element={<StudentsProfile />} />
           <Route path="/Recruitment_Profile" element={<RecruitmentProfile />} />

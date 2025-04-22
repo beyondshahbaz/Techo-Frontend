@@ -3,7 +3,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { all_routes } from "../../router/all_routes";
 import { AuthContext } from "../../../contexts/authContext";
 import login from "../../../assets/images/login/login.png";
-import ClipLoader from "react-spinners/ClipLoader";
 
 const Login3 = () => {
   const routes = all_routes;
@@ -15,6 +14,7 @@ const Login3 = () => {
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
 
+  console.log('responseSubrole', responseSubrole);
   const [passwordVisibility, setPasswordVisibility] = useState({
     password: false,
   });
@@ -33,6 +33,9 @@ const Login3 = () => {
     }
     if (userLoggedIN && responseSubrole === "RECRUITER") {
       navigation("/ReadyToRecruitDashboard");
+    }
+    if (userLoggedIN && responseSubrole === "INTERVIEWEE") {
+      navigation("/Interviewee");
     }
     
   }, [userLoggedIN, responseSubrole,role , navigation]);

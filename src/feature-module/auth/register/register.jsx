@@ -31,7 +31,8 @@ const Register = () => {
   const [identity, setIdentity] = useState("");
   const [selectedIdType, setSelectedIdType] = useState("Select an ID");
   const [imagePreview, setImagePreview] = useState("");
-  const [subrole, setSubrole] = useState("1"); // Default to Learner (1)
+  const [subrole, setSubrole] = useState("2"); // Default to Learner (1)
+  console.log(subrole);
 
   // Error states
   const [errorFirstName, setErrorFirstName] = useState("");
@@ -217,10 +218,11 @@ const Register = () => {
       formData.append('email', email.trim());
       formData.append('password', password);
       formData.append('mobile_no', mobileNumber);
-      formData.append('role', '6');
+      // formData.append('role', '6');
+      formData.append('role', '2');
       formData.append('id_type', ID_TYPE_MAPPING[selectedIdType.toUpperCase()]);
       formData.append('identity', identity.trim());
-      formData.append('subrole', subrole); 
+      formData.append('subrole', "2"); 
           if (profileImage) {
         formData.append('user_profile', profileImage);
       }

@@ -1853,6 +1853,14 @@ td {
 .dropdownBtn{
   font-weight: 700 !important;
 }
+
+.applicationHeader{
+  background-color: #00334c !important;
+  text-align: center;
+}
+.applicationHeader h2{
+  color: white !important;
+}
 /* StudentBatche component start by hasnen */
 .batches-containerHSB {
   padding: 2rem;
