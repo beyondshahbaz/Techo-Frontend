@@ -218,8 +218,8 @@ const Register = () => {
       formData.append('email', email.trim());
       formData.append('password', password);
       formData.append('mobile_no', mobileNumber);
-      // formData.append('role', '6');
-      formData.append('role', '2');
+      formData.append('role', '6');
+      // formData.append('role', '2');
       formData.append('id_type', ID_TYPE_MAPPING[selectedIdType.toUpperCase()]);
       formData.append('identity', identity.trim());
       formData.append('subrole', "2"); 

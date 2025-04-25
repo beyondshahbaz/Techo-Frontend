@@ -213,7 +213,7 @@ const AuthProvider = ({ children }) => {
     }
     
     try {
-      const response = await axios.post(`${API_BASE_URL}/token/refresh/`, {
+      const response = await axios.post(`${API_BASE_URL}/login/refresh/`, {
         refresh: refreshToken
       });
       
