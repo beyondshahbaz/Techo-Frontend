@@ -19,9 +19,9 @@ const AuthProvider = ({ children }) => {
   const [trainers, setTrainers] = useState([]);
 
 
+
   const API_BASE_URL = "https://techie01.pythonanywhere.com/auth";
 //   const API_BASE_URL = "https://gl8tx74f-8000.inc1.devtunnels.ms/auth";
-
 
 
   // Initialize auth state from localStorage
@@ -241,7 +241,7 @@ const AuthProvider = ({ children }) => {
     }
     
     try {
-      const response = await axios.post(`${API_BASE_URL}/token/refresh/`, {
+      const response = await axios.post(`${API_BASE_URL}/login/refresh/`, {
         refresh: refreshToken
       });
       
