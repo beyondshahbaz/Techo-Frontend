@@ -9,6 +9,7 @@ export const Student_Card = ({ filterStudent, selectAll, setSelectAll }) => {
   const [totalAmount, setTotalAmount] = useState(0);
   const { API_BASE_URL } = useContext(AuthContext);
   const accessToken = localStorage.getItem("accessToken");
+
   const SPONSOR_STUDENT = async () => {
     const uniqueBatchIds = [...new Set(sponsorStudentBatchId)];
     const intSponsorStudentBatchId = uniqueBatchIds.map((item) => Number(item));
@@ -17,6 +18,7 @@ export const Student_Card = ({ filterStudent, selectAll, setSelectAll }) => {
       batch_ids: intSponsorStudentBatchId,
     };
     try {
+
       const response = await axios.post(
         `${API_BASE_URL}/sponsors/sponsor_batch/`,
         payload,
@@ -33,6 +35,7 @@ export const Student_Card = ({ filterStudent, selectAll, setSelectAll }) => {
       }
     } catch (error) {
       console.log("error", error);
+
       window.alert("There is some issue at the moment, please try again");
     }
   };
@@ -171,3 +174,4 @@ export const Student_Card = ({ filterStudent, selectAll, setSelectAll }) => {
     </div>
   );
 };
+
