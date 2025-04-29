@@ -258,7 +258,7 @@ const Register3 = () => {
       formData.append('mobile_no', mobileNumber);
 
       if (newSelectedRole === "LEARNER") {
-        formData.append('role', '6');
+        formData.append('role', '2');
         formData.append('id_type', ID_TYPE_MAPPING[selectedIdType.toUpperCase()]);
         formData.append('identity', identity.trim());
         formData.append('subrole', 1);
@@ -266,7 +266,8 @@ const Register3 = () => {
           formData.append('user_profile', profileImage);
         }
       } else if (newSelectedRole === "ENABLER") {
-        formData.append('role', '7');
+        // formData.append('role', '7');
+        formData.append('role', '3');
         const subroleMapping = {
           APPLICANT: 1, 
           INTERVIEWEE: 2,
@@ -278,8 +279,12 @@ const Register3 = () => {
         };
         formData.append('subrole', subroleMapping[selectedSubrole] || '');
       }
+  
+      const response = await RegisterUser(formData);
+      if (response && response.success) {
+        alert("User successfully created!");
+      }
 
-      await RegisterUser(formData);
       
     } catch (error) {
       console.error("Registration error:", error);
