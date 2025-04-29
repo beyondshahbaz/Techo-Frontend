@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { all_routes } from "../../router/all_routes";
 import { AuthContext } from "../../../contexts/authContext";
 import login from "../../../assets/images/login/login.png";
+import ClipLoader from "react-spinners/ClipLoader";
 
 const Login3 = () => {
   const routes = all_routes;
