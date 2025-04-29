@@ -23,6 +23,7 @@ interface Technology {
 interface BatchDetail {
   batch_id: number;
   batch_name: string;
+  center: string;
   student_count: number;
   technologies: Technology[];
   students: Student[];
@@ -86,7 +87,7 @@ const TrainerBatchDetail = () => {
     try {
       const response = await axios.post(
         `${baseURL}/Trainer/trainer_select/`,
-        payload ,
+        payload,
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -109,7 +110,10 @@ const TrainerBatchDetail = () => {
   return (
     <div className="trainer-batch-detail-container">
       <div className="batch-headerTBD">
-        <h2>Batch: {batchDetail.batch_name}</h2>
+        <h2>
+          <span>Batch: {batchDetail.batch_name}</span>
+          <span>Center: {batchDetail.center}</span>
+        </h2>
       </div>
 
       <div className="batch-infoTBD">

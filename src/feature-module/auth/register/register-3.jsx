@@ -126,6 +126,7 @@ const Register3 = () => {
     setProfileImage(file);
     setUserProfileError("");
     setImagePreview(URL.createObjectURL(file));
+
   };
 
   const removeImage = () => {
@@ -135,6 +136,8 @@ const Register3 = () => {
       URL.revokeObjectURL(imagePreview);
     }
   };
+
+
 
   useEffect(() => {
     fetchNewSubrole();
@@ -281,6 +284,7 @@ const Register3 = () => {
       if (response && response.success) {
         alert("User successfully created!");
       }
+
       
     } catch (error) {
       console.error("Registration error:", error);
@@ -418,6 +422,7 @@ const Register3 = () => {
             </div>
 
             <div className="col-xxl-6 col-xl-6 col-md-6  mb-3">
+
               <label className="form-label" htmlFor="mobileNumber">
                 Mobile Number <span className="text-danger">*</span>
               </label>
@@ -689,6 +694,7 @@ const Register3 = () => {
                 >
                   Create Account
                 </button>
+
               </div>
               <div className="text-center">
                 <h6 className="fw-normal text-dark mb-0">

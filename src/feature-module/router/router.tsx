@@ -31,6 +31,9 @@ import Register from "../auth/register/register";
 import { ProtectedRoute } from "../../components/PrivateRoute/Private";
 import { Interviewee } from "../../components/Interview/Interviewee";
 
+import AssignBatch from "../../components/Admission_dashboard/AssignBatch";
+
+
 
 const ALLRoutes: React.FC = () => {
   const routes = all_routes;  
@@ -42,6 +45,7 @@ const ALLRoutes: React.FC = () => {
         <Route path={routes.login3} element={<Login />} />
         <Route path={routes.register3} element={<Register3 />} />
         <Route path={routes.register} element={<Register />} />
+
       </Route>
 
 

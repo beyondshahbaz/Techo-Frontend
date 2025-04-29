@@ -13,7 +13,7 @@ interface AssessmentDetail {
   admin_name?: string; // Optional
   admin_score?: number; // Optional
   admin_feedback?: string; // Optional
-  admin_selected?: boolean; // Optional
+  admin_selected?: string; 
   student_name: string;
   batch_name: string;
   trainer_name: string;
@@ -27,11 +27,12 @@ interface ApiResponse {
 }
 
 const AssessmentCandidateWithForm: React.FC = () => {
-  const [assessmentDetail, setAssessmentDetail] = useState<AssessmentDetail | null>(null);
+  const [assessmentDetail, setAssessmentDetail] =
+    useState<AssessmentDetail | null>(null);
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { role } = useContext(AuthContext);
-  
+
   const {
     register,
     handleSubmit,
@@ -45,8 +46,27 @@ const AssessmentCandidateWithForm: React.FC = () => {
         const response = await axios.get<ApiResponse>(
           `${baseURL}/assessment/${id}/`
         );
-        setAssessmentDetail(response.data.data);
-        reset(response.data.data); 
+        const data = response.data.data;
+
+        // Map assessment_test_status to match select options
+        const mappedStatus = {
+          Selected: "1",
+          NotSelected: "2",
+          null: "", // for cases where it's null or undefined
+        };
+
+        // Ensure the form gets expected values
+        const transformedData = {
+          ...data,
+          assessment_test_status:
+            mappedStatus[
+              data.assessment_test_status as keyof typeof mappedStatus
+            ] || "",
+          admin_selected: data.admin_selected ? "Yes" : "No",
+        };
+
+        setAssessmentDetail(data);
+        reset(transformedData);
       } catch (error) {
         console.error("Error fetching assessment detail:", error);
       }
@@ -57,22 +77,23 @@ const AssessmentCandidateWithForm: React.FC = () => {
 
   const onSubmit: SubmitHandler<AssessmentDetail> = async (data) => {
     console.log(data);
-  
+
     // Construct the base payload without admin fields
-    const payload: any = { // any uses for add extra fetures in payload
+    const payload: any = {
+      // any uses for add extra fetures in payload
       id: data.id,
-      student_id: data.student_id, 
+      student_id: data.student_id,
       batch_id: data.batch_id,
       trainer_score: data.trainer_score,
       trainer_feedback: data.trainer_feedback,
       assessment_test_status: data.assessment_test_status,
       student_name: data.student_name,
       batch_name: data.batch_name,
-      trainer_id: data.trainer_id, 
+      trainer_id: data.trainer_id,
       trainer_name: data.trainer_name,
       trainer_is_selected: data.trainer_is_selected,
     };
-  
+
     // If the role is ADMIN, add the admin-specific fields to the payload
     if (role === "ADMIN") {
       payload.admin_name = data.admin_name;
@@ -80,12 +101,9 @@ const AssessmentCandidateWithForm: React.FC = () => {
       payload.admin_feedback = data.admin_feedback;
       payload.admin_selected = data.admin_selected;
     }
-  
+
     try {
-      const response = await axios.put(
-        `${baseURL}/assessment/${id}/`,
-        payload
-      );
+      const response = await axios.put(`${baseURL}/assessment/${id}/`, payload);
       console.log("Data updated successfully:", response.data);
       alert("Assessment Completed successfully!");
       navigate("/AssessmentTable");
@@ -128,11 +146,17 @@ const AssessmentCandidateWithForm: React.FC = () => {
             <label className="form-label fw-bold">Trainer Score</label>
             <input
               type="number"
-              className={`form-control ${errors.trainer_score ? "is-invalid" : ""}`}
-              {...register("trainer_score", { required: "Trainer Score is required." })}
+              className={`form-control ${
+                errors.trainer_score ? "is-invalid" : ""
+              }`}
+              {...register("trainer_score", {
+                required: "Trainer Score is required.",
+              })}
             />
             {errors.trainer_score && (
-              <div className="invalid-feedback">{errors.trainer_score.message}</div>
+              <div className="invalid-feedback">
+                {errors.trainer_score.message}
+              </div>
             )}
           </div>
 
@@ -141,11 +165,17 @@ const AssessmentCandidateWithForm: React.FC = () => {
             <label className="form-label fw-bold">Trainer Feedback</label>
             <input
               type="text"
-              className={`form-control ${errors.trainer_feedback ? "is-invalid" : ""}`}
-              {...register("trainer_feedback", { required: "Trainer Feedback is required." })}
+              className={`form-control ${
+                errors.trainer_feedback ? "is-invalid" : ""
+              }`}
+              {...register("trainer_feedback", {
+                required: "Trainer Feedback is required.",
+              })}
             />
             {errors.trainer_feedback && (
-              <div className="invalid-feedback">{errors.trainer_feedback.message}</div>
+              <div className="invalid-feedback">
+                {errors.trainer_feedback.message}
+              </div>
             )}
           </div>
 
@@ -169,11 +199,17 @@ const AssessmentCandidateWithForm: React.FC = () => {
                 <label className="form-label fw-bold">Admin Name</label>
                 <input
                   type="text"
-                  className={`form-control ${errors.admin_name ? "is-invalid" : ""}`}
-                  {...register("admin_name", { required: "Admin Name is required." })}
+                  className={`form-control ${
+                    errors.admin_name ? "is-invalid" : ""
+                  }`}
+                  {...register("admin_name", {
+                    required: "Admin Name is required.",
+                  })}
                 />
                 {errors.admin_name && (
-                  <div className="invalid-feedback">{errors.admin_name.message}</div>
+                  <div className="invalid-feedback">
+                    {errors.admin_name.message}
+                  </div>
                 )}
               </div>
 
@@ -182,11 +218,17 @@ const AssessmentCandidateWithForm: React.FC = () => {
                 <label className="form-label fw-bold">Admin Score</label>
                 <input
                   type="number"
-                  className={`form-control ${errors.admin_score ? "is-invalid" : ""}`}
-                  {...register("admin_score", { required: "Admin Score is required." })}
+                  className={`form-control ${
+                    errors.admin_score ? "is-invalid" : ""
+                  }`}
+                  {...register("admin_score", {
+                    required: "Admin Score is required.",
+                  })}
                 />
                 {errors.admin_score && (
-                  <div className="invalid-feedback">{errors.admin_score.message}</div>
+                  <div className="invalid-feedback">
+                    {errors.admin_score.message}
+                  </div>
                 )}
               </div>
 
@@ -195,21 +237,24 @@ const AssessmentCandidateWithForm: React.FC = () => {
                 <label className="form-label fw-bold">Admin Feedback</label>
                 <input
                   type="text"
-                  className={`form-control ${errors.admin_feedback ? "is-invalid" : ""}`}
-                  {...register("admin_feedback", { required: "Admin Feedback is required." })}
+                  className={`form-control ${
+                    errors.admin_feedback ? "is-invalid" : ""
+                  }`}
+                  {...register("admin_feedback", {
+                    required: "Admin Feedback is required.",
+                  })}
                 />
                 {errors.admin_feedback && (
-                  <div className="invalid-feedback">{errors.admin_feedback.message}</div>
+                  <div className="invalid-feedback">
+                    {errors.admin_feedback.message}
+                  </div>
                 )}
               </div>
 
               {/* Admin Selected */}
               <div className="col-xxl-6 col-xl-6 col-md-6">
                 <label className="form-label fw-bold">Admin Selected</label>
-                <select
-                  className="form-select"
-                  {...register("admin_selected")}
-                >
+                <select className="form-select" {...register("admin_selected")}>
                   <option value="Yes">Yes</option>
                   <option value="No">No</option>
                 </select>
@@ -222,12 +267,18 @@ const AssessmentCandidateWithForm: React.FC = () => {
             <label className="form-label fw-bold">Student Name</label>
             <input
               type="text"
-              className={`form-control ${errors.student_name ? "is-invalid" : ""}`}
-              {...register("student_name", { required: "Student Name is required." })}
+              className={`form-control ${
+                errors.student_name ? "is-invalid" : ""
+              }`}
+              {...register("student_name", {
+                required: "Student Name is required.",
+              })}
               readOnly
             />
             {errors.student_name && (
-              <div className="invalid-feedback">{errors.student_name.message}</div>
+              <div className="invalid-feedback">
+                {errors.student_name.message}
+              </div>
             )}
           </div>
 
@@ -236,12 +287,18 @@ const AssessmentCandidateWithForm: React.FC = () => {
             <label className="form-label fw-bold">Batch Name</label>
             <input
               type="text"
-              className={`form-control ${errors.batch_name ? "is-invalid" : ""}`}
-              {...register("batch_name", { required: "Batch Name is required." })}
+              className={`form-control ${
+                errors.batch_name ? "is-invalid" : ""
+              }`}
+              {...register("batch_name", {
+                required: "Batch Name is required.",
+              })}
               readOnly
             />
             {errors.batch_name && (
-              <div className="invalid-feedback">{errors.batch_name.message}</div>
+              <div className="invalid-feedback">
+                {errors.batch_name.message}
+              </div>
             )}
           </div>
 
@@ -250,12 +307,18 @@ const AssessmentCandidateWithForm: React.FC = () => {
             <label className="form-label fw-bold">Trainer Name</label>
             <input
               type="text"
-              className={`form-control ${errors.trainer_name ? "is-invalid" : ""}`}
-              {...register("trainer_name", { required: "Trainer Name is required." })}
+              className={`form-control ${
+                errors.trainer_name ? "is-invalid" : ""
+              }`}
+              {...register("trainer_name", {
+                required: "Trainer Name is required.",
+              })}
               readOnly
             />
             {errors.trainer_name && (
-              <div className="invalid-feedback">{errors.trainer_name.message}</div>
+              <div className="invalid-feedback">
+                {errors.trainer_name.message}
+              </div>
             )}
           </div>
 
@@ -264,7 +327,9 @@ const AssessmentCandidateWithForm: React.FC = () => {
             <label className="form-label fw-bold">Trainer Is Selected</label>
             <input
               type="text"
-              className={`form-control ${errors.trainer_name ? "is-invalid" : ""}`}
+              className={`form-control ${
+                errors.trainer_name ? "is-invalid" : ""
+              }`}
               value={assessmentDetail.trainer_is_selected ? "Yes" : "No"}
               readOnly
             />

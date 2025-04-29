@@ -14,7 +14,7 @@ const AllIntervieweesInformation = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`${baseURL}/Learner/`);
+        const response = await axios.get(`https://187gwsw1-8000.inc1.devtunnels.ms/auth/Learner/`);
         setInterviewees(response.data); 
         setLoading(false);
       } catch (error) {
