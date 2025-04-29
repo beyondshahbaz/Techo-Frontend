@@ -29,7 +29,7 @@ const Login3 = () => {
       navigation("/Trainer_batch");
     }
     if (userLoggedIN && role === "ADMIN") {
-      navigation("/AssessmentTable");
+      navigation("/");
     }
     if (userLoggedIN && responseSubrole === "RECRUITER") {
       navigation("/ReadyToRecruitDashboard");
