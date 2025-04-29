@@ -28,6 +28,7 @@ import AssessmentCandidte from "../../components/Assessment_dashboard/Assessment
 import { Forbidden } from "../../components/Forbidden/Forbidden";
 import RecruitmentProfile from "../../components/RecruitmentDashboard/RecruitmentProfile";
 import AssignBatch from "../../components/Admission_dashboard/AssignBatch";
+import StudentInformation from "../../components/Assessment_dashboard/StudentInformation";
 
 
 
@@ -60,6 +61,7 @@ const ALLRoutes: React.FC = () => {
         {userLoggedIN &&  accessToken  && <Route path="/AssessmentTable" element={<AssessmentTable />} /> }
         {userLoggedIN &&  accessToken  && <Route path="/AssessmentCandidte/:id" element={<AssessmentCandidte />} /> }
         {userLoggedIN &&  accessToken  && <Route path="/AssignBatch" element={<AssignBatch/>} /> }
+        {userLoggedIN &&  accessToken  && <Route path="/StudentInformation" element={<StudentInformation/>} /> }
          
          
       </Route>

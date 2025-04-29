@@ -10,16 +10,18 @@ interface AssessmentDetail {
   trainer_score: number;
   trainer_feedback: string;
   assessment_test_status: string | null;
-  admin_name?: string; // Optional
-  admin_score?: number; // Optional
-  admin_feedback?: string; // Optional
+  admin_name?: string; 
+  admin_score?: number; 
+  admin_feedback?: string; 
   admin_selected?: string; 
   student_name: string;
   batch_name: string;
-  trainer_name: string;
+  assessed_by: string;
   trainer_is_selected: boolean;
-  student_id?: string; // Optional
-  trainer_id?: string; // Optional
+  student_id?: string; 
+  trainer_id?: string; 
+  center : string;
+  selected_by_trainer : string;
 }
 
 interface ApiResponse {
@@ -50,8 +52,8 @@ const AssessmentCandidateWithForm: React.FC = () => {
 
         // Map assessment_test_status to match select options
         const mappedStatus = {
-          Selected: "1",
-          NotSelected: "2",
+          Selected: "Selected",
+          Not: "Not",
           null: "", // for cases where it's null or undefined
         };
 
@@ -62,7 +64,7 @@ const AssessmentCandidateWithForm: React.FC = () => {
             mappedStatus[
               data.assessment_test_status as keyof typeof mappedStatus
             ] || "",
-          admin_selected: data.admin_selected ? "Yes" : "No",
+          admin_selected: data.admin_selected ? "yes" : "no",
         };
 
         setAssessmentDetail(data);
@@ -90,8 +92,10 @@ const AssessmentCandidateWithForm: React.FC = () => {
       student_name: data.student_name,
       batch_name: data.batch_name,
       trainer_id: data.trainer_id,
-      trainer_name: data.trainer_name,
+      assessed_by: data.assessed_by,
       trainer_is_selected: data.trainer_is_selected,
+      selected_by_trainer: data.selected_by_trainer,
+      center: data.center,
     };
 
     // If the role is ADMIN, add the admin-specific fields to the payload
@@ -103,7 +107,7 @@ const AssessmentCandidateWithForm: React.FC = () => {
     }
 
     try {
-      const response = await axios.put(`${baseURL}/assessment/${id}/`, payload);
+      const response = await axios.put(`${baseURL}/assessment/update/${id}/`, payload);
       console.log("Data updated successfully:", response.data);
       alert("Assessment Completed successfully!");
       navigate("/AssessmentTable");
@@ -186,8 +190,8 @@ const AssessmentCandidateWithForm: React.FC = () => {
               className="form-select"
               {...register("assessment_test_status")}
             >
-              <option value="1">Yes</option>
-              <option value="2">No</option>
+              <option value="Selected">Yes</option>
+              <option value="Not">No</option>
             </select>
           </div>
 
@@ -255,8 +259,8 @@ const AssessmentCandidateWithForm: React.FC = () => {
               <div className="col-xxl-6 col-xl-6 col-md-6">
                 <label className="form-label fw-bold">Admin Selected</label>
                 <select className="form-select" {...register("admin_selected")}>
-                  <option value="Yes">Yes</option>
-                  <option value="No">No</option>
+                  <option value="yes">Yes</option>
+                  <option value="no">No</option>
                 </select>
               </div>
             </>
@@ -308,16 +312,16 @@ const AssessmentCandidateWithForm: React.FC = () => {
             <input
               type="text"
               className={`form-control ${
-                errors.trainer_name ? "is-invalid" : ""
+                errors.assessed_by ? "is-invalid" : ""
               }`}
-              {...register("trainer_name", {
+              {...register("assessed_by", {
                 required: "Trainer Name is required.",
               })}
               readOnly
             />
-            {errors.trainer_name && (
+            {errors.assessed_by && (
               <div className="invalid-feedback">
-                {errors.trainer_name.message}
+                {errors.assessed_by.message}
               </div>
             )}
           </div>
@@ -328,7 +332,7 @@ const AssessmentCandidateWithForm: React.FC = () => {
             <input
               type="text"
               className={`form-control ${
-                errors.trainer_name ? "is-invalid" : ""
+                errors.trainer_is_selected ? "is-invalid" : ""
               }`}
               value={assessmentDetail.trainer_is_selected ? "Yes" : "No"}
               readOnly
