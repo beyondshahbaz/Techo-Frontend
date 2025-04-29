@@ -3,11 +3,9 @@ import { Link, useNavigate } from "react-router-dom";
 import { all_routes } from "../../router/all_routes";
 import { AuthContext } from "../../../contexts/authContext";
 import login from "../../../assets/images/login/login.png";
-import ClipLoader from "react-spinners/ClipLoader";
 
 const Login3 = () => {
   const routes = all_routes;
-
   const { LoginUser, loading, loginError, responseSubrole, userLoggedIN, setLoginError , role } = useContext(AuthContext);
 
   const navigation = useNavigate();
@@ -42,14 +40,12 @@ const Login3 = () => {
     
   }, [userLoggedIN, responseSubrole,role , navigation]);
 
-
   console.log(role)
   console.log(responseSubrole)
   const validateEmail = (email) => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return re.test(String(email).toLowerCase());
   };
-
 
 
   const validatePassword = (password) => {
@@ -103,7 +99,6 @@ const Login3 = () => {
       console.log(error);
     }
   };
-
 
   return (
     <div className="row bgLoginScreen m-0">
@@ -183,15 +178,14 @@ const Login3 = () => {
                       onClick={loginUser}
                     >
                       <span>Sign In</span>
+                      {/* <ClipLoader
 
-                      {loading && (
-                        <ClipLoader
-                          color="#fff"
-                          size={18}
-                          speedMultiplier={0.5}
-                          className="loginLoader"
-                        />
-                      )}
+                        color="#fff"
+                        size={18}
+                        speedMultiplier={0.5}
+                        loading={loading}
+                        className="loginLoader"
+                      /> */}
 
                     </Link>
                     {loginError && <span className="text-danger">{loginError}</span>}
