@@ -18,7 +18,11 @@ const AuthProvider = ({ children }) => {
   const [loginError, setLoginError] = useState("");
   const [trainers, setTrainers] = useState([]);
 
-  const API_BASE_URL = "https://gl8tx74f-8000.inc1.devtunnels.ms/auth";
+
+
+  const API_BASE_URL = "https://techie01.pythonanywhere.com/auth";
+//   const API_BASE_URL = "https://gl8tx74f-8000.inc1.devtunnels.ms/auth";
+
 
   // Initialize auth state from localStorage
   useEffect(() => {
@@ -110,6 +114,8 @@ const AuthProvider = ({ children }) => {
   const RegisterUser = async (userData) => {
     setLoading(true);
     setUserCreatedSuccessfully(false);
+    setEmailAlreadyCreated(false);
+    
     try {
       const isFormData = userData instanceof FormData;
       
@@ -125,22 +131,22 @@ const AuthProvider = ({ children }) => {
         config
       );
   
-      if (response.status === 200) {
-        setUserCreatedSuccessfully(true); 
-        window.alert("User Created Successfully");
+      // Check for successful response (200-299 status code)
+      if (response.status >= 200 && response.status < 300) {
+        setUserCreatedSuccessfully(true);
+        return { success: true, data: response.data };
       }
-      return response.data;
+      
+      return { success: false, data: response.data };
+      
     } catch (error) {
-      if(error.response?.data?.email?.[0] === 'user with this email already exists.'){
+      if (error.response?.data?.email?.[0] === 'user with this email already exists.') {
         setEmailAlreadyCreated(true);
       }
+      
       console.log('Registration error:', error);
+      return { success: false, error: error.response?.data || error.message };
       
-      if (error.response?.status === 400 && error.response?.data?.user_profile) {
-        throw new Error(error.response.data.user_profile.join(', '));
-      }
-      
-      throw error;
     } finally {
       setLoading(false);
     }
@@ -237,7 +243,7 @@ const AuthProvider = ({ children }) => {
     }
     
     try {
-      const response = await axios.post(`${API_BASE_URL}/token/refresh/`, {
+      const response = await axios.post(`${API_BASE_URL}/login/refresh/`, {
         refresh: refreshToken
       });
       

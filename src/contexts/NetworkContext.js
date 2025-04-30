@@ -24,7 +24,7 @@ import {
       // Set up the interval to check network status every 5 seconds (5000 milliseconds)
       const interval = setInterval(() => {
         onlineCheck();
-      }, 3000);
+      }, 5000);
   
       // Initial check when the component mounts
       onlineCheck();

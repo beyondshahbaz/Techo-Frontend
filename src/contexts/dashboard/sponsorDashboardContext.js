@@ -13,6 +13,8 @@ const SponsorDashboardProvider = ({ children }) => {
   const [sponsorProfileDetails, setSponsorProfileDetails] = useState([]);
   const [recruiterProfileDetails, setRecruiterProfileDetails] = useState([]);
   const { API_BASE_URL, userLoggedIN, accessToken } = useContext(AuthContext);
+  const [trainerDetails, setTrainerDetails] = useState([]);
+  const [batchSummary, setBatchSummary] = useState([]);
 
 
   const GET_ALL_STUDENTS_TO_SPONSER = async () => {
@@ -78,7 +80,6 @@ const SponsorDashboardProvider = ({ children }) => {
         },
       });
       if (response.status === 200) {
-        console.log(response.data);
         setSponsorProfileDetails(response.data);
       }
     } catch (error) {
@@ -90,14 +91,18 @@ const SponsorDashboardProvider = ({ children }) => {
       const response = await axios.get(`${API_BASE_URL}/recruiter/`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
-        },
+        }
       });
       if (response.status === 200) {
-        console.log('recruiter data', response.data);
-        setRecruiterProfileDetails(response.data);
+        // Ensure we always set an array
+        const data = Array.isArray(response.data) 
+          ? response.data 
+          : [response.data];
+        setRecruiterProfileDetails(data);
       }
     } catch (error) {
-      console.log("sponsor error", error);
+      console.error("Recruiter fetch error:", error.response?.data || error.message);
+      setRecruiterProfileDetails([]); // Reset to empty array on error
     }
   };
 
@@ -117,20 +122,51 @@ const SponsorDashboardProvider = ({ children }) => {
     }
   };
 
+  const GetTrainerBatches = async ()=>{
+    try {
+      const response = await axios.get(`${API_BASE_URL}/trainers/`);
+      if(response.status === 200){
+        setTrainerDetails(response.data);
+      }
+    } catch (error) {
+      console.log('TrainerBatches error', error);
+    }
+  }
+
+  const GetBatchSummary = async ()=>{
+    try {
+      const response = await axios.get(`${API_BASE_URL}/batches/center-summary/`);
+      if(response.status === 200){
+        setBatchSummary(response.data);
+      }
+    } catch (error) {
+      console.log('Batch Summary error', error);
+    }
+  }
+
+
+  useEffect(()=>{
+    GetTrainerBatches();
+    GetBatchSummary();
+  }, [])
+
 
   useEffect(() => {
     fetchAllData();
-  }, [userLoggedIN, accessToken]); // Add both userLoggedIN and accessToken as dependencies
-
+  }, [userLoggedIN, accessToken]); 
   const value = {
     usersDataToSponsor,
     batchName,
     batchId,
     readyForRecruitment,
     FetchSponsor,
-    fetchAllData, // Export if you need to manually refresh data
+    fetchAllData,
     sponsorProfileDetails,
+    recruiterProfileDetails,
+    trainerDetails,
+    batchSummary,
     recruiterProfileDetails
+
 
   };
 
