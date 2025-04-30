@@ -30,6 +30,7 @@ const Login3 = () => {
     }
     if (userLoggedIN && role === "ADMIN") {
       navigation("/");
+      window.location.reload()
     }
     if (userLoggedIN && responseSubrole === "RECRUITER") {
       navigation("/ReadyToRecruitDashboard");

@@ -68,6 +68,8 @@ const ALLRoutes: React.FC = () => {
           <Route path="/TrainerBatchDetail/:batchId" element={<TrainerBatchDetail />} />
           <Route path="/AssessmentTable" element={<AssessmentTable />} />
           <Route path="/AssessmentCandidte/:id" element={<AssessmentCandidte />} />
+          <Route path="/AssignBatch" element={<AssignBatch/>} /> 
+          <Route path="/StudentInformation" element={<StudentInformation/>} /> 
         </Route>
       </Route>
 
