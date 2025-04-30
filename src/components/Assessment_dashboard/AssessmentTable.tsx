@@ -30,9 +30,16 @@ const AssessmentTable: React.FC = () => {
   console.log(trainerName);
 
   useEffect(() => {
+
+    const token = localStorage.getItem("accessToken");
+
     const fetchData = async () => {
       try {
-        const response = await axios.get<ApiResponse>(`${baseURL}/assessment/`);
+        const response = await axios.get<ApiResponse>(`${baseURL}/assessment/` , {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         setData(response.data.data);
         console.log(response.data.data);
       } catch (error) {
