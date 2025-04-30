@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext , useEffect, useState } from "react";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { DataTable } from "primereact/datatable";
@@ -6,10 +6,11 @@ import { Column } from "primereact/column";
 import { Button } from "primereact/button";
 import { useNavigate } from "react-router-dom";
 import { baseURL } from "../../utils/axios";
+import { AuthContext } from "../../contexts/authContext";
 interface AssessmentData {
   id: string;
   student_name: string;
-  trainer_name: string;
+  assessed_by: string;
   batch_name: string;
   assessment_test_status: string;
 }
@@ -23,14 +24,17 @@ const AssessmentTable: React.FC = () => {
   const navigate = useNavigate();
   const [hoveredRow, setHoveredRow] = useState<string | null>(null);
 
+  const { trainers } = useContext(AuthContext);
+  const trainerName = trainers;
+
+  console.log(trainerName);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get<ApiResponse>(
-          `${baseURL}/assessment/`
-        );
+        const response = await axios.get<ApiResponse>(`${baseURL}/assessment/`);
         setData(response.data.data);
-        console.log(response.data.data)
+        console.log(response.data.data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -40,15 +44,19 @@ const AssessmentTable: React.FC = () => {
   }, []);
 
   const studentNameTemplate = (rowData: AssessmentData) => (
-    <span style={{ color: "black", fontWeight: "bold" }}>{rowData.student_name}</span>
+    <span style={{ color: "black", fontWeight: "bold" }}>
+      {rowData.student_name}
+    </span>
   );
 
   const trainerNameTemplate = (rowData: AssessmentData) => (
-    <span style={{ color: "black" }}>{rowData.trainer_name}</span>
+    <span style={{ color: "black" }}>{rowData.assessed_by}</span>
   );
 
   const batchNameTemplate = (rowData: AssessmentData) => (
-    <span style={{ color: "black", fontWeight: "bold" }}>{rowData.batch_name}</span>
+    <span style={{ color: "black", fontWeight: "bold" }}>
+      {rowData.batch_name}
+    </span>
   );
 
   const assessmentStatusTemplate = (rowData: AssessmentData) => (
@@ -57,6 +65,25 @@ const AssessmentTable: React.FC = () => {
     </span>
   );
 
+  const handleEditInterviewer = (rowData: AssessmentData) => {
+      const updatedData = data.map((item) =>
+        item.id === rowData.id ? { ...item, assessed_by: trainerName } : item
+      );
+      setData(updatedData);
+  
+      axios
+        .put(`${baseURL}/assessment/update/${rowData.id}/`, {
+          ...rowData,
+          assessed_by: trainerName,
+        })
+        .then((response) => {
+          console.log("Interviewer updated successfully:", response.data);
+        })
+        .catch((error) => {
+          console.error("Error updating interviewer:", error);
+        });
+    };
+
   const handleSelectAssessment = (rowData: AssessmentData) => {
     console.log("Selecting assessment for:", rowData);
     let id = rowData.id;
@@ -64,20 +91,49 @@ const AssessmentTable: React.FC = () => {
   };
 
   const selectAssessmentTemplate = (rowData: AssessmentData) => {
-    return (
-      <Button
-        label="Select for Assessment"
-        icon="pi pi-check"
-        className="p-button-sm custom-edit-button"
-        onClick={() => handleSelectAssessment(rowData)}
-      />
-    );
+        if (rowData.assessed_by === null) {
+          return (
+            <Button
+              label="Select for Assessment"
+              icon="pi pi-user-plus"
+              className="p-button-sm custom-edit-button"
+              style={{
+                background:
+                  hoveredRow === rowData.id
+                    ? "var(--bs-info)"
+                    : "rgb(92, 160, 232)",
+              }}
+              onMouseEnter={() => setHoveredRow(rowData.id)}
+              onMouseLeave={() => setHoveredRow(null)}
+              onClick={() => handleEditInterviewer(rowData)}
+            />
+          );
+        } else {
+          return (
+            <Button
+              label="Update Details"
+              icon="pi pi-check"
+              className="p-button-sm custom-edit-button"
+              onClick={() => handleSelectAssessment(rowData)}
+            />
+          );
+        }
+  };
+
+  const handleStudentInformation = () => {
+    navigate("/StudentInformation");
   };
 
   return (
     <div className="container mt-4">
       <div className="header-containerH">
         <h2 className="header-titleH">ASSESSMENTS</h2>
+        <Button
+          className="header-buttonH mb-1"
+          label="All Student Information"
+          severity="info"
+          onClick={handleStudentInformation}
+        />
       </div>
 
       <div className="card">
@@ -89,7 +145,7 @@ const AssessmentTable: React.FC = () => {
             sortable
           ></Column>
           <Column
-            field="trainer_name"
+            field="assessed_by"
             header="Trainer Name"
             body={trainerNameTemplate}
             sortable

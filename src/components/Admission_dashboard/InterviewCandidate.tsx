@@ -57,7 +57,7 @@ const InterviewCandidate: React.FC = () => {
     console.log(data);
     try {
       const response = await axios.put(
-        `https://187gwsw1-8000.inc1.devtunnels.ms/auth/Learner/${data.id}/`,
+        `https://187gwsw1-8000.inc1.devtunnels.ms/auth/Learner/${data.id}/update_selected/`,
         data
       );
       console.log("Data updated successfully:", response.data);

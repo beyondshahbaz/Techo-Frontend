@@ -76,7 +76,7 @@ const AdmissionTable: React.FC = () => {
     setData(updatedData);
 
     axios
-      .put(`https://187gwsw1-8000.inc1.devtunnels.ms/auth/Learner/${rowData.id}/`, {
+      .put(`https://187gwsw1-8000.inc1.devtunnels.ms/auth/Learner/${rowData.id}/update_selected/`, {
         ...rowData,
         interview_by: trainerName,
       })
@@ -114,7 +114,7 @@ const AdmissionTable: React.FC = () => {
     if (rowData.interview_by === null) {
       return (
         <Button
-          label="Assign Interviewer"
+          label="Select for interview"
           icon="pi pi-user-plus"
           className="p-button-sm custom-edit-button"
           style={{
@@ -131,7 +131,7 @@ const AdmissionTable: React.FC = () => {
     } else {
       return (
         <Button
-          label="Select for interview"
+          label="Update Details"
           icon="pi pi-pencil"
           className="p-button-sm custom-edit-button"
           onClick={() => handleEdit(rowData)}
@@ -190,10 +190,6 @@ const AdmissionTable: React.FC = () => {
             header="Interviewer Name"
             body={interviewByTemplate}
             sortable
-          ></Column>
-          <Column
-            header="Assigned Interviewer"
-            body={interviewerDisplayTemplate}
           ></Column>
           <Column header="Actions" body={editTemplate}></Column>
         </DataTable>

@@ -2580,3 +2580,180 @@ td {
 }
 
 /* AssignBatch End by hasnen */
+
+/* StudentInformation Started by hasnen */
+/* StudentInformation Styles */
+.student-info-containerS {
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.student-info-containerS::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url('../src/assets/images/Assien/BG.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  z-index: -1;
+}
+
+.content-overlay {
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.table-titleS {
+  color: #2c3e50;
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.table-wrapperS {
+  border-radius: 8px;
+  overflow-x: auto;
+  margin: 0 auto;
+  max-width: 100%;
+}
+
+.student-tableS {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: white;
+  min-width: 600px;
+}
+
+.student-tableS th {
+  background-color: #3498db;
+  color: white;
+  padding: 12px 15px;
+  text-align: left;
+  font-weight: 500;
+  text-transform: uppercase;
+  font-size: 13px;
+}
+
+.student-tableS th:first-child {
+  border-top-left-radius: 8px;
+}
+
+.student-tableS th:last-child {
+  border-top-right-radius: 8px;
+}
+
+.student-tableS td {
+  padding: 12px 15px;
+  border-bottom: 1px solid #ecf0f1;
+  color: #34495e;
+}
+
+.student-tableS tr:last-child td {
+  border-bottom: none;
+}
+
+.student-tableS tr:hover {
+  background-color: #f8f9fa;
+}
+
+.student-nameS {
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.batch-tagS {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 15px;
+  font-size: 12px;
+  font-weight: 600;
+  background-color: #e3f2fd;
+  color: #1976d2;
+  white-space: nowrap;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .student-info-containerS {
+    padding: 10px;
+  }
+  
+  .content-overlay {
+    padding: 15px;
+  }
+  
+  .table-titleS {
+    font-size: 20px;
+    margin-bottom: 15px;
+  }
+  
+  .student-tableS th,
+  .student-tableS td {
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+  
+  .batch-tagS {
+    padding: 2px 6px;
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 480px) {
+  .table-titleS {
+    font-size: 18px;
+  }
+  
+  .student-tableS {
+    min-width: 100%; 
+  }
+  
+  .student-tableS th {
+    font-size: 12px;
+    padding: 8px 10px;
+  }
+  
+  .student-tableS td {
+    padding: 8px 10px;
+    font-size: 12px;
+  }
+  
+  .student-nameS {
+    font-size: 13px;
+  }
+}
+
+/* Loading and error states */
+.loading, .error {
+  padding: 20px;
+  font-size: 16px;
+  color: #666;
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 8px;
+  text-align: center;
+}
+
+.error {
+  color: #e74c3c;
+}
+
+@media (max-width: 768px) {
+  .loading, .error {
+    font-size: 14px;
+    padding: 15px;
+  }
+}
+/* StudentInformation End by hasnen */
