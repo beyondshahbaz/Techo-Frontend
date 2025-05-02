@@ -1,4 +1,4 @@
-import React, { useContext , useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { DataTable } from "primereact/datatable";
@@ -13,6 +13,7 @@ interface AssessmentData {
   assessed_by: string;
   batch_name: string;
   assessment_test_status: string;
+  admin_selected?: boolean;
 }
 
 interface ApiResponse {
@@ -24,22 +25,24 @@ const AssessmentTable: React.FC = () => {
   const navigate = useNavigate();
   const [hoveredRow, setHoveredRow] = useState<string | null>(null);
 
-  const { trainers } = useContext(AuthContext);
+  const { trainers, role } = useContext(AuthContext);
   const trainerName = trainers;
 
   console.log(trainerName);
 
   useEffect(() => {
-
     const token = localStorage.getItem("accessToken");
 
     const fetchData = async () => {
       try {
-        const response = await axios.get<ApiResponse>(`${baseURL}/assessment/` , {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await axios.get<ApiResponse>(
+          `${baseURL}/assessment/`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
         setData(response.data.data);
         console.log(response.data.data);
       } catch (error) {
@@ -72,24 +75,35 @@ const AssessmentTable: React.FC = () => {
     </span>
   );
 
+  const adminSelectedTemplate = (rowData: AssessmentData) => (
+    <div className="flex align-items-center">
+      <input
+        type="checkbox"
+        checked={rowData.admin_selected || false}
+        readOnly
+        className="custom-checkboxAS"
+      />
+    </div>
+  );
+
   const handleEditInterviewer = (rowData: AssessmentData) => {
-      const updatedData = data.map((item) =>
-        item.id === rowData.id ? { ...item, assessed_by: trainerName } : item
-      );
-      setData(updatedData);
-  
-      axios
-        .put(`${baseURL}/assessment/update/${rowData.id}/`, {
-          ...rowData,
-          assessed_by: trainerName,
-        })
-        .then((response) => {
-          console.log("Interviewer updated successfully:", response.data);
-        })
-        .catch((error) => {
-          console.error("Error updating interviewer:", error);
-        });
-    };
+    const updatedData = data.map((item) =>
+      item.id === rowData.id ? { ...item, assessed_by: trainerName } : item
+    );
+    setData(updatedData);
+
+    axios
+      .put(`${baseURL}/assessment/update/${rowData.id}/`, {
+        ...rowData,
+        assessed_by: trainerName,
+      })
+      .then((response) => {
+        console.log("Interviewer updated successfully:", response.data);
+      })
+      .catch((error) => {
+        console.error("Error updating interviewer:", error);
+      });
+  };
 
   const handleSelectAssessment = (rowData: AssessmentData) => {
     console.log("Selecting assessment for:", rowData);
@@ -98,33 +112,33 @@ const AssessmentTable: React.FC = () => {
   };
 
   const selectAssessmentTemplate = (rowData: AssessmentData) => {
-        if (rowData.assessed_by === null) {
-          return (
-            <Button
-              label="Select for Assessment"
-              icon="pi pi-user-plus"
-              className="p-button-sm custom-edit-button"
-              style={{
-                background:
-                  hoveredRow === rowData.id
-                    ? "var(--bs-info)"
-                    : "rgb(92, 160, 232)",
-              }}
-              onMouseEnter={() => setHoveredRow(rowData.id)}
-              onMouseLeave={() => setHoveredRow(null)}
-              onClick={() => handleEditInterviewer(rowData)}
-            />
-          );
-        } else {
-          return (
-            <Button
-              label="Update Details"
-              icon="pi pi-check"
-              className="p-button-sm custom-edit-button"
-              onClick={() => handleSelectAssessment(rowData)}
-            />
-          );
-        }
+    if (rowData.assessed_by === null) {
+      return (
+        <Button
+          label="Select for Assessment"
+          icon="pi pi-user-plus"
+          className="p-button-sm custom-edit-button"
+          style={{
+            background:
+              hoveredRow === rowData.id
+                ? "var(--bs-info)"
+                : "rgb(92, 160, 232)",
+          }}
+          onMouseEnter={() => setHoveredRow(rowData.id)}
+          onMouseLeave={() => setHoveredRow(null)}
+          onClick={() => handleEditInterviewer(rowData)}
+        />
+      );
+    } else {
+      return (
+        <Button
+          label="Update Details"
+          icon="pi pi-check"
+          className="p-button-sm custom-edit-button"
+          onClick={() => handleSelectAssessment(rowData)}
+        />
+      );
+    }
   };
 
   const handleStudentInformation = () => {
@@ -163,12 +177,22 @@ const AssessmentTable: React.FC = () => {
             body={batchNameTemplate}
             sortable
           ></Column>
-          <Column
+          {/* <Column
             field="assessment_test_status"
             header="Assessment Status"
             body={assessmentStatusTemplate}
             sortable
-          ></Column>
+          ></Column> */}
+          
+          {/* Conditionally render Admin fields if role is ADMIN */}
+          {role === "ADMIN" && (
+              <Column
+                field="admin_selected"
+                header="Approved by Admin"
+                body={adminSelectedTemplate}
+                sortable
+              ></Column>
+          )}
           <Column header="Actions" body={selectAssessmentTemplate}></Column>
         </DataTable>
       </div>

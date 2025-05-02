@@ -11,7 +11,7 @@ interface Student {
 interface Batch {
   batch_name: string;
   start_date: string;
-  trainer: string;
+  trainers: string[];
   duration: string;
   technologies: string[];
   student: Student;
@@ -81,7 +81,12 @@ const StudentsBatches: React.FC = () => {
               </div>
               <div className="info-itemHSB">
                 <span className="info-labelHSB">Trainer:</span>
-                <span className="info-valueHSB">{batch.trainer}</span>
+                <span className="trainer-listHSB">
+                  {batch.trainers.map((trainer, index) => (
+                    <span key={index} className="trainer-itemHSB uppercase">
+                     | {trainer} |
+                    </span>
+                  ))}</span>
               </div>
               <div className="info-itemHSB">
                 <span className="info-labelHSB">Duration:</span>
