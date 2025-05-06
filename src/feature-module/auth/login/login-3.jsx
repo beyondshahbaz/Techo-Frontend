@@ -179,14 +179,7 @@ const Login3 = () => {
                       onClick={loginUser}
                     >
                       <span>Sign In</span>
-                      {/* <ClipLoader
-
-                        color="#fff"
-                        size={18}
-                        speedMultiplier={0.5}
-                        loading={loading}
-                        className="loginLoader"
-                      /> */}
+                
 
                     </Link>
                     {loginError && <span className="text-danger">{loginError}</span>}
