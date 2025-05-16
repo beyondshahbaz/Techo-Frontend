@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { baseURL } from "../../utils/axios";
 
 const AssignBatch = () => {
   const [selectedLearners, setSelectedLearners] = useState([]);
@@ -13,7 +14,7 @@ const AssignBatch = () => {
   const fetchLearners = async () => {
     try {
       const response = await axios.get(
-        "https://187gwsw1-8000.inc1.devtunnels.ms/auth/Learner/selected_without_batch/"
+        `${baseURL}/Learner/selected_without_batch/`
       );
       setLearners(response.data);
       setLoading(false);
@@ -62,7 +63,7 @@ const AssignBatch = () => {
     try {
       // Make API call to assign batch
       await axios.post(
-        "https://187gwsw1-8000.inc1.devtunnels.ms/auth/Learner/assign_batch/",
+        `${baseURL}/Learner/assign_batch/`,
         {
           learner_ids: selectedLearners,
           batch_id: selectedBatch,
