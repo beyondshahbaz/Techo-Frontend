@@ -39,7 +39,7 @@ const AdmissionTable: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`https://187gwsw1-8000.inc1.devtunnels.ms/auth/Learner/`);
+        const response = await axios.get(`${baseURL}/Learner/`);
         setData(response.data);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -76,7 +76,7 @@ const AdmissionTable: React.FC = () => {
     setData(updatedData);
 
     axios
-      .put(`https://187gwsw1-8000.inc1.devtunnels.ms/auth/Learner/${rowData.id}/update_selected/`, {
+      .put(`${baseURL}/Learner/${rowData.id}/update_selected/`, {
         ...rowData,
         interview_by: trainerName,
       })

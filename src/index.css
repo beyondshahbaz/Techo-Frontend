@@ -724,31 +724,35 @@ input[type="file"]::file-selector-button {
 
 .header-containerH {
   display: flex;
-  align-items: center; /* Centers vertically */
-  justify-content: center; /* Centers horizontally */
+  flex-wrap: wrap; /* Allow items to wrap on smaller screens */
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+  gap: 10px; /* Space between items when they wrap */
   position: relative;
-  padding: 10px; /* Adds padding for better spacing */
 }
 
 .header-titleH {
-  color: var(--bs-primary); /* Uses Bootstrap's primary color */
+  color: var(--bs-primary);
   text-align: center;
-  margin: 0; /* Removes default margin */
-  flex-grow: 1; /* Allows the title to take up available space */
+  margin: 0;
+  order: 2; /* Center the title in the middle */
+  flex: 1; /* Take available space */
+  min-width: max-content; /* Prevent title from shrinking too much */
 }
 
-.header-buttonH {
-  background-color: var(--bs-info); /* Bootstrap info color */
-  border: 2px solid var(--bs-info); /* Adds a border */
-  color: white; /* Text color */
-  padding: 5px 10px; /* Padding for a better look */
-  font-size: 16px; /* Font size */
-  font-weight: 500; /* Medium bold text */
-  border-radius: 30px; /* More rounded corners */
-  transition: all 0.3s ease-in-out; /* Smooth transitions */
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-  position: absolute; /* Positions the button absolutely */
-  right: 10px; /* Places the button on the right */
+.header-buttonH, .header-buttonL {
+  background-color: var(--bs-info);
+  border: 2px solid var(--bs-info);
+  color: white;
+  padding: 5px 10px;
+  font-size: 16px;
+  font-weight: 500;
+  border-radius: 30px;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  min-width: max-content; /* Prevent buttons from shrinking */
+  z-index: 1; /* Ensure buttons stay above other elements */
 }
 
 .header-buttonH:hover {
@@ -761,19 +765,6 @@ input[type="file"]::file-selector-button {
 .header-buttonH:focus {
   outline: none; /* Removes default outline */
   box-shadow: 0px 0px 10px rgba(23, 162, 184, 0.5); /* Glowing effect */
-}
-.header-buttonL {
-  background-color: var(--bs-info); /* Bootstrap info color */
-  border: 2px solid var(--bs-info); /* Adds a border */
-  color: white; /* Text color */
-  padding: 5px 10px; /* Padding for a better look */
-  font-size: 16px; /* Font size */
-  font-weight: 500; /* Medium bold text */
-  border-radius: 30px; /* More rounded corners */
-  transition: all 0.3s ease-in-out; /* Smooth transitions */
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-  position: absolute; /* Positions the button absolutely */
-  left: 10px;
 }
 
 .header-buttonL:hover {
@@ -788,34 +779,58 @@ input[type="file"]::file-selector-button {
   box-shadow: 0px 0px 10px rgba(23, 162, 184, 0.5); /* Glowing effect */
 }
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .header-containerH {
-    flex-direction: column; /* Stacks items vertically on smaller screens */
-    align-items: center;
-    text-align: center;
-  }
+.header-buttonH {
+  order: 3; /* Right button goes last */
+}
 
+.header-buttonL {
+  order: 1; /* Left button goes first */
+}
+
+/* Medium screens */
+@media (max-width: 992px) {
   .header-titleH {
-    margin-bottom: 10px; /* Adds space between title and button */
+    font-size: 1.5rem;
   }
-
-  .header-buttonH {
-    position: static; /* Resets the position */
-    width: 100%; /* Makes the button full width */
-    max-width: 200px; /* Limits the maximum width */
-    margin-top: 10px; /* Adds space between title and button */
+  
+  .header-buttonH, .header-buttonL {
+    font-size: 14px;
+    padding: 5px 8px;
   }
 }
 
+/* Small screens */
+@media (max-width: 768px) {
+  .header-containerH {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .header-titleH {
+    order: 1; /* Title first */
+    margin-bottom: 10px;
+  }
+  
+  .header-buttonL {
+    order: 2; /* Left button second */
+    margin-bottom: 5px;
+  }
+  
+  .header-buttonH {
+    order: 3; /* Right button last */
+  }
+}
+
+/* Extra small screens */
 @media (max-width: 480px) {
   .header-titleH {
-    font-size: 18px; /* Adjusts font size for very small screens */
+    font-size: 1.3rem;
   }
-
-  .header-buttonH {
-    font-size: 14px; /* Adjusts button font size */
-    padding: 5px 8px; /* Adjusts padding */
+  
+  .header-buttonH, .header-buttonL {
+    width: 100%;
+    text-align: center;
+    font-size: 13px;
   }
 }
 
@@ -2808,3 +2823,27 @@ td {
   }
 }
 /* StudentInformation End by hasnen */
+
+
+.header-containerHT {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.header-titleHT {
+  margin: 0;
+}
+
+/* For smaller screens */
+@media (max-width: 600px) {
+  .header-containerHT {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+}
