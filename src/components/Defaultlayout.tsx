@@ -31,7 +31,7 @@ const Defaultlayout = () => {
     const userSubrole = localStorage.getItem("subrole");
     setRole(userRole || "");
     setSubrole(userSubrole || "");
-  }, [userLoggedIN]); 
+  }, [userLoggedIN]);
   const menuItems = {
     STUDENT: {
       title: "Student Dashboard",
@@ -67,19 +67,25 @@ const Defaultlayout = () => {
     ],
     RECRUITER: {
       title: "Recruitment",
-      items: [
-        { path: "/Recruitment_Profile", label: "PROFILE" },
-        { path: "/ReadyToRecruitDashboard", label: "DASHBOARD" },
-      ],
+      items:
+        role === "ADMIN"
+          ? [{ path: "/RecuriterTable", label: "RECRUITER" }]
+          : [
+              { path: "/Recruitment_Profile", label: "PROFILE" },
+              { path: "/ReadyToRecruitDashboard", label: "DASHBOARD" },
+            ],
       icon: faChalkboardUser,
       key: "recruiter-dashboard",
     },
     SPONSOR: {
       title: "Sponsor",
-      items: [
-        { path: "/Sponsor_Profile", label: "PROFILE" },
-        { path: "/Students_SponserDashboard", label: "DASHBOARD" },
-      ],
+      items:
+        role === "ADMIN"
+          ? [{ path: "/Sponsor_Table", label: "SPONSORS" }]
+          : [
+              { path: "/Sponsor_Profile", label: "PROFILE" },
+              { path: "/Students_SponserDashboard", label: "DASHBOARD" },
+            ],
       icon: faCubes,
       key: "sponsor-dashboard",
     },
@@ -239,20 +245,24 @@ const Defaultlayout = () => {
             >
               {renderMenuItems()}
 
-             {role === "ADMIN" && <Link to={routes.register3} className="dropdownBtn">
-                <i className="pi pi-plus me-2"></i>
-                Create Enabler
-              </Link>}
+              {role === "ADMIN" && (
+                <Link to={routes.register3} className="dropdownBtn">
+                  <i className="pi pi-plus me-2"></i>
+                  Create Enabler
+                </Link>
+              )}
 
               <div className="authFuncCont">
                 {userLoggedIN && (
                   <>
+                    {/* Existing Logout Section */}
                     <div className="me-2">
                       <i
                         className="pi pi-sign-out"
                         style={{ fontSize: "2rem", color: "#dc3545" }}
                       ></i>
                     </div>
+
                     <div className="d-flex flex-column">
                       <span className="text-muted">Ready to leave?</span>
                       <span
@@ -262,6 +272,15 @@ const Defaultlayout = () => {
                         onClick={() => setVisible(false)}
                       >
                         Logout
+                      </span>
+                      <span
+                        className="btnChangePassword"
+                        onClick={() => {
+                          setVisible(false);
+                          navigate(`${routes.changePassword}`);
+                        }}
+                      >
+                        Change Password
                       </span>
                     </div>
                   </>

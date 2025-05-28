@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import ImageWithBasePath from "../../../core/common/imageWithBasePath";
 import { Link } from "react-router-dom";
 import { all_routes } from "../../router/all_routes";
+import { AuthContext } from "../../../contexts/authContext";
 
 const Login = () => {
   const routes = all_routes;
+  const {API_BASE_URL} = useContext(AuthContext);
   const [isPasswordVisible, setPasswordVisible] = useState(false);
 
   const togglePasswordVisibility = () => {

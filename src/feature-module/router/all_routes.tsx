@@ -1,3 +1,4 @@
+
 export const all_routes = {
   // landing page
 
@@ -39,6 +40,7 @@ export const all_routes = {
   resetPasswordSuccess: "/reset-password-success",
   resetPasswordSuccess2: "/reset-password-success-2",
   resetPasswordSuccess3: "/reset-password-success-3",
+  changePassword: "/changePassword",
 
   //ui routes
   alert: "/ui-alert",

@@ -25,7 +25,7 @@ const Register = () => {
   const [identity, setIdentity] = useState("");
   const [selectedIdType, setSelectedIdType] = useState("Select an ID");
   const [imagePreview, setImagePreview] = useState("");
-  const [subrole, setSubrole] = useState("2");
+  const [subrole, setSubrole] = useState("2"); //farheen
 
   // Error states
   const [errorFirstName, setErrorFirstName] = useState("");
@@ -148,7 +148,7 @@ const Register = () => {
 
     let isValid = true;
 
-    // Validation checks
+    // Existing validation checks (keep all these exactly as they were)
     if (!firstName.trim()) {
       setErrorFirstName("First Name is Required");
       isValid = false;
@@ -195,14 +195,6 @@ const Register = () => {
       isValid = false;
     }
 
-    if (!selectedIdType || selectedIdType === "Select an ID") {
-      setSelectedIdTypeError("Id Type is Required");
-      isValid = false;
-    } else {
-      setSelectedIdTypeError(""); // Clear error if valid
-    }
-
-    // Add ID number validation based on selected type
     if (selectedIdType && identity) {
       let regex;
       switch (selectedIdType) {
@@ -215,7 +207,7 @@ const Register = () => {
           break;
 
         case "PASSPORT":
-          regex = /^[A-Za-z]{1}[0-9]{7}$/; // Standard Indian passport format
+          regex = /^[A-Za-z]{1}[0-9]{7}$/;
           if (!regex.test(identity)) {
             setIdNumberError("Invalid Passport format (e.g., A1234567)");
             isValid = false;
@@ -245,34 +237,40 @@ const Register = () => {
     try {
       const formData = new FormData();
 
-      // Add all regular fields
+      // Existing form data setup
       formData.append("first_name", firstName.trim());
       formData.append("last_name", lastName.trim());
       formData.append("email", email.trim());
       formData.append("password", password);
       formData.append("mobile_no", mobileNumber);
-      // formData.append('role', '6');
+      // formData.append("role", "6");
       formData.append("role", "2");
       formData.append("id_type", ID_TYPE_MAPPING[selectedIdType.toUpperCase()]);
       formData.append("identity", identity.trim());
-      formData.append("subrole", "2");
+      formData.append("subrole", subrole);
       if (profileImage) {
         formData.append("user_profile", profileImage);
       }
-      await RegisterUser(formData);
+
+      // Only change: Add error handling for the response
+      const result = await RegisterUser(formData);
+
+      if (!result.success && result.error?.email) {
+        setEmailExistsError(result.error.email.join(", "));
+      }
     } catch (error) {
       console.error("Registration error:", error);
 
-      if (emailAlreadyCreated) {
+      // Modified error handling for email exists
+      if (error.response?.data?.email?.includes("already exists")) {
         setEmailExistsError(
           "This email is already registered. Please use a different email."
         );
       }
 
+      // Keep existing error handling for other fields
       if (error.response?.data?.user_profile) {
         setUserProfileError(error.response.data.user_profile.join(", "));
-      } else if (error.message.includes("user_profile")) {
-        setUserProfileError(error.message);
       }
 
       if (error.response?.data) {
@@ -336,7 +334,6 @@ const Register = () => {
                 <span className="text-danger">{errorLastName}</span>
               )}
             </div>
-
             <div className="col-xxl-6 col-xl-6 col-md-6 mb-3">
               <label htmlFor="emailAddress" className="form-label">
                 Email Address <span className="text-danger">*</span>
@@ -353,9 +350,11 @@ const Register = () => {
                 }}
                 className="mb-0"
               />
-              {errorEmail && <span className="text-danger">{errorEmail}</span>}
               {emailExistsError && (
                 <span className="text-danger">{emailExistsError}</span>
+              )}
+              {!emailExistsError && errorEmail && (
+                <span className="text-danger">{errorEmail}</span>
               )}
             </div>
 
@@ -466,7 +465,7 @@ const Register = () => {
               />
             </div>
 
-            <div className="col-xxl-6 col-xl-6 col-md-6">
+            <div className="col-xxl-6 col-xl-6 col-md-6 mb-3">
               <label className="form-label">
                 ID Type <span className="text-danger">*</span>
               </label>
