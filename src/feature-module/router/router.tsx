@@ -33,6 +33,9 @@ import { Interviewee } from "../../components/Interview/Interviewee";
 
 import AssignBatch from "../../components/Admission_dashboard/AssignBatch";
 import StudentInformation from "../../components/Assessment_dashboard/StudentInformation";
+import AllTrainer from "../../components/Trainer_dashboard/AllTrainer";
+import AllStudent from "../../components/Student_dashboard/AllStudent";
+import AssignBatchForTrainer from "../../components/Trainer_dashboard/AssignBatchForTrainer";
 
 
 
@@ -70,6 +73,9 @@ const ALLRoutes: React.FC = () => {
           <Route path="/AssessmentCandidte/:id" element={<AssessmentCandidte />} />
           <Route path="/AssignBatch" element={<AssignBatch/>} /> 
           <Route path="/StudentInformation" element={<StudentInformation/>} /> 
+          <Route path="/AllTrainer" element={<AllTrainer/>} /> 
+          <Route path="/AllStudent" element={<AllStudent/>} /> 
+          <Route path="/AssignBatchForTrainer" element={<AssignBatchForTrainer/>} /> 
         </Route>
       </Route>
 

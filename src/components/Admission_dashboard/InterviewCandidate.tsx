@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { baseURL } from "../../utils/axios";
+import { AuthContext } from "../../contexts/authContext";
 
 interface CandidateData {
   id: string;
@@ -23,10 +24,29 @@ interface CandidateData {
   remarks?: string;
 }
 
+interface BatchData {
+  id: number;
+  batch_id: string;
+  batch_name: string;
+  trainer: string[];
+  center: string;
+  status: string;
+}
+
 const InterviewCandidate: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { candidateData } = location.state || {};
+  const { error1, batches, loadingBatches } = useContext(AuthContext);
+  const [accessToken, setAccessToken] = useState<string>("");
+  
+
+  useEffect(() => {
+    const token = localStorage.getItem("accessToken");
+    if (token) {
+      setAccessToken(token);
+    }
+  }, []);
 
   const {
     register,
@@ -55,10 +75,20 @@ const InterviewCandidate: React.FC = () => {
 
   const onSubmit: SubmitHandler<CandidateData> = async (data) => {
     console.log(data);
+    if (!accessToken) {
+      alert("No authentication token available");
+      return;
+    }
     try {
       const response = await axios.put(
         `${baseURL}/Learner/${data.id}/update_selected/`,
-        data
+        data ,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            'Content-Type': 'application/json'
+          }
+        }
       );
       console.log("Data updated successfully:", response.data);
       alert("Candidate data updated successfully!");
@@ -113,7 +143,12 @@ const InterviewCandidate: React.FC = () => {
 
           {/* Mobile No */}
           <div className="col-xxl-6 col-xl-6 col-md-6">
-            <label className="form-label fw-bold">Mobile No</label>
+            <label className="form-label fw-bold">
+              Mobile No{" "}
+              <span className="text-danger" style={{ fontSize: "1.2em" }}>
+                *
+              </span>
+            </label>
             <input
               type="text"
               className={`form-control ${errors.mobile_no ? "is-invalid" : ""}`}
@@ -151,7 +186,12 @@ const InterviewCandidate: React.FC = () => {
 
           {/* Gender */}
           <div className="col-xxl-6 col-xl-6 col-md-6">
-            <label className="form-label fw-bold">Gender</label>
+            <label className="form-label fw-bold">
+              Gender{" "}
+              <span className="text-danger" style={{ fontSize: "1.2em" }}>
+                *
+              </span>
+            </label>
             <select className="form-select" {...register("gender")}>
               <option value="">Select Gender</option>
               <option value="Male">Male</option>
@@ -160,33 +200,58 @@ const InterviewCandidate: React.FC = () => {
             </select>
           </div>
 
-          {/* Batch */}
+          {/* Batch - Updated with dynamic data */}
           <div className="col-xxl-6 col-xl-6 col-md-6">
-            <label className="form-label fw-bold">Batch</label>
-             <select className="form-select" {...register("batch")}>
-              <option value="">Select batch</option>
-              <option value="103">Java</option>
-              <option value="101">Python</option>
-              <option value="102">Full stack development</option>
-            </select>
+            <label className="form-label fw-bold">Batch </label>
+            {loadingBatches ? (
+              <select className="form-select" disabled>
+                <option>Loading batches...</option>
+              </select>
+            ) : error1 ? (
+              <select className="form-select" disabled>
+                <option className="text-danger">{error1}</option>
+              </select>
+            ) : (
+              <select className="form-select" {...register("batch")}>
+                <option value="">Select batch</option>
+                {batches.map((batch: BatchData) => (
+                  <option key={batch.id} value={batch.batch_id}>
+                    {batch.batch_name} - {batch.trainer.join(", ")} -{" "}
+                    {batch.center}
+                  </option>
+                ))}
+              </select>
+            )}
           </div>
 
           {/* English Communication Skills */}
           <div className="col-xxl-6 col-xl-6 col-md-6">
             <label className="form-label fw-bold">
-              English Communication Skills
+              {" "}
+              English Communication Skills{" "}
+              <span className="text-danger" style={{ fontSize: "1.2em" }}>
+                *
+              </span>
             </label>
-            <input
-              type="number"
-              className="form-control"
-              {...register("eng_comm_skills")}
-            />
+            <select className="form-select" {...register("eng_comm_skills")}>
+              <option value="">Select</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+            </select>
           </div>
 
           {/* Humble Background */}
           <div className="col-xxl-6 col-xl-6 col-md-6">
-            <label className="form-label fw-bold">Humble Background</label>
-              <select className="form-select" {...register("humble_background")}>
+            <label className="form-label fw-bold">
+              Humble Background{" "}
+              <span className="text-danger" style={{ fontSize: "1.2em" }}>
+                *
+              </span>
+            </label>
+            <select className="form-select" {...register("humble_background")}>
               <option value="">Select</option>
               <option value="Y">Yes</option>
               <option value="N">No</option>
@@ -195,8 +260,13 @@ const InterviewCandidate: React.FC = () => {
 
           {/* Laptop */}
           <div className="col-xxl-6 col-xl-6 col-md-6">
-            <label className="form-label fw-bold">Laptop</label>
-             <select className="form-select" {...register("laptop")}>
+            <label className="form-label fw-bold">
+              Laptop{" "}
+              <span className="text-danger" style={{ fontSize: "1.2em" }}>
+                *
+              </span>
+            </label>
+            <select className="form-select" {...register("laptop")}>
               <option value="">Select</option>
               <option value="Y">Yes</option>
               <option value="N">No</option>
@@ -205,7 +275,12 @@ const InterviewCandidate: React.FC = () => {
 
           {/* Profession */}
           <div className="col-xxl-6 col-xl-6 col-md-6">
-            <label className="form-label fw-bold">Profession</label>
+            <label className="form-label fw-bold">
+              Profession{" "}
+              <span className="text-danger" style={{ fontSize: "1.2em" }}>
+                *
+              </span>
+            </label>
             <input
               type="text"
               className="form-control"
@@ -215,8 +290,13 @@ const InterviewCandidate: React.FC = () => {
 
           {/* Selected Status */}
           <div className="col-xxl-6 col-xl-6 col-md-6">
-            <label className="form-label fw-bold">Selected Status</label>
-             <select className="form-select" {...register("selected_status")}>
+            <label className="form-label fw-bold">
+              Selected Status{" "}
+              <span className="text-danger" style={{ fontSize: "1.2em" }}>
+                *
+              </span>
+            </label>
+            <select className="form-select" {...register("selected_status")}>
               <option value="">Select</option>
               <option value="Y">Yes</option>
               <option value="N">No</option>
@@ -226,17 +306,30 @@ const InterviewCandidate: React.FC = () => {
 
           {/* Level */}
           <div className="col-xxl-6 col-xl-6 col-md-6">
-            <label className="form-label fw-bold">Level</label>
-            <input
-              type="number"
-              className="form-control"
-              {...register("level")}
-            />
+            <label className="form-label fw-bold">
+              Level{" "}
+              <span className="text-danger" style={{ fontSize: "1.2em" }}>
+                *
+              </span>
+            </label>
+            <select className="form-select" {...register("level")}>
+              <option value="">Select</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+            </select>
           </div>
 
           {/* Source */}
           <div className="col-xxl-6 col-xl-6 col-md-6">
-            <label className="form-label fw-bold">Source</label>
+            <label className="form-label fw-bold">
+              Source{" "}
+              <span className="text-danger" style={{ fontSize: "1.2em" }}>
+                *
+              </span>
+            </label>
             <input
               type="text"
               className="form-control"
@@ -246,7 +339,12 @@ const InterviewCandidate: React.FC = () => {
 
           {/* Remarks */}
           <div className="col-12">
-            <label className="form-label fw-bold">Remarks</label>
+            <label className="form-label fw-bold">
+              Remarks{" "}
+              <span className="text-danger" style={{ fontSize: "1.2em" }}>
+                *
+              </span>
+            </label>
             <textarea className="form-control" {...register("remarks")} />
           </div>
 

@@ -1,23 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-
-const StudentInformation = () => {
+const AllStudent = () => {
   const [studentData, setStudentData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const token = localStorage.getItem("accessToken");
-
     const fetchStudentData = async () => {
+        const token = localStorage.getItem("accessToken");
       try {
-        const response = await axios.get('https://gl8tx74f-8000.inc1.devtunnels.ms/auth/assessment/' , {
+        const response = await axios.get(
+          'https://gl8tx74f-8000.inc1.devtunnels.ms/auth/Learner/interviewee_student/?selected_status=Y' , {
             headers: {
               Authorization: `Bearer ${token}`,
             },
-          });
-        setStudentData(response.data.data);
+      });
+        
+        setStudentData(response.data);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -38,7 +38,7 @@ const StudentInformation = () => {
   }
 
   if (error) {
-    return <div className="error text-center">Error fetching data: {error}</div>;
+    return <div className="error">Error fetching data: {error}</div>;
   }
 
   return (
@@ -48,19 +48,21 @@ const StudentInformation = () => {
         <table className="student-tableS">
           <thead>
             <tr>
-              <th>Student Name</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Mobile No</th>
+              <th>Gender</th>
               <th>Batch</th>
-              <th>Center</th>
-              <th>Selected By Trainer</th>
             </tr>
           </thead>
           <tbody>
             {studentData.map((student) => (
-              <tr key={student.id}>
-                <td className="student-nameS">{student.student_name}</td>
-                <td><span className="batch-tagS">{student.batch_name}</span></td>
-                <td>{student.center}</td>
-                <td>{student.selected_by_trainer}</td>
+              <tr key={student.id || student.email}>
+                <td className="student-nameS">{student.name}</td>
+                <td>{student.email}</td>
+                <td>{student.mobile_no}</td>
+                <td>{student.gender}</td>
+                <td><span className="batch-tagS">{student.batch}</span></td>
               </tr>
             ))}
           </tbody>
@@ -70,4 +72,4 @@ const StudentInformation = () => {
   );
 };
 
-export default StudentInformation;
+export default AllStudent;
