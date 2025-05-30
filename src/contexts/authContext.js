@@ -171,70 +171,37 @@ const AuthProvider = ({ children }) => {
     fetchBatches();
   }, []);
 
-  const RegisterUser = async (userData) => {
+      const RegisterUser = async (userData) => {
     setLoading(true);
     setUserCreatedSuccessfully(false);
     setEmailAlreadyCreated(false);
-
+    
     try {
       const isFormData = userData instanceof FormData;
-
+      
       const config = {
         headers: {
-          "Content-Type": isFormData
-            ? "multipart/form-data"
-            : "application/json",
-        },
+          'Content-Type': isFormData ? 'multipart/form-data' : 'application/json'
+        }
       };
-
+  
       const response = await axios.post(
-        `${API_BASE_URL}/register/`,
-        userData,
+        `${API_BASE_URL}/register/`, 
+        userData, 
         config
       );
-
+  
       // Check for successful response (200-299 status code)
       if (response.status >= 200 && response.status < 300) {
         setUserCreatedSuccessfully(true);
         return { success: true, data: response.data };
       }
-
+      
       return { success: false, data: response.data };
+      
     } catch (error) {
-      if (
-        error.response?.data?.email?.[0] ===
-        "user with this email already exists."
-      ) {
+      if (error.response?.data?.email?.[0] === 'user with this email already exists.') {
         setEmailAlreadyCreated(true);
-      }
-
-      console.log("Registration error:", error);
-      return { success: false, error: error.response?.data || error.message };
-    } finally {
-      setLoading(false);
-    }
-  };
-
-
-    const response = await axios.post(
-      `${API_BASE_URL}/register/`, 
-      userData, 
-      config
-    );
-    
-
-    if (response.status >= 200 && response.status < 300) {
-      window.alert('User created successfully');
-      setUserCreatedSuccessfully(true);
-      return { success: true, data: response.data };
-    }
-    
-    return { success: false, data: response.data };
-    
-  } catch (error) {
-    // Handle email exists error
-    if (error.response?.data?.email?.includes('already exists')) {
-      setEmailAlreadyCreated(true);
     }
     
     console.error('Registration error:', error);
