@@ -215,6 +215,39 @@ const AuthProvider = ({ children }) => {
     }
   };
 
+
+    const response = await axios.post(
+      `${API_BASE_URL}/register/`, 
+      userData, 
+      config
+    );
+    
+
+    if (response.status >= 200 && response.status < 300) {
+      window.alert('User created successfully');
+      setUserCreatedSuccessfully(true);
+      return { success: true, data: response.data };
+    }
+    
+    return { success: false, data: response.data };
+    
+  } catch (error) {
+    // Handle email exists error
+    if (error.response?.data?.email?.includes('already exists')) {
+      setEmailAlreadyCreated(true);
+    }
+    
+    console.error('Registration error:', error);
+    return { 
+      success: false, 
+      error: error.response?.data || error.message,
+      status: error.response?.status 
+    };
+    
+  } finally {
+    setLoading(false);
+  }
+};
   const LoginUser = async (userData) => {
     setLoginError("");
     setLoading(true);

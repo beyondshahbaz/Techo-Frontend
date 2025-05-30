@@ -39,8 +39,15 @@ import AssignBatchForTrainer from "../../components/Trainer_dashboard/AssignBatc
 
 
 
+import { RecruiterTable } from "../../components/RecruitmentDashboard/RecruiterTable";
+import { SponsorTable } from "../../components/Sponser_Dashboard/SponsorTable";
+import ForgotPassword from "../auth/forgotPassword/forgotPassword";
+import ResetPassword from "../auth/resetPassword/resetPassword";
+import { ChangePassword } from "../auth/changePassword/ChangePassword";
+
+
 const ALLRoutes: React.FC = () => {
-  const routes = all_routes;  
+  const routes = all_routes;
   return (
     <Routes>
       {/* Public routes */}
@@ -49,26 +56,42 @@ const ALLRoutes: React.FC = () => {
         <Route path={routes.login3} element={<Login />} />
         <Route path={routes.register3} element={<Register3 />} />
         <Route path={routes.register} element={<Register />} />
-
-
+        <Route path={routes.forgotPassword} element={<ForgotPassword />} />
+        <Route path={routes.resetPassword} element={<ResetPassword />} />
       </Route>
-
 
       <Route element={<ProtectedRoute />}>
         <Route path="/" element={<Defaultlayout />}>
-          <Route path="/Students_SponserDashboard" element={<Students_SponserDashboard />} />
+          <Route path={routes.changePassword} element={<ChangePassword />} />
+
+          <Route
+            path="/Students_SponserDashboard"
+            element={<Students_SponserDashboard />}
+          />
           <Route path="/Interviewee" element={<Interviewee />} />
-          <Route path="/ReadyToRecruitDashboard" element={<RecruitmentDashboard />} />
+          <Route
+            path="/ReadyToRecruitDashboard"
+            element={<RecruitmentDashboard />}
+          />
           <Route path="/Students_profile" element={<StudentsProfile />} />
           <Route path="/Recruitment_Profile" element={<RecruitmentProfile />} />
           <Route path="/Sponsor_Profile" element={<Sponsor_Profile />} />
           <Route path="/Students_batches" element={<StudentsBatches />} />
           <Route path="/Trainer_profile" element={<TrainerProfile />} />
           <Route path="/Admission_table" element={<AdmissionTable />} />
-          <Route path="/interview-candidate/:id" element={<InterviewCandidate />} />
-          <Route path="/AllIntervieweesInformation" element={<AllIntervieweesInformation />} />
+          <Route
+            path="/interview-candidate/:id"
+            element={<InterviewCandidate />}
+          />
+          <Route
+            path="/AllIntervieweesInformation"
+            element={<AllIntervieweesInformation />}
+          />
           <Route path="/Trainer_batch" element={<TrainerBatch />} />
-          <Route path="/TrainerBatchDetail/:batchId" element={<TrainerBatchDetail />} />
+          <Route
+            path="/TrainerBatchDetail/:batchId"
+            element={<TrainerBatchDetail />}
+          />
           <Route path="/AssessmentTable" element={<AssessmentTable />} />
           <Route path="/AssessmentCandidte/:id" element={<AssessmentCandidte />} />
           <Route path="/AssignBatch" element={<AssignBatch/>} /> 
@@ -76,6 +99,9 @@ const ALLRoutes: React.FC = () => {
           <Route path="/AllTrainer" element={<AllTrainer/>} /> 
           <Route path="/AllStudent" element={<AllStudent/>} /> 
           <Route path="/AssignBatchForTrainer" element={<AssignBatchForTrainer/>} /> 
+          <Route path="/StudentInformation" element={<StudentInformation />} />
+          <Route path="/RecuriterTable" element={<RecruiterTable />} />
+          <Route path="/Sponsor_Table" element={<SponsorTable />} />
         </Route>
       </Route>
 

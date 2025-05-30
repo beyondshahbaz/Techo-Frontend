@@ -3253,4 +3253,10 @@ td {
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-/* AssignBatchForTrainer End by hasnen */
+
+}
+
+.btnChangePassword{
+  color: #05a6f0;
+  cursor: pointer;
+}

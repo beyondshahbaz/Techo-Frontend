@@ -11,14 +11,8 @@ import { Badge } from "primereact/badge";
 const Register = () => {
   const { API_BASE_URL } = useContext(AuthContext);
   const routes = all_routes;
-  const navigate = useNavigate();
-
-  // CONTEXT API
-  const {
-    RegisterUser,
-    loading,
-    emailAlreadyCreated,
-  } = useContext(AuthContext);
+  const { RegisterUser, loading, emailAlreadyCreated } =
+    useContext(AuthContext);
 
   // STATE MANAGEMENT
   const [firstName, setFirstName] = useState("");
@@ -31,8 +25,7 @@ const Register = () => {
   const [identity, setIdentity] = useState("");
   const [selectedIdType, setSelectedIdType] = useState("Select an ID");
   const [imagePreview, setImagePreview] = useState("");
-  const [subrole, setSubrole] = useState("2"); // Default to Learner (1)
-  console.log(subrole);
+  const [subrole, setSubrole] = useState("2"); //farheen
 
   // Error states
   const [errorFirstName, setErrorFirstName] = useState("");
@@ -50,14 +43,14 @@ const Register = () => {
   });
 
   const ID_TYPE_MAPPING = {
-    'PASSPORT': 2,
-    'VOTER_ID': 3,
-    'ADHAARCARD': 1
+    PASSPORT: 2,
+    VOTER_ID: 3,
+    ADHAARCARD: 1,
   };
 
   // SUBROLE MAPPING
   const SUBROLE_MAPPING = {
-    '1': 'Learner'
+    1: "Learner",
   };
 
   // Validation functions
@@ -102,7 +95,7 @@ const Register = () => {
     if (!file) return;
 
     // Validate file type
-    const validTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+    const validTypes = ["image/jpeg", "image/png", "image/jpg"];
     if (!validTypes.includes(file.type)) {
       setUserProfileError("Only JPG, JPEG, or PNG files are allowed");
       return;
@@ -130,7 +123,7 @@ const Register = () => {
 
   useEffect(() => {
     fetchIdType();
-    
+
     // Clean up object URLs when component unmounts
     return () => {
       if (imagePreview) {
@@ -141,7 +134,7 @@ const Register = () => {
 
   const onRegisterUser = async (e) => {
     e.preventDefault();
-    
+
     // Reset all errors
     setErrorFirstName("");
     setErrorLastName("");
@@ -154,18 +147,18 @@ const Register = () => {
     setEmailExistsError("");
 
     let isValid = true;
-  
-    // Validation checks
+
+    // Existing validation checks (keep all these exactly as they were)
     if (!firstName.trim()) {
       setErrorFirstName("First Name is Required");
       isValid = false;
     }
-  
+
     if (!lastName.trim()) {
       setErrorLastName("Last Name is Required");
       isValid = false;
     }
-  
+
     if (!email.trim()) {
       setErrorEmail("Email is Required");
       isValid = false;
@@ -173,7 +166,7 @@ const Register = () => {
       setErrorEmail("Invalid Email Format");
       isValid = false;
     }
-  
+
     if (!password) {
       setErrorPassword("Password is Required");
       isValid = false;
@@ -183,7 +176,7 @@ const Register = () => {
       );
       isValid = false;
     }
-  
+
     if (!mobileNumber) {
       setMobileNumberError("Mobile Number is Required");
       isValid = false;
@@ -191,63 +184,103 @@ const Register = () => {
       setMobileNumberError("Invalid Mobile Number");
       isValid = false;
     }
-    
+
     if (!profileImage) {
       setUserProfileError("Profile Image is Required");
       isValid = false;
     }
-    
+
     if (!selectedIdType || selectedIdType === "Select an ID") {
       setSelectedIdTypeError("Id Type is Required");
       isValid = false;
     }
-    
+
+    if (selectedIdType && identity) {
+      let regex;
+      switch (selectedIdType) {
+        case "ADHAARCARD":
+          regex = /^\d{12}$/;
+          if (!regex.test(identity)) {
+            setIdNumberError("Aadhaar must be 12 digits");
+            isValid = false;
+          }
+          break;
+
+        case "PASSPORT":
+          regex = /^[A-Za-z]{1}[0-9]{7}$/;
+          if (!regex.test(identity)) {
+            setIdNumberError("Invalid Passport format (e.g., A1234567)");
+            isValid = false;
+          }
+          break;
+
+        case "VOTER_ID":
+          regex = /^[A-Za-z]{3}[0-9]{7}$/;
+          if (!regex.test(identity)) {
+            setIdNumberError("Voter ID must be 3 letters followed by 7 digits");
+            isValid = false;
+          }
+          break;
+      }
+    } else if (selectedIdType && !identity) {
+      setIdNumberError("ID Number is required");
+      isValid = false;
+    }
+
     if (!identity.trim()) {
       setIdNumberError("ID Number is Required");
       isValid = false;
     }
-  
+
     if (!isValid) return;
-  
+
     try {
       const formData = new FormData();
-      
-      // Add all regular fields
-      formData.append('first_name', firstName.trim());
-      formData.append('last_name', lastName.trim());
-      formData.append('email', email.trim());
-      formData.append('password', password);
-      formData.append('mobile_no', mobileNumber);
-      // formData.append('role', '6');
-      formData.append('role', '2');
-      formData.append('id_type', ID_TYPE_MAPPING[selectedIdType.toUpperCase()]);
-      formData.append('identity', identity.trim());
-      formData.append('subrole', "2"); 
-          if (profileImage) {
-        formData.append('user_profile', profileImage);
-      }
-      await RegisterUser(formData);    
-    } catch (error) {
-      console.error("Registration error:", error);
-     
-      if (emailAlreadyCreated) {
-        setEmailExistsError("This email is already registered. Please use a different email.");
+
+      // Existing form data setup
+      formData.append("first_name", firstName.trim());
+      formData.append("last_name", lastName.trim());
+      formData.append("email", email.trim());
+      formData.append("password", password);
+      formData.append("mobile_no", mobileNumber);
+      // formData.append("role", "6");
+      formData.append("role", "2");
+      formData.append("id_type", ID_TYPE_MAPPING[selectedIdType.toUpperCase()]);
+      formData.append("identity", identity.trim());
+      formData.append("subrole", subrole);
+      if (profileImage) {
+        formData.append("user_profile", profileImage);
       }
 
+      // Only change: Add error handling for the response
+      const result = await RegisterUser(formData);
+
+      if (!result.success && result.error?.email) {
+        setEmailExistsError(result.error.email.join(", "));
+      }
+    } catch (error) {
+      console.error("Registration error:", error);
+
+      // Modified error handling for email exists
+      if (error.response?.data?.email?.includes("already exists")) {
+        setEmailExistsError(
+          "This email is already registered. Please use a different email."
+        );
+      }
+
+      // Keep existing error handling for other fields
       if (error.response?.data?.user_profile) {
-        setUserProfileError(error.response.data.user_profile.join(', '));
-      } else if (error.message.includes('user_profile')) {
-        setUserProfileError(error.message);
+        setUserProfileError(error.response.data.user_profile.join(", "));
       }
 
       if (error.response?.data) {
         const errors = error.response.data;
-        
+
         if (errors.email) {
-          setErrorEmail(errors.email.join(', '));
+          setErrorEmail(errors.email.join(", "));
         }
         if (errors.mobileNumber) {
-          setMobileNumberError(errors.mobileNumber.join(', '));
+          setMobileNumberError(errors.mobileNumber.join(", "));
         }
       }
     }
@@ -301,7 +334,6 @@ const Register = () => {
                 <span className="text-danger">{errorLastName}</span>
               )}
             </div>
-
             <div className="col-xxl-6 col-xl-6 col-md-6 mb-3">
               <label htmlFor="emailAddress" className="form-label">
                 Email Address <span className="text-danger">*</span>
@@ -318,9 +350,11 @@ const Register = () => {
                 }}
                 className="mb-0"
               />
-              {errorEmail && <span className="text-danger">{errorEmail}</span>}
               {emailExistsError && (
                 <span className="text-danger">{emailExistsError}</span>
+              )}
+              {!emailExistsError && errorEmail && (
+                <span className="text-danger">{errorEmail}</span>
               )}
             </div>
 
@@ -396,14 +430,18 @@ const Register = () => {
               )}
               {imagePreview && (
                 <div className="mt-2">
-                  <img 
-                    src={imagePreview} 
-                    alt="Preview" 
-                    style={{maxWidth: '100px', maxHeight: '100px', display: 'block'}}
+                  <img
+                    src={imagePreview}
+                    alt="Preview"
+                    style={{
+                      maxWidth: "100px",
+                      maxHeight: "100px",
+                      display: "block",
+                    }}
                     className="mb-2"
                   />
-                  <button 
-                    type="button" 
+                  <button
+                    type="button"
                     className="btn btn-sm btn-danger"
                     onClick={removeImage}
                   >
@@ -427,7 +465,7 @@ const Register = () => {
               />
             </div>
 
-            <div className="col-xxl-6 col-xl-6 col-md-6">
+            <div className="col-xxl-6 col-xl-6 col-md-6 mb-3">
               <label className="form-label">
                 ID Type <span className="text-danger">*</span>
               </label>

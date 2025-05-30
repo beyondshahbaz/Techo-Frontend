@@ -151,168 +151,204 @@ const Register3 = () => {
     };
   }, []);
 
-  const onRegisterUser = async (e) => {
-    e.preventDefault();
-    
-    // Reset all errors
-    setErrorFirstName("");
-    setErrorLastName("");
-    setErrorEmail("");
-    setErrorPassword("");
-    setErrorSelectedRole("");
-    setErrorSelectedSubsRole("");
-    setMobileNumberError("");
-    setUserProfileError("");
-    setSelectedIdTypeError("");
-    setIdNumberError("");
-    // setProposerEmailError("");
-    // setproposerMobileError("");
-    setEmailExistsError("");
+const onRegisterUser = async (e) => {
+  e.preventDefault();
+  console.log("Register button clicked"); // Add this
 
-    let isValid = true;
-  
-    // Validation checks
-    if (!firstName.trim()) {
-      setErrorFirstName("First Name is Required");
+  // Reset all errors
+  setErrorFirstName("");
+  setErrorLastName("");
+  setErrorEmail("");
+  setErrorPassword("");
+  setErrorSelectedRole("");
+  setErrorSelectedSubsRole("");
+  setMobileNumberError("");
+  setUserProfileError("");
+  setSelectedIdTypeError("");
+  setIdNumberError("");
+  setEmailExistsError("");
+
+  let isValid = true;
+
+  // Validation checks
+  if (!firstName.trim()) {
+    setErrorFirstName("First Name is Required");
+    isValid = false;
+  }
+
+  if (!lastName.trim()) {
+    setErrorLastName("Last Name is Required");
+    isValid = false;
+  }
+
+  if (!email.trim()) {
+    setErrorEmail("Email is Required");
+    isValid = false;
+  } else if (!validateEmail(email)) {
+    setErrorEmail("Invalid Email Format");
+    isValid = false;
+  }
+
+  if (!password) {
+    setErrorPassword("Password is Required");
+    isValid = false;
+  } else if (!validatePassword(password)) {
+    setErrorPassword(
+      "Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, one number, and one special character"
+    );
+    isValid = false;
+  }
+
+  if (!newSelectedRole) {
+    setErrorSelectedRole("Select a Role");
+    isValid = false;
+  }
+
+  if (newSelectedRole === "ENABLER") {
+    if (!selectedSubrole || selectedSubrole === "Choose Your Subrole") {
+      setErrorSelectedSubsRole("Select a subrole");
       isValid = false;
     }
-  
-    if (!lastName.trim()) {
-      setErrorLastName("Last Name is Required");
+  } else if (newSelectedRole === "LEARNER") {
+    if (!mobileNumber) {
+      setMobileNumberError("Mobile Number is Required");
+      isValid = false;
+    } else if (!validateMobileNumber(mobileNumber)) {
+      setMobileNumberError("Invalid Mobile Number");
       isValid = false;
     }
-  
-    if (!email.trim()) {
-      setErrorEmail("Email is Required");
-      isValid = false;
-    } else if (!validateEmail(email)) {
-      setErrorEmail("Invalid Email Format");
+    if (!profileImage) {
+      setUserProfileError("Profile Image is Required");
       isValid = false;
     }
-  
-    if (!password) {
-      setErrorPassword("Password is Required");
-      isValid = false;
-    } else if (!validatePassword(password)) {
-      setErrorPassword(
-        "Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, one number, and one special character"
-      );
+    // ID TYPE VALIDATION
+    if (!selectedIdType || selectedIdType === "Select an ID") {
+      setSelectedIdTypeError("ID Type is Required");
       isValid = false;
     }
-  
-    if (!newSelectedRole) {
-      setErrorSelectedRole("Select a Role");
+
+    // ID NUMBER VALIDATION (EXISTENCE)
+    if (!identity.trim()) {
+      setIdNumberError("ID Number is Required");
       isValid = false;
     }
+  }
+
   
-    if (newSelectedRole === "ENABLER") {
-      if (!selectedSubrole || selectedSubrole === "Choose Your Subrole") {
-        setErrorSelectedSubsRole("Select a subrole");
+if (selectedIdType && identity.trim()) {
+      let regex;
+      let errorMessage = "";
+      
+      switch (selectedIdType.toUpperCase()) {
+        case "ADHAARCARD":
+          regex = /^\d{12}$/;
+          errorMessage = "Aadhaar must be exactly 12 digits";
+          break;
+        case "PASSPORT":
+          regex = /^[A-Za-z][0-9]{7}$/;
+          errorMessage = "Invalid Passport format (e.g., A1234567)";
+          break;
+        case "VOTER_ID":
+          regex = /^[A-Za-z]{3}[0-9]{7}$/;
+          errorMessage = "Voter ID must be 3 letters followed by 7 digits";
+          break;
+        default:
+          break;
+      }
+
+      if (regex && !regex.test(identity)) {
+        setIdNumberError(errorMessage);
         isValid = false;
       }
-    } else if (newSelectedRole === "LEARNER") {
-      if (!mobileNumber) {
-        setMobileNumberError("Mobile Number is Required");
-        isValid = false;
-      } else if (!validateMobileNumber(mobileNumber)) {
-        setMobileNumberError("Invalid Mobile Number");
-        isValid = false;
-      }
-      if (!profileImage) {
-        setUserProfileError("Profile Image is Required");
-        isValid = false;
-      }
-      if (!selectedIdType || selectedIdType === "Select an ID") {
-        setSelectedIdTypeError("Id Type is Required");
-        isValid = false;
-      }
-      if (!identity.trim()) {
-        setIdNumberError("ID Number is Required");
-        isValid = false;
-      }
-      // if (!proposerEmail.trim()) {
-      //   setProposerEmailError("Proposer Email is Required");
-      //   isValid = false;
-      // } else if (!validateEmail(proposerEmail)) {
-      //   setProposerEmailError("Invalid Proposer Email Format");
-      //   isValid = false;
-      // }
-      // if (!proposerNumber) {
-      //   setproposerMobileError("Proposer Mobile Number is Required");
-      //   isValid = false;
-      // } else if (!validateMobileNumber(proposerNumber)) {
-      //   setproposerMobileError("Invalid Proposer Mobile Number");
-      //   isValid = false;
-      // }
     }
-  
+
+  // if (!isValid) return;
     if (!isValid) return;
-  
-    try {
-      const formData = new FormData();
 
-      formData.append('first_name', firstName.trim());
-      formData.append('last_name', lastName.trim());
-      formData.append('email', email.trim());
-      formData.append('password', password);
-      formData.append('mobile_no', mobileNumber);
+  //   if (!isValid) {
+  //   console.log("Validation failed - not calling API");
+  //   return;
+  // }
 
-      if (newSelectedRole === "LEARNER") {
-        formData.append('role', '2');
-        formData.append('id_type', ID_TYPE_MAPPING[selectedIdType.toUpperCase()]);
-        formData.append('identity', identity.trim());
-        formData.append('subrole', 1);
-        if (profileImage) {
-          formData.append('user_profile', profileImage);
-        }
-      } else if (newSelectedRole === "ENABLER") {
-        // formData.append('role', '7');
-        formData.append('role', '3');
-        const subroleMapping = {
-          APPLICANT: 1, 
-          INTERVIEWEE: 2,
-          STUDENT: 3,
-          SPONSOR: 4,
-          TRAINER: 5,
-          RECRUITER: 6,
-          "GUEST LECTURER": 7,
-        };
-        formData.append('subrole', subroleMapping[selectedSubrole] || '');
+  try {
+    const formData = new FormData();
+
+    formData.append("first_name", firstName.trim());
+    formData.append("last_name", lastName.trim());
+    formData.append("email", email.trim());
+    formData.append("password", password);
+    formData.append("mobile_no", mobileNumber);
+
+    if (newSelectedRole === "LEARNER") {
+      formData.append("role", "2");
+      formData.append("id_type", ID_TYPE_MAPPING[selectedIdType.toUpperCase()]);
+      formData.append("identity", identity.trim());
+      formData.append("subrole", 1);
+      if (profileImage) {
+        formData.append("user_profile", profileImage);
       }
-  
-      const response = await RegisterUser(formData);
-      if (response && response.success) {
-        alert("User successfully created!");
+    } else if (newSelectedRole === "ENABLER") {
+      formData.append("role", "3");
+      const subroleMapping = {
+        APPLICANT: 1,
+        INTERVIEWEE: 2,
+        STUDENT: 3,
+        SPONSOR: 4,
+        TRAINER: 5,
+        RECRUITER: 6,
+        "GUEST LECTURER": 7,
+      };
+      formData.append("subrole", subroleMapping[selectedSubrole] || "");
+    }
+
+    const response = await RegisterUser(formData);
+    console.log('response', response);
+
+    if (response && response.success) {
+      alert("User successfully created!");
+    }
+
+    // Handle email exists case based on success = false
+    if (response && !response.success && response.error?.email) {
+      setEmailExistsError(response.error.email.join(", "));
+    }
+
+  } catch (error) {
+
+    // Handle email already exists error
+    if (
+      error.response?.data?.email &&
+      error.response.data.email.some((msg) =>
+        msg.toLowerCase().includes("already exists")
+      )
+    ) {
+      setEmailExistsError(
+        "This email is already registered. Please use a different email."
+      );
+    }
+
+    // Handle file upload specific errors
+    if (error.response?.data?.user_profile) {
+      setUserProfileError(error.response.data.user_profile.join(", "));
+    } else if (error.message?.includes("user_profile")) {
+      setUserProfileError(error.message);
+    }
+
+    // Handle other API errors
+    if (error.response?.data) {
+      const errors = error.response.data;
+
+      if (errors.email) {
+        setErrorEmail(errors.email.join(", "));
       }
 
-      
-    } catch (error) {
-      console.error("Registration error:", error);
-      
-      if (emailAlreadyCreated) {
-        setEmailExistsError("This email is already registered. Please use a different email.");
-      }
-      
-      // Handle file upload specific errors
-      if (error.response?.data?.user_profile) {
-        setUserProfileError(error.response.data.user_profile.join(', '));
-      } else if (error.message.includes('user_profile')) {
-        setUserProfileError(error.message);
-      }
-      
-      // Handle other API errors
-      if (error.response?.data) {
-        const errors = error.response.data;
-        
-        if (errors.email) {
-          setErrorEmail(errors.email.join(', '));
-        }
-        if (errors.mobileNumber) {
-          setMobileNumberError(errors.mobileNumber.join(', '));
-        }
+      if (errors.mobileNumber) {
+        setMobileNumberError(errors.mobileNumber.join(", "));
       }
     }
-  };
+  }
+};
+
 
   return (
     <div className="card mt-5 mx-2">
@@ -638,49 +674,6 @@ const Register3 = () => {
                 <span className="text-danger">{idNumberError}</span>
               )}
             </div>
-
-            {/* <div className="col-xxl-4 col-xl-4 col-md-4 mb-3">
-              <label className="form-label text-nowrap" htmlFor="proposerEmail">
-                Proposer Email <span className="text-danger">*</span>
-              </label>
-              <input
-                className="mb-0"
-                id="proposerEmail"
-                placeholder="Enter Your Proposer Email"
-                type="email"
-                value={proposerEmail}
-                onChange={(e) => {
-                  setProposerEmail(e.target.value);
-                  setProposerEmailError("");
-                }}
-              />
-              {proposerEmailError && (
-                <span className="text-danger">{proposerEmailError}</span>
-              )}
-            </div> */}
-
-            {/* <div className="col-xxl-4 col-xl-4 col-md-4  mb-3">
-              <label
-                className="form-label text-nowrap"
-                htmlFor="proposerNumber"
-              >
-                Proposer Mobile No <span className="text-danger">*</span>
-              </label>
-              <input
-                className="mb-0"
-                id="proposerNumber"
-                placeholder="Enter Your Proposer Number"
-                type="text"
-                value={proposerNumber}
-                onChange={(e) => {
-                  setProposerNumber(e.target.value);
-                  setproposerMobileError("");
-                }}
-              />
-              {proposerMobileError && (
-                <span className="text-danger">{proposerMobileError}</span>
-              )}
-            </div> */}
           </div>
 
           <hr />
