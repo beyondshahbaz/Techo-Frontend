@@ -17,6 +17,9 @@ const AuthProvider = ({ children }) => {
   const [emailAlreadyCreated, setEmailAlreadyCreated] = useState(false);
   const [loginError, setLoginError] = useState("");
   const [trainers, setTrainers] = useState([]);
+  const [admin, setAdmin] = useState([]);
+  const [allTrainer, setAllTrainer] = useState([]);
+  const [batches, setBatches] = useState([]);
 
 
 
@@ -110,6 +113,54 @@ const AuthProvider = ({ children }) => {
       fetchTrainers();
     }
   }, [accessToken])
+
+  useEffect(() => {
+    const fetchAdmin = async () => {
+      setLoading(true);
+      try {
+        const response = await axios.get(`${API_BASE_URL}/Admin/`);
+        if (response.status === 200) {
+          setAdmin(
+            response.data[0].user.first_name +
+              " " +
+              response.data[0].user.last_name
+          );
+        }
+      } catch (error) {
+        console.error("Error fetching Admin:", error);
+      }
+    };
+
+    fetchAdmin();
+  }, []);
+
+  useEffect(() => {
+    const fetchAllTrainer = async () => { 
+      try {
+        const response = await axios.get(`${API_BASE_URL}/trainers/`);
+        if (response.status === 200) {
+          setAllTrainer(response.data);
+        }
+      } catch (error) {
+        console.error("Error fetching Trainers:", error);
+      } 
+    };
+
+    fetchAllTrainer();
+  }, []);
+
+  useEffect(() => {
+    const fetchBatches = async () => {
+      try {
+        const response = await axios.get(`${API_BASE_URL}/batches/`);
+        setBatches(response.data);
+      } catch (err) {
+        console.error("Error fetching batches:", err);
+      }
+    };
+
+    fetchBatches();
+  }, []);
 
 const RegisterUser = async (userData) => {
   setLoading(true);
@@ -292,6 +343,9 @@ const RegisterUser = async (userData) => {
     API_BASE_URL,
     GenerateNewAccessToken,
     trainers,
+    batches,
+    admin,
+    allTrainer,
   };
 
   return (
