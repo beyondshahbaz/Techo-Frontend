@@ -16,9 +16,41 @@ const RecruitmentProfile = () => {
   const [gender, setGender] = useState("");
   const [isEditing, setIsEditing] = useState(false);
   const [disabled, setDisabled] = useState(true);
+  const [userProfileError, setUserProfileError] = useState("");
+  const [profileImage, setProfileImage] = useState(null);
+  const [imagePreview, setImagePreview] = useState("");
+  const [existingProfileImage, setExistingProfileImage] = useState("");
+
+  const handleImageUpload = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Validate file type
+    const validTypes = ["image/jpeg", "image/png", "image/jpg"];
+    if (!validTypes.includes(file.type)) {
+      setUserProfileError("Only JPG, JPEG, or PNG files are allowed");
+      return;
+    }
+
+    // Validate file size (max 2MB)
+    if (file.size > 2 * 1024 * 1024) {
+      setUserProfileError("Image size should be less than 2MB");
+      return;
+    }
+
+    setProfileImage(file);
+    setUserProfileError("");
+    setImagePreview(URL.createObjectURL(file));
+  };
+
+  const removeImage = () => {
+    setProfileImage(null);
+    setImagePreview("");
+    URL.revokeObjectURL(imagePreview);
+  };
 
   useEffect(() => {
-    if (recruiterProfileDetails && recruiterProfileDetails.length > 0) {
+    if (recruiterProfileDetails?.length) {
       const profile = recruiterProfileDetails[0];
       setFirstName(profile.first_name || "-");
       setLastName(profile.last_name || "-");
@@ -26,45 +58,44 @@ const RecruitmentProfile = () => {
       setPhoneNumber(profile.mobile_no || "-");
       setCompanyName(profile.company_name || "-");
       setGender(profile.gender || "-");
+      setExistingProfileImage(profile.user_profile || "");
     }
   }, [recruiterProfileDetails]);
 
-  const toggleDisabled = () => {
-    setDisabled(!disabled);
-  };
+  const toggleDisabled = () => setDisabled(!disabled);
 
   const handleRecruiterUpdate = async () => {
     try {
       const currentProfile = recruiterProfileDetails[0];
+      const formData = new FormData();
 
-      const payload = {
-        ...currentProfile,
-        first_name: firstName,
-        last_name: lastName,
-        email: email,
-        mobile_no: phoneNumber,
-        company_name: companyName,
-        gender: gender,
-        id_type: currentProfile.id_type || 0,
-        identity: currentProfile.identity || "",
-        qualification: currentProfile.qualification || "",
-        address: currentProfile.address || "",
-        user_profile: currentProfile.user_profile || null,
-        date_of_birth: currentProfile.date_of_birth || null,
-      };
+      // Required fields
+      formData.append("id", currentProfile.id);
+      formData.append("first_name", firstName);
+      formData.append("last_name", lastName);
+      formData.append("email", email);
+      formData.append("mobile_no", phoneNumber);
+      formData.append("company_name", companyName);
+      formData.append("gender", gender);
 
-      const cleanPayload = Object.fromEntries(
-        Object.entries(payload).filter(([_, value]) => value !== undefined)
-      );
+      // Optional fields with fallbacks
+      formData.append("id_type", currentProfile.id_type);
+      formData.append("identity", currentProfile.identity || "");
+      formData.append("qualification", currentProfile.qualification || "");
+      formData.append("address", currentProfile.address || "");
+      formData.append("date_of_birth", currentProfile.date_of_birth);
 
-      console.log("Final recruiter payload:", cleanPayload);
+      // Append image if exists
+      if (profileImage) {
+        formData.append("user_profile", profileImage);
+      }
 
       const response = await axios.put(
         `${API_BASE_URL}/recruiter/Recruiter_update/`,
-        cleanPayload,
+        formData,
         {
           headers: {
-            "Content-Type": "application/json",
+            "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${accessToken}`,
           },
         }
@@ -74,11 +105,18 @@ const RecruitmentProfile = () => {
         window.alert("Successfully updated the profile");
         setIsEditing(false);
         setDisabled(true);
+        setProfileImage(null);
+
+        // Assume updated profile is returned in response.data
+        const updatedProfile = response.data;
+
+        setImagePreview("");
+        setExistingProfileImage(updatedProfile.user_profile || "");
+
       }
     } catch (error) {
       console.error("Error updating recruiter:", error);
       if (error.response) {
-        console.error("Server response:", error.response.data);
         window.alert(`Update failed: ${JSON.stringify(error.response.data)}`);
       } else {
         window.alert("Failed to update profile. Please check your connection.");
@@ -92,7 +130,18 @@ const RecruitmentProfile = () => {
         <div className="row">
           <div className="col-xxl-12 col-xl-12 col-md-12 d-flex mb-3">
             <div className="d-flex flex-column me-4">
-              <img src={img1} className="profileImg mb-2" alt="Profile" />
+              <img
+                src={
+                  imagePreview
+                    ? imagePreview
+                    : existingProfileImage
+                    ? `${API_BASE_URL}${existingProfileImage}`
+                    : img1
+                }
+                className="profileImg mb-2"
+                alt="Profile"
+              />
+
               <button
                 className="btn btn-light w-100"
                 onClick={() => {
@@ -142,6 +191,44 @@ const RecruitmentProfile = () => {
             />
           </div>
           <div className="col-xxl-6 col-xl-6 col-md-6 mb-3">
+            <label className="form-label" htmlFor="user_profile">
+              User Profile Image <span className="text-danger">*</span>
+            </label>
+            <input
+              disabled={!isEditing}
+              id="user_profile"
+              type="file"
+              name="user_profile"
+              className="form-control mb-0"
+              accept="image/jpeg, image/png, image/jpg"
+              onChange={handleImageUpload}
+            />
+            {userProfileError && (
+              <span className="text-danger">{userProfileError}</span>
+            )}
+            {imagePreview && (
+              <div className="mt-2">
+                <img
+                  src={imagePreview}
+                  alt="Preview"
+                  style={{
+                    maxWidth: "100px",
+                    maxHeight: "100px",
+                    display: "block",
+                  }}
+                  className="mb-2"
+                />
+                <button
+                  type="button"
+                  className="btn btn-sm btn-danger"
+                  onClick={removeImage}
+                >
+                  Remove Image
+                </button>
+              </div>
+            )}
+          </div>
+          <div className="col-xxl-6 col-xl-6 col-md-6 mb-3">
             <label htmlFor="email" className="form-label">
               Email
             </label>
@@ -181,17 +268,40 @@ const RecruitmentProfile = () => {
             />
           </div>
           <div className="col-xxl-6 col-xl-6 col-md-6 mb-3">
-            <label htmlFor="gender" className="form-label">
-              Gender
+            <label className="form-label" htmlFor="Gender">
+              Select Gender <span className="text-danger">*</span>
             </label>
-            <input
-              type="text"
-              disabled={!isEditing}
-              id="gender"
-              className="form-control"
-              onChange={(e) => setGender(e.target.value)}
-              value={gender}
-            />
+            <div className="dropdown">
+              <button
+                className="btnDropdown dropdown-toggle form-control"
+                type="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+                disabled={!isEditing}
+              >
+                {gender || "Select Gender"}
+              </button>
+              <ul className="dropdown-menu w-100">
+                <li
+                  className="dropdown-item c-pointer"
+                  onClick={() => setGender("Male")}
+                >
+                  Male
+                </li>
+                <li
+                  className="dropdown-item c-pointer"
+                  onClick={() => setGender("Female")}
+                >
+                  Female
+                </li>
+                <li
+                  className="dropdown-item c-pointer"
+                  onClick={() => setGender("Other")}
+                >
+                  Other
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
         <div className="row">
