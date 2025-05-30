@@ -9,10 +9,8 @@ import { Tooltip } from "primereact/tooltip";
 import { Badge } from "primereact/badge";
 
 const Register = () => {
-  const { API_BASE_URL } = useContext(AuthContext);
+  const { API_BASE_URL, RegisterUser, loading  } = useContext(AuthContext);
   const routes = all_routes;
-  const { RegisterUser, loading, emailAlreadyCreated } =
-    useContext(AuthContext);
 
   // STATE MANAGEMENT
   const [firstName, setFirstName] = useState("");

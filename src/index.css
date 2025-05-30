@@ -1919,6 +1919,7 @@ td {
 .profileImg {
   height: 100px;
   width: 100px;
+  border-radius: 50%;
 }
 .profileView {
   display: flex;
