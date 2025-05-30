@@ -147,7 +147,7 @@ const AssessmentCandidateWithForm: React.FC = () => {
 
           {/* Trainer Score */}
           <div className="col-xxl-6 col-xl-6 col-md-6">
-            <label className="form-label fw-bold">Trainer Score</label>
+            <label className="form-label fw-bold">Trainer Score <span className="text-danger" style={{ fontSize: "1.2em" }}>*</span></label>
             <input
               type="number"
               className={`form-control ${
@@ -166,7 +166,7 @@ const AssessmentCandidateWithForm: React.FC = () => {
 
           {/* Trainer Feedback */}
           <div className="col-xxl-6 col-xl-6 col-md-6">
-            <label className="form-label fw-bold">Trainer Feedback</label>
+            <label className="form-label fw-bold">Trainer Feedback <span className="text-danger" style={{ fontSize: "1.2em" }}>*</span></label>
             <input
               type="text"
               className={`form-control ${
@@ -185,7 +185,7 @@ const AssessmentCandidateWithForm: React.FC = () => {
 
           {/* Assessment Test Status */}
           <div className="col-xxl-6 col-xl-6 col-md-6">
-            <label className="form-label fw-bold">Assessment Test Status</label>
+            <label className="form-label fw-bold">Assessment Test Status <span className="text-danger" style={{ fontSize: "1.2em" }}>*</span></label>
             <select
               className="form-select"
               {...register("assessment_test_status")}
@@ -219,7 +219,7 @@ const AssessmentCandidateWithForm: React.FC = () => {
 
               {/* Admin Score */}
               <div className="col-xxl-6 col-xl-6 col-md-6">
-                <label className="form-label fw-bold">Admin Score</label>
+                <label className="form-label fw-bold">Admin Score <span className="text-danger" style={{ fontSize: "1.2em" }}>*</span></label>
                 <input
                   type="number"
                   className={`form-control ${
@@ -238,7 +238,7 @@ const AssessmentCandidateWithForm: React.FC = () => {
 
               {/* Admin Feedback */}
               <div className="col-xxl-6 col-xl-6 col-md-6">
-                <label className="form-label fw-bold">Admin Feedback</label>
+                <label className="form-label fw-bold">Admin Feedback <span className="text-danger" style={{ fontSize: "1.2em" }}>*</span></label>
                 <input
                   type="text"
                   className={`form-control ${
@@ -257,7 +257,7 @@ const AssessmentCandidateWithForm: React.FC = () => {
 
               {/* Admin Selected */}
               <div className="col-xxl-6 col-xl-6 col-md-6">
-                <label className="form-label fw-bold">Admin Selected</label>
+                <label className="form-label fw-bold">Admin Selected <span className="text-danger" style={{ fontSize: "1.2em" }}>*</span></label>
                 <select className="form-select" {...register("admin_selected")}>
                   <option value="yes">Yes</option>
                   <option value="no">No</option>

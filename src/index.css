@@ -741,7 +741,8 @@ input[type="file"]::file-selector-button {
   min-width: max-content; /* Prevent title from shrinking too much */
 }
 
-.header-buttonH, .header-buttonL {
+.header-buttonH,
+.header-buttonL {
   background-color: var(--bs-info);
   border: 2px solid var(--bs-info);
   color: white;
@@ -792,8 +793,9 @@ input[type="file"]::file-selector-button {
   .header-titleH {
     font-size: 1.5rem;
   }
-  
-  .header-buttonH, .header-buttonL {
+
+  .header-buttonH,
+  .header-buttonL {
     font-size: 14px;
     padding: 5px 8px;
   }
@@ -805,17 +807,17 @@ input[type="file"]::file-selector-button {
     flex-direction: column;
     align-items: stretch;
   }
-  
+
   .header-titleH {
     order: 1; /* Title first */
     margin-bottom: 10px;
   }
-  
+
   .header-buttonL {
     order: 2; /* Left button second */
     margin-bottom: 5px;
   }
-  
+
   .header-buttonH {
     order: 3; /* Right button last */
   }
@@ -826,8 +828,9 @@ input[type="file"]::file-selector-button {
   .header-titleH {
     font-size: 1.3rem;
   }
-  
-  .header-buttonH, .header-buttonL {
+
+  .header-buttonH,
+  .header-buttonL {
     width: 100%;
     text-align: center;
     font-size: 13px;
@@ -2610,7 +2613,6 @@ td {
 }
 
 .assign-batch-container-with-bg {
-  background-image: url("../src/assets/images/Assien/BG.png");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -2639,8 +2641,76 @@ td {
 }
 
 .tableA th,
+.tableA th {
+  padding: 12px 15px;
+  text-align: left;
+  font-weight: 600;
+  color: #495057;
+  border: 1px solid #dee2e6;
+  white-space: nowrap;
+}
+
 .tableA td {
   vertical-align: middle;
+}
+
+/* Mobile Card Styles */
+.mobile-learner-card {
+  background-color: white;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 15px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.mobile-learner-card.selected {
+  background-color: #f0f8ff;
+  border-left: 4px solid #3498db;
+}
+
+.mobile-learner-card .card-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.mobile-learner-card .card-header input[type="checkbox"] {
+  margin-right: 10px;
+  transform: scale(1.3);
+}
+
+.mobile-learner-card .card-details {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.mobile-learner-card .card-details div {
+  display: flex;
+  flex-direction: column;
+}
+
+.mobile-learner-card .card-details span {
+  font-weight: bold;
+  color: #555;
+  font-size: 0.8rem;
+}
+
+/* Responsive table toggle */
+@media (max-width: 767.98px) {
+  .tableA {
+    display: none;
+  }
+}
+
+@media (min-width: 768px) {
+  .mobile-learner-card {
+    display: none;
+  }
 }
 
 /* AssignBatch End by hasnen */
@@ -2654,21 +2724,6 @@ td {
   padding: 20px;
   box-sizing: border-box;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-}
-
-.student-info-containerS::before {
-  content: "";
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-image: url("../src/assets/images/Assien/BG.png");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  z-index: -1;
 }
 
 .content-overlay {
@@ -2699,24 +2754,16 @@ td {
   border-spacing: 0;
   background: white;
   min-width: 600px;
+  border-radius: 8px;
+  overflow: hidden; /* This ensures the border-radius is applied properly */
 }
 
 .student-tableS th {
-  background-color: #3498db;
-  color: white;
   padding: 12px 15px;
   text-align: left;
-  font-weight: 500;
-  text-transform: uppercase;
-  font-size: 13px;
-}
-
-.student-tableS th:first-child {
-  border-top-left-radius: 8px;
-}
-
-.student-tableS th:last-child {
-  border-top-right-radius: 8px;
+  font-weight: 600;
+  color: #495057;
+  border: 1px solid #dee2e6;
 }
 
 .student-tableS td {
@@ -2725,9 +2772,10 @@ td {
   color: #34495e;
 }
 
-.student-tableS tr:last-child td {
+/* Remove this if you want borders on all rows including the last one */
+/* .student-tableS tr:last-child td {
   border-bottom: none;
-}
+} */
 
 .student-tableS tr:hover {
   background-color: #f8f9fa;
@@ -2824,7 +2872,6 @@ td {
 }
 /* StudentInformation End by hasnen */
 
-
 .header-containerHT {
   display: flex;
   flex-direction: row;
@@ -2845,6 +2892,367 @@ td {
     flex-direction: column;
     align-items: flex-start;
   }
+}
+
+/* AllIntervieweesInformation Start by hasnen */
+
+/* Main container styles */
+.interviewees-container-with-bg {
+  min-height: 100vh;
+  padding: 20px;
+  background-color: #f8f9fa;
+}
+
+.interviewees-containerYY {
+  background-color: rgba(255, 255, 255, 0.95);
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  max-width: 95%;
+  margin: 0 auto;
+}
+
+/* Header styles */
+.header-textYY {
+  color: #2c3e50;
+  margin-bottom: 25px;
+  font-size: 28px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Filter button styles */
+.filter-buttonsYY {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.filter-btnYY {
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: none;
+  background-color: #e0f2fe;
+  color: #3498db;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.filter-btnYY:hover {
+  background-color: #bae6fd;
+}
+
+.filter-btnYY.active {
+  background-color: #3498db;
+  color: white;
+}
+
+/* Table styles */
+.table-containerYY {
+  overflow-x: auto;
+  margin: 25px 0;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.interviewees-tableYY {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.interviewees-tableYY th {
+  padding: 12px 15px;
+  text-align: left;
+  font-weight: 600;
+  color: #495057;
+  border: 1px solid #dee2e6;
+  white-space: nowrap;
+}
+
+.interviewees-tableYY td {
+  padding: 12px 15px;
+  border-bottom: 1px solid #e2e8f0;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.interviewees-tableYY tr:hover {
+  background-color: #f0f9ff;
+}
+
+.interviewees-tableYY input[type="checkbox"] {
+  transform: scale(1.2);
+  cursor: pointer;
+}
+
+/* Status badge styles */
+.status-badgeYY {
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+  display: inline-block;
+  min-width: 60px;
+  text-align: center;
+}
+
+.status-badgeYY.selected {
+  background-color: #dcfce7;
+  color: #166534;
+}
+
+.status-badgeYY.rejected {
+  background-color: #fee2e2;
+  color: #991b1b;
+}
+
+.status-badgeYY.pending {
+  background-color: #fef9c3;
+  color: #854d0e;
+}
+
+/* Primary theme color elements */
+.primary-theme {
+  color: #3498db;
+}
+
+.loading-text {
+  color: #3498db;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+  .interviewees-tableYY th,
+  .interviewees-tableYY td {
+    padding: 8px 10px;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 768px) {
+  .interviewees-containerYY {
+    padding: 15px;
+  }
+
+  .header-textYY {
+    font-size: 22px;
+  }
+
+  .filter-buttonsYY {
+    justify-content: center;
+  }
+
+  /* Allow wrapping on small screens */
+  .interviewees-tableYY th,
+  .interviewees-tableYY td,
+  .filter-btnYY,
+  .alert-message {
+    white-space: normal;
+  }
+}
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+  .interviewees-tableYY th,
+  .interviewees-tableYY td {
+    padding: 8px 10px;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 768px) {
+  .interviewees-containerYY {
+    padding: 15px;
+  }
+
+  .header-textYY {
+    font-size: 22px;
+  }
+
+  .filter-buttonsYY {
+    justify-content: center;
+  }
+}
+
+/* AllIntervieweesInformation End by Hasnen */
+
+/* Loading error start by hasnen  */
+
+/* Minimal loading animation */
+.loading-minimal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  height: 100px;
+  color: #3b82f6;
+  font-weight: 500;
+}
+
+.dot-flashing {
+  position: relative;
+  width: 10px;
+  height: 10px;
+  border-radius: 5px;
+  background-color: #3b82f6;
+  color: #3b82f6;
+  animation: dotFlashing 1s infinite linear alternate;
+  animation-delay: 0.5s;
+}
+
+.dot-flashing::before,
+.dot-flashing::after {
+  content: "";
+  display: inline-block;
+  position: absolute;
+  top: 0;
+  width: 10px;
+  height: 10px;
+  border-radius: 5px;
+  background-color: #3b82f6;
+  color: #3b82f6;
+}
+
+.dot-flashing::before {
+  left: -15px;
+  animation: dotFlashing 1s infinite alternate;
+  animation-delay: 0s;
+}
+
+.dot-flashing::after {
+  left: 15px;
+  animation: dotFlashing 1s infinite alternate;
+  animation-delay: 1s;
+}
+
+@keyframes dotFlashing {
+  0% {
+    background-color: #93c5fd; /* Lighter blue */
+  }
+  50%,
+  100% {
+    background-color: #3b82f6; /* Normal blue */
+  }
+}
+
+/* loading error end by hasnen  */
+
+/* AllTrainer batch-center ui :start by hasnen  */
+/* Compact version */
+.batchAll-center-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.batchAll-center-tag {
+  display: inline-block;
+  background-color: #f0f7ff;
+  border-radius: 4px;
+  padding: 2px 8px;
+  font-size: 0.8rem;
+  color: #2c5282;
+  border-left: 3px solid #63b3ed;
+}
+
+.batchAll-name {
+  font-weight: 500;
+}
+
+.separatorAll {
+  margin: 0 4px;
+  color: #90cdf4;
+}
+
+.centerAll-name {
+  color: #4a5568;
+}
+
+/* AllTrainer batch-center ui :end by hasnen */
+
+/* AssignBatchForTrainer start by hasnen */
+
+.assignABT-batch-container {
+  max-width: 800px; /* Changed from 1200px to 800px */
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.assignABT-batch-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 24px;
+  color: #333;
+}
+
+.assignABT-form-container {
+  background-color: white;
+  padding: 24px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 24px;
+}
+
+.form-groupABT {
+  margin-bottom: 16px;
+}
+
+.form-labelABT {
+  display: block;
+  color: #555;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.form-selectABT {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+.form-selectABT:focus {
+  outline: none;
+  border-color: #4a90e2;
+  box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
+}
+
+.submit-buttonABT {
+  background-color: #4a90e2;
+  color: white;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: block;
+  margin: 25px auto 0 auto;
+  width: 200px;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.submit-buttonABT:hover {
+  background-color: #3a7bc8;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.submit-buttonABT:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
 
 }
 

@@ -158,7 +158,7 @@ const AssessmentTable: React.FC = () => {
       </div>
 
       <div className="card">
-        <DataTable value={data} stripedRows paginator rows={15}>
+        <DataTable value={data} stripedRows paginator rows={20}>
           <Column
             field="student_name"
             header="Student Name"

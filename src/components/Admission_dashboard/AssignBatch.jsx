@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import axios from "axios";
 import { baseURL } from "../../utils/axios";
+import { AuthContext } from "../../contexts/authContext";
 
 const AssignBatch = () => {
   const [selectedLearners, setSelectedLearners] = useState([]);
@@ -10,23 +11,45 @@ const AssignBatch = () => {
   const [learners, setLearners] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const { error1, batches, loadingBatches } = useContext(AuthContext);
+  const [accessToken, setAccessToken] = useState(null);
+
+  useEffect(() => {
+    const token = localStorage.getItem("accessToken");
+    if (token) {
+      setAccessToken(token);
+    } else {
+      setError("No access token found");
+      setLoading(false);
+    }
+  }, []);
 
   const fetchLearners = async () => {
+    if (!accessToken) return;
+    
     try {
       const response = await axios.get(
-        `${baseURL}/Learner/selected_without_batch/`
+        `${baseURL}/Learner/selected_without_batch/`, 
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            'Content-Type': 'application/json'
+          }
+        }
       );
       setLearners(response.data);
       setLoading(false);
     } catch (err) {
-      setError(err.message);
+      setError(err.response?.data?.detail || err.message);
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchLearners();
-  }, []);
+    if (accessToken) {
+      fetchLearners();
+    }
+  }, [accessToken]);
 
   const handleSelectLearner = (learnerId) => {
     if (selectedLearners.includes(learnerId)) {
@@ -60,43 +83,53 @@ const AssignBatch = () => {
       return;
     }
 
+    if (!accessToken) {
+      alert("No authentication token available");
+      return;
+    }
+
     try {
-      // Make API call to assign batch
       await axios.post(
-        `${baseURL}/Learner/assign_batch/`,
+        `${baseURL}/Learner/assign_batch/`, 
         {
           learner_ids: selectedLearners,
           batch_id: selectedBatch,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            'Content-Type': 'application/json'
+          }
         }
       );
 
-      // Refresh the learners list by removing the assigned ones
       setLearners(
         learners.filter((learner) => !selectedLearners.includes(learner.id))
       );
 
-      // Reset selections
       setSelectedLearners([]);
       setSelectAll(false);
       setSelectedBatch("");
       setShowDialog(false);
     } catch (err) {
-      alert("Failed to assign batch: " + err.message);
+      alert("Failed to assign batch: " + (err.response?.data?.detail || err.message));
     }
   };
 
   if (loading) {
     return (
-      <div className="assign-batch-container-with-bg text-white text-center">
-        Loading...
+      <div className="loading-minimal">
+        <div className="dot-flashing"></div>
+        <span className="ml-4">Loading ...</span>
       </div>
     );
   }
 
-  if (error) {
+  const errorToDisplay = error1 || error;
+  if (errorToDisplay) {
     return (
       <div className="assign-batch-container-with-bg text-white text-center">
-        Error: {error}
+        Error: {errorToDisplay}
       </div>
     );
   }
@@ -113,7 +146,8 @@ const AssignBatch = () => {
         ) : (
           <>
             <div className="table-responsiveA">
-              <table className="tableA">
+              {/* Desktop Table */}
+              <table className="tableA d-none d-md-table">
                 <thead>
                   <tr>
                     <th>
@@ -151,6 +185,47 @@ const AssignBatch = () => {
                   ))}
                 </tbody>
               </table>
+
+              {/* Mobile Cards */}
+              <div className="d-md-none">
+                {learners.map((learner) => (
+                  <div
+                    key={learner.id}
+                    className={`mobile-learner-card ${
+                      selectedLearners.includes(learner.id) ? "selected" : ""
+                    }`}
+                    onClick={() => handleSelectLearner(learner.id)}
+                  >
+                    <div className="card-header">
+                      <input
+                        type="checkbox"
+                        checked={selectedLearners.includes(learner.id)}
+                        onChange={() => handleSelectLearner(learner.id)}
+                        onClick={(e) => e.stopPropagation()}
+                      />
+                      <span className="learner-name">{learner.name}</span>
+                    </div>
+                    <div className="card-details">
+                      <div>
+                        <span>Email:</span> {learner.email}
+                      </div>
+                      <div>
+                        <span>Mobile:</span> {learner.mobile_no}
+                      </div>
+                      <div>
+                        <span>Level:</span> {learner.level}
+                      </div>
+                      <div>
+                        <span>Laptop:</span>{" "}
+                        {learner.laptop === "Y" ? "Yes" : "No"}
+                      </div>
+                      <div>
+                        <span>Interview By:</span> {learner.interview_by}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
 
             <div className="action-buttonsA">
@@ -173,16 +248,25 @@ const AssignBatch = () => {
             <h3>Assign Batch</h3>
             <p>Select a batch for the selected learners:</p>
 
-            <select
-              className="form-selectA"
-              value={selectedBatch}
-              onChange={(e) => setSelectedBatch(e.target.value)}
-            >
-              <option value="">Select batch</option>
-              <option value="103">Java</option>
-              <option value="101">Python</option>
-              <option value="102">Full stack development</option>
-            </select>
+            {loadingBatches ? (
+              <select className="form-selectA" disabled>
+                <option>Loading batches...</option>
+              </select>
+            ) : (
+              <select
+                className="form-selectA"
+                value={selectedBatch}
+                onChange={(e) => setSelectedBatch(e.target.value)}
+              >
+                <option value="">Select batch</option>
+                {batches.map((batch) => (
+                  <option key={batch.id} value={batch.batch_id}>
+                    {batch.batch_name} - {batch.trainer.join(", ")} -{" "}
+                    {batch.center}
+                  </option>
+                ))}
+              </select>
+            )}
 
             <div className="dialog-actionsA">
               <button className="btn btn-secondary" onClick={handleDialogClose}>
@@ -191,6 +275,7 @@ const AssignBatch = () => {
               <button
                 className="btn btn-primary"
                 onClick={handleBatchAssignConfirm}
+                disabled={!selectedBatch}
               >
                 Confirm
               </button>

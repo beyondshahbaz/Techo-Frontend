@@ -95,6 +95,36 @@ const Defaultlayout = () => {
       icon: faCubes,
       key: "admin-assessment-process",
     },
+    ALLTRAINER: [
+      {
+        title: "Trainer Dashboard",
+        items: [
+          { path: "/AllTrainer", label: "TRAINERS" },
+          { path: "/AssignBatchForTrainer", label: "ASSIGN TRAINER BATCH" },
+        ],
+        icon: faChalkboardUser,
+        key: "AllTrainer-dashboard",
+      },
+      {
+        title: "Admission Process",
+        items: [{ path: "/Admission_table", label: "INTERVIEW" }],
+        icon: faTicket,
+        key: "admission-process",
+      },
+      {
+        title: "Assessment Process",
+        items: [{ path: "/AssessmentTable", label: "ASSESSMENT CANDIDATE" }],
+        icon: faCubes,
+        key: "assessment-process",
+      },
+    ],
+
+    ALLSTUDENT: {
+      title: "Student Dashboard",
+      items: [{ path: "/AllStudent", label: "STUDENTS" }],
+      icon: faSchool,
+      key: "All-student-dashboard",
+    },
   };
 
   const toggleSidebar = () => {
@@ -117,14 +147,14 @@ const Defaultlayout = () => {
         <>
           {/* Student Dropdown */}
           <Dropdown
-            key={menuItems.STUDENT.key}
-            title={menuItems.STUDENT.title}
-            items={menuItems.STUDENT.items}
-            icon={menuItems.STUDENT.icon}
+            key={menuItems.ALLSTUDENT.key}
+            title={menuItems.ALLSTUDENT.title}
+            items={menuItems.ALLSTUDENT.items}
+            icon={menuItems.ALLSTUDENT.icon}
           />
 
           {/* Trainer Dropdown(s) */}
-          {menuItems.TRAINER.map((item) => (
+          {menuItems.ALLTRAINER.map((item) => (
             <Dropdown
               key={item.key}
               title={item.title}

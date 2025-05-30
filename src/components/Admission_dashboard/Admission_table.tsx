@@ -32,14 +32,25 @@ const AdmissionTable: React.FC = () => {
   const [data, setData] = useState<AdmissionData[]>([]);
   const navigate = useNavigate();
   const [hoveredRow, setHoveredRow] = useState<string | null>(null);
-
-  const { trainers } = useContext(AuthContext);
-  const trainerName = trainers;
+  const [accessToken, setAccessToken] = useState<string>("");
+  
+  const { trainers, admin } = useContext(AuthContext);
+  const trainerName = trainers.length > 0 ? trainers : admin;
 
   useEffect(() => {
     const fetchData = async () => {
+      const token = localStorage.getItem("accessToken");
+
+      if (token) {
+      setAccessToken(token);
+    }
+
       try {
-        const response = await axios.get(`${baseURL}/Learner/`);
+        const response = await axios.get(`${baseURL}/Learner/`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         setData(response.data);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -48,7 +59,7 @@ const AdmissionTable: React.FC = () => {
 
     fetchData();
   }, []);
-  
+
   const nameTemplate = (rowData: AdmissionData) => (
     <span style={{ color: "black", fontWeight: "bold" }}>{rowData.name}</span>
   );
@@ -76,31 +87,20 @@ const AdmissionTable: React.FC = () => {
     setData(updatedData);
 
     axios
-      .put(`${baseURL}/Learner/${rowData.id}/update_selected/`, {
+      .put(`${baseURL}/Learner/${rowData.id}/update_selected/` , {
         ...rowData,
         interview_by: trainerName,
-      })
+      } , {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        })
       .then((response) => {
         console.log("Interviewer updated successfully:", response.data);
       })
       .catch((error) => {
         console.error("Error updating interviewer:", error);
       });
-  };
-
-  const interviewerDisplayTemplate = (rowData: AdmissionData) => {
-    return (
-      <span style={{ 
-        color: "#2a2a2a", 
-        fontWeight: "600",
-        fontSize: "1.1em",
-        padding: "0.2em 0.4em",
-        fontFamily: "'Segoe UI', Roboto, sans-serif", 
-        letterSpacing: "0.5px"
-      }}>
-        {trainerName}
-      </span>
-    );
   };
 
   const handleEdit = (rowData: AdmissionData) => {
@@ -154,7 +154,7 @@ const AdmissionTable: React.FC = () => {
           className="header-buttonL mb-1"
           label="Assign Batch For Students"
           severity="info"
-          onClick={handleAssignBatchClick} 
+          onClick={handleAssignBatchClick}
         />
         <h2 className="header-titleH">INTERVIEWEES</h2>
         <Button
@@ -166,7 +166,7 @@ const AdmissionTable: React.FC = () => {
       </div>
 
       <div className="card">
-        <DataTable value={data} stripedRows paginator rows={15}>
+        <DataTable value={data} stripedRows paginator rows={20}>
           <Column
             field="name"
             header="Name"

@@ -33,11 +33,18 @@ import { Interviewee } from "../../components/Interview/Interviewee";
 
 import AssignBatch from "../../components/Admission_dashboard/AssignBatch";
 import StudentInformation from "../../components/Assessment_dashboard/StudentInformation";
+import AllTrainer from "../../components/Trainer_dashboard/AllTrainer";
+import AllStudent from "../../components/Student_dashboard/AllStudent";
+import AssignBatchForTrainer from "../../components/Trainer_dashboard/AssignBatchForTrainer";
+
+
+
 import { RecruiterTable } from "../../components/RecruitmentDashboard/RecruiterTable";
 import { SponsorTable } from "../../components/Sponser_Dashboard/SponsorTable";
 import ForgotPassword from "../auth/forgotPassword/forgotPassword";
 import ResetPassword from "../auth/resetPassword/resetPassword";
 import { ChangePassword } from "../auth/changePassword/ChangePassword";
+
 
 const ALLRoutes: React.FC = () => {
   const routes = all_routes;
@@ -86,11 +93,12 @@ const ALLRoutes: React.FC = () => {
             element={<TrainerBatchDetail />}
           />
           <Route path="/AssessmentTable" element={<AssessmentTable />} />
-          <Route
-            path="/AssessmentCandidte/:id"
-            element={<AssessmentCandidte />}
-          />
-          <Route path="/AssignBatch" element={<AssignBatch />} />
+          <Route path="/AssessmentCandidte/:id" element={<AssessmentCandidte />} />
+          <Route path="/AssignBatch" element={<AssignBatch/>} /> 
+          <Route path="/StudentInformation" element={<StudentInformation/>} /> 
+          <Route path="/AllTrainer" element={<AllTrainer/>} /> 
+          <Route path="/AllStudent" element={<AllStudent/>} /> 
+          <Route path="/AssignBatchForTrainer" element={<AssignBatchForTrainer/>} /> 
           <Route path="/StudentInformation" element={<StudentInformation />} />
           <Route path="/RecuriterTable" element={<RecruiterTable />} />
           <Route path="/Sponsor_Table" element={<SponsorTable />} />
