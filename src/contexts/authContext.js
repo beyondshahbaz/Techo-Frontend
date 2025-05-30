@@ -17,16 +17,12 @@ const AuthProvider = ({ children }) => {
   const [emailAlreadyCreated, setEmailAlreadyCreated] = useState(false);
   const [loginError, setLoginError] = useState("");
   const [trainers, setTrainers] = useState([]);
-  const [admin, setAdmin] = useState([]);
-  const [allTrainer, setAllTrainer] = useState([]);
-  const [error1, setError1] = useState(null);
-  const [batches, setBatches] = useState([]);
-  const [loadingBatches, setLoadingBatches] = useState(true);
-  const [error2, setError2] = useState(null);
-  const [loading2, setLoading2] = useState(false);
+
+
 
   // const API_BASE_URL = "https://techie01.pythonanywhere.com/auth";
   const API_BASE_URL = "https://gl8tx74f-8000.inc1.devtunnels.ms/auth";
+
 
   // Initialize auth state from localStorage
   useEffect(() => {
@@ -50,25 +46,25 @@ const AuthProvider = ({ children }) => {
   useEffect(() => {
     // Request interceptor to add auth token to headers
     const requestInterceptor = axios.interceptors.request.use(
-      (config) => {
+      config => {
         if (accessToken) {
           config.headers.Authorization = `Bearer ${accessToken}`;
         }
         return config;
       },
-      (error) => Promise.reject(error)
+      error => Promise.reject(error)
     );
 
     // Response interceptor to handle token refresh
     const responseInterceptor = axios.interceptors.response.use(
-      (response) => response,
-      async (error) => {
+      response => response,
+      async error => {
         const originalRequest = error.config;
-
+        
         // If error is 401 and we haven't already retried
         if (error.response?.status === 401 && !originalRequest._retry) {
           originalRequest._retry = true;
-
+          
           try {
             const newAccessToken = await GenerateNewAccessToken();
             originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
@@ -79,7 +75,7 @@ const AuthProvider = ({ children }) => {
             return Promise.reject(refreshError);
           }
         }
-
+        
         return Promise.reject(error);
       }
     );
@@ -95,7 +91,7 @@ const AuthProvider = ({ children }) => {
     const fetchTrainers = async () => {
       setLoading(true);
       try {
-        const response = await axios.get(`${API_BASE_URL}/trainers/`, {
+        const response = await axios.get(`${API_BASE_URL}/trainers/` , {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
@@ -113,95 +109,38 @@ const AuthProvider = ({ children }) => {
     if (accessToken) {
       fetchTrainers();
     }
-  }, [accessToken]);
+  }, [accessToken])
 
-  useEffect(() => {
-    const fetchAdmin = async () => {
-      setLoading(true);
-      try {
-        const response = await axios.get(`${API_BASE_URL}/Admin/`);
-        if (response.status === 200) {
-          setAdmin(
-            response.data[0].user.first_name +
-              " " +
-              response.data[0].user.last_name
-          );
-        }
-      } catch (error) {
-        console.error("Error fetching Admin:", error);
+const RegisterUser = async (userData) => {
+  setLoading(true);
+  setUserCreatedSuccessfully(false);
+  setEmailAlreadyCreated(false); 
+  try {
+    const config = {
+      headers: {
+        'Content-Type': userData instanceof FormData ? 'multipart/form-data' : 'application/json'
       }
     };
 
-    fetchAdmin();
-  }, []);
-
-  useEffect(() => {
-    const fetchAllTrainer = async () => {
-      setLoading2(true);
-      setError2(null); 
-      try {
-        const response = await axios.get(`${API_BASE_URL}/trainers/`);
-        if (response.status === 200) {
-          setAllTrainer(response.data);
-        }
-      } catch (error) {
-        console.error("Error fetching Trainers:", error);
-        setError2(error.message || "Failed to fetch trainers");
-      } finally {
-        setLoading2(false);
-      }
-    };
-
-    fetchAllTrainer();
-  }, []);
-
-  useEffect(() => {
-    const fetchBatches = async () => {
-      try {
-        const response = await axios.get(`${API_BASE_URL}/batches/`);
-        setBatches(response.data);
-        setLoadingBatches(false);
-      } catch (err) {
-        setError1("Failed to fetch batches");
-        setLoadingBatches(false);
-        console.error("Error fetching batches:", err);
-      }
-    };
-
-    fetchBatches();
-  }, []);
-
-      const RegisterUser = async (userData) => {
-    setLoading(true);
-    setUserCreatedSuccessfully(false);
-    setEmailAlreadyCreated(false);
+    const response = await axios.post(
+      `${API_BASE_URL}/register/`, 
+      userData, 
+      config
+    );
     
-    try {
-      const isFormData = userData instanceof FormData;
-      
-      const config = {
-        headers: {
-          'Content-Type': isFormData ? 'multipart/form-data' : 'application/json'
-        }
-      };
-  
-      const response = await axios.post(
-        `${API_BASE_URL}/register/`, 
-        userData, 
-        config
-      );
-  
-      // Check for successful response (200-299 status code)
-      if (response.status >= 200 && response.status < 300) {
-        setUserCreatedSuccessfully(true);
-        return { success: true, data: response.data };
-      }
-      
-      return { success: false, data: response.data };
-      
-    } catch (error) {
-      if (error.response?.data?.email?.[0] === 'user with this email already exists.') {
-        setEmailAlreadyCreated(true);
+
+    if (response.status >= 200 && response.status < 300) {
+      window.alert('User created successfully');
+      setUserCreatedSuccessfully(true);
+      return { success: true, data: response.data };
+    }
+    
+    return { success: false, data: response.data };
+    
+  } catch (error) {
+    // Handle email exists error
+    if (error.response?.data?.email?.includes('already exists')) {
+      setEmailAlreadyCreated(true);
     }
     
     console.error('Registration error:', error);
@@ -257,7 +196,7 @@ const AuthProvider = ({ children }) => {
     setLoading(true);
     try {
       const response = await axios.get(`${API_BASE_URL}/User/${userID}`);
-
+      
       if (response.status === 200) {
         setUser(response.data);
       }
@@ -272,7 +211,7 @@ const AuthProvider = ({ children }) => {
     setLoading(true);
     try {
       const response = await axios.get(`${API_BASE_URL}/SubRole/`);
-
+      
       if (response.status === 200) {
         console.log("Subroles fetched successfully:", response.data);
         setNewSubRole(response.data);
@@ -304,12 +243,12 @@ const AuthProvider = ({ children }) => {
       LogoutUser();
       throw new Error("No refresh token available");
     }
-
+    
     try {
       const response = await axios.post(`${API_BASE_URL}/login/refresh/`, {
-        refresh: refreshToken,
+        refresh: refreshToken
       });
-
+      
       if (response.data.access) {
         const newAccessToken = response.data.access;
         setAccessToken(newAccessToken);
@@ -353,16 +292,13 @@ const AuthProvider = ({ children }) => {
     API_BASE_URL,
     GenerateNewAccessToken,
     trainers,
-    error1,
-    batches,
-    loadingBatches,
-    admin,
-    allTrainer,
-    loading2,
-    error2
   };
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={value}>
+      {children}
+    </AuthContext.Provider>
+  );
 };
 
 export default AuthProvider;
