@@ -11,7 +11,7 @@ const AssignBatch = () => {
   const [learners, setLearners] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const { error1, batches, loadingBatches } = useContext(AuthContext);
+  const {  batches } = useContext(AuthContext);
   const [accessToken, setAccessToken] = useState(null);
 
   useEffect(() => {
@@ -125,7 +125,7 @@ const AssignBatch = () => {
     );
   }
 
-  const errorToDisplay = error1 || error;
+  const errorToDisplay = error;
   if (errorToDisplay) {
     return (
       <div className="assign-batch-container-with-bg text-white text-center">
@@ -248,11 +248,7 @@ const AssignBatch = () => {
             <h3>Assign Batch</h3>
             <p>Select a batch for the selected learners:</p>
 
-            {loadingBatches ? (
-              <select className="form-selectA" disabled>
-                <option>Loading batches...</option>
-              </select>
-            ) : (
+            
               <select
                 className="form-selectA"
                 value={selectedBatch}
@@ -266,7 +262,6 @@ const AssignBatch = () => {
                   </option>
                 ))}
               </select>
-            )}
 
             <div className="dialog-actionsA">
               <button className="btn btn-secondary" onClick={handleDialogClose}>
