@@ -6,7 +6,7 @@ export const Trainers = () => {
   const { trainerDetails } = useContext(SponsorContext);
   
   return (
-    <div className="col-xxl-12 col-xl-12 col-md-12 px-0">
+    <div className="col-xxl-12 col-xl-12 col-md-12 px-0"><br/>
       <div className="scrollbar-wrappercenter">
         <div className="row mx-0 flex-nowrap">
           {trainerDetails.map((trainer) => (

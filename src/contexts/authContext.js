@@ -23,8 +23,16 @@ const AuthProvider = ({ children }) => {
 
 
 
-  const API_BASE_URL = "https://techie01.pythonanywhere.com/auth";
+  // const API_BASE_URL = "https://techie01.pythonanywhere.com/auth";
   // const API_BASE_URL = "https://gl8tx74f-8000.inc1.devtunnels.ms/auth";
+
+
+  // const API_BASE_URL = "https://9gqxjbjg-8000.inc1.devtunnels.ms/auth";//tahur
+
+
+  const API_BASE_URL = "https://gl8tx74f-8000.inc1.devtunnels.ms/auth";//mam
+
+
 
 
   // Initialize auth state from localStorage
@@ -128,6 +136,8 @@ const AuthProvider = ({ children }) => {
         }
       } catch (error) {
         console.error("Error fetching Admin:", error);
+      }finally{
+        setLoading(false)
       }
     };
 
@@ -143,6 +153,8 @@ const AuthProvider = ({ children }) => {
         }
       } catch (error) {
         console.error("Error fetching Trainers:", error);
+      }finally{
+        setLoading(false)
       } 
     };
 
@@ -156,6 +168,8 @@ const AuthProvider = ({ children }) => {
         setBatches(response.data);
       } catch (err) {
         console.error("Error fetching batches:", err);
+      }finally{
+        setLoading(false)
       }
     };
 

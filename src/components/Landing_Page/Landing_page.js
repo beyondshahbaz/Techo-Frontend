@@ -18,7 +18,7 @@ export const Landing_page = () => {
             <div className="text-primary">
               <hr />
             </div>
-            <h1>Technologies we teach</h1>
+            <h1>Technologies We Teach</h1>
             <Technologies />
             <div className="text-primary">
               <hr />

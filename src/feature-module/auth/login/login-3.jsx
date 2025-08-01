@@ -173,7 +173,7 @@ const Login3 = () => {
 
                 <div className="col-xxl-12 col-xl-12 col-md-12 mb-3">
                   <div className="mb-3">
-                    <Link
+                    {/* <Link
                       type="submit"
                       className="btn btn-primary loginBtn"
                       onClick={loginUser}
@@ -181,7 +181,21 @@ const Login3 = () => {
                       <span>Sign In</span>
                 
 
-                    </Link>
+                    </Link> */}
+                      <button
+                    type="submit"
+                    className="btn btn-primary loginBtn "
+                    onClick={loginUser}>
+                     {loading ? (
+                       <>
+                         <i className="fas fa-spinner fa-spin me-2 "></i> 
+                       </>
+                      ) : (
+                       <>
+                         Sign In
+                       </>
+                      )}
+                  </button>
                     {loginError && <span className="text-danger">{loginError}</span>}
                   </div>
                 </div>

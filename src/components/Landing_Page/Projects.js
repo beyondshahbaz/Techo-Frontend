@@ -6,7 +6,7 @@ import invoice from "../../assets/images/projects/invoice.jpeg";
 import recuiting from "../../assets/images/projects/recuiting.png";
 export const Projects = () => {
   return (
-    <div className="col-xxl-12 col-xl-12 col-md-12 px-0">
+    <div className="col-xxl-12 col-xl-12 col-md-12 px-0"><br/>
       <div className="scrollbar-wrappercenter">
         <div className="row mx-0 flex-nowrap">
           <div className="col-xxl-4 col-xl-4 col-md-4">
@@ -63,7 +63,7 @@ export const Projects = () => {
           </div>
           <div className="col-xxl-4 col-xl-4 col-md-4">
             <div class="card">
-              <img src={""} alt="" className="cardImage" />
+              <img src={invoice} alt="" className="cardImage" />
               <div class="card-body min-bodyHeight">
                 <h2>Astro Qoutation Tool</h2>
                 <p className="card-text">
@@ -78,7 +78,7 @@ export const Projects = () => {
           </div>
           <div className="col-xxl-4 col-xl-4 col-md-4">
             <div class="card">
-              <img src={invoice} alt="" className="cardImage" />
+              <img src={incident} alt="" className="cardImage" />
               <div class="card-body min-bodyHeight">
                 <h2>Invoice Management System</h2>
                 <p className="card-text">
@@ -108,7 +108,7 @@ export const Projects = () => {
           </div>
           <div className="col-xxl-4 col-xl-4 col-md-4">
             <div class="card">
-              <img src={""} alt="" className="cardImage" />
+              <img src={recuiting} alt="" className="cardImage" />
               <div class="card-body min-bodyHeight">
                 <h2>School Management System</h2>
                 <p className="card-text">

@@ -88,6 +88,7 @@
 .btn-primary {
   background-color: #05a6f0 !important;
   border-color: #05a6f0 !important;
+  height: 37px;
 }
 
 .btn-primary:focus {
@@ -3260,4 +3261,9 @@ td {
 .btnChangePassword{
   color: #05a6f0;
   cursor: pointer;
+}
+
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+  display: none;
 }

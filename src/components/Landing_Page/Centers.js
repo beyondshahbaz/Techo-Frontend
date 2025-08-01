@@ -12,6 +12,7 @@ export const Centers = () => {
         {batchSummary?.map((batchSum) => {
           return (
             <div className="col-xxl-4 col-xl-4 col-md-4" key={batchSum.center}>
+              <br></br>
               <div className="card">
                 <div className="card-body">
                   <div className="p-4">
