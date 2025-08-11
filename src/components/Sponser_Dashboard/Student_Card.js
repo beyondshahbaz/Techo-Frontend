@@ -221,6 +221,51 @@ export const Student_Card = ({ filterStudent, selectAll, setSelectAll }) => {
       setLoading(false)
     }
   };
+
+   
+  const loadScript = (src) =>
+    new Promise((resolve) => {
+      const script = document.createElement("script");
+      script.src = src;
+      script.onload = () => resolve(true);
+      script.onerror = () => resolve(false);
+      document.body.appendChild(script);
+    });
+
+  
+  const displayRazorpay = async () => {
+    const res = await loadScript("https://checkout.razorpay.com/v1/checkout.js");
+
+    if (!res) {
+      alert("Razorpay SDK failed to load.");
+      return;
+    }
+
+    const options = {
+      // key: "rzp_test_oUZPLEqe7SgJGP", 
+      key:"rzp_test_ZEQPpMe8S970uR",
+      amount: totalAmount * 100, 
+      currency: "INR",
+      name: "Techno Hub",
+      description: "Sponsor Students",
+      handler: function (response) {
+        alert("Payment Successful!\nPayment ID: " + response.razorpay_payment_id);
+        SPONSOR_STUDENT();
+      },
+      prefill: {
+        name: "Abdurrahman Khan",
+        email: "abdur@example.com",
+        contact: "9999999999",
+      },
+      theme: {
+        color: "#2563eb",
+      },
+    };
+
+    const paymentObject = new window.Razorpay(options);
+    paymentObject.open();
+  };
+
   const handleCheckboxClick = (e, studentId, batchId) => {
     const isChecked = e.target.checked;
     const student = filterStudent.find(
@@ -251,8 +296,10 @@ export const Student_Card = ({ filterStudent, selectAll, setSelectAll }) => {
     alert("Please select at least one student before sponsoring.");
     return;
   }
-    SPONSOR_STUDENT();
+    // SPONSOR_STUDENT();
+    displayRazorpay();
   };
+
   useEffect(() => {
     if (selectAll) {
       const allStudentIds = filterStudent.map((student) => student.student_id);
@@ -376,4 +423,3 @@ export const Student_Card = ({ filterStudent, selectAll, setSelectAll }) => {
     </div>
   );
 };
-
