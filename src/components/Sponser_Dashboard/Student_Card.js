@@ -242,8 +242,8 @@ export const Student_Card = ({ filterStudent, selectAll, setSelectAll }) => {
     }
 
     const options = {
-      // key: "rzp_test_oUZPLEqe7SgJGP", 
-      key:"rzp_test_ZEQPpMe8S970uR",
+      // key: "rzp_test_oUZPLEqe7SgJGP", //Abdurrahman
+      key:"rzp_test_ZEQPpMe8S970uR",//Tahur
       amount: totalAmount * 100, 
       currency: "INR",
       name: "Techno Hub",
