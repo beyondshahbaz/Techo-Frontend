@@ -6,14 +6,14 @@ import login from "../../../assets/images/login/login.png";
 
 const Login3 = () => {
   const routes = all_routes;
-  const { LoginUser, loading, loginError, responseSubrole, userLoggedIN, setLoginError, role } = useContext(AuthContext);
+  const { LoginUser, loading, loginError, responseSubrole, userLoggedIN, setLoginError, role, setLoginSuccess } = useContext(AuthContext);
 
   const navigation = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
-  const [showModal, setShowModal] = useState(false);
+
 
 
   console.log('responseSubrole', responseSubrole);
@@ -74,7 +74,7 @@ const Login3 = () => {
         password,
       };
       await LoginUser(userData);
-      setShowModal(true);
+      setLoginSuccess(true);
       console.log('responsesubrole', responseSubrole);
     } catch (error) {
       console.log(error);
@@ -83,33 +83,28 @@ const Login3 = () => {
 
 
   useEffect(() => {
-    if (showModal) {
-      const timer = setTimeout(() => {
-        setShowModal(false);
-        if (userLoggedIN && responseSubrole === "SPONSOR") {
-          navigation("/Students_SponserDashboard");
-        }
-        if (userLoggedIN && responseSubrole === "STUDENT") {
-          navigation("/Students_profile");
-        }
-        if (userLoggedIN && responseSubrole === "TRAINER") {
-          navigation("/Trainer_batch");
-        }
-        if (userLoggedIN && role === "ADMIN") {
-          navigation("/");
-          // window.location.reload()
-        }
-        if (userLoggedIN && responseSubrole === "RECRUITER") {
-          navigation("/ReadyToRecruitDashboard");
-        }
-        if (userLoggedIN && responseSubrole === "INTERVIEWEE") {
-          navigation("/Interviewee");
-        }
-      }, 2000);
-
-      return () => clearTimeout(timer);
+    if (userLoggedIN && responseSubrole === "SPONSOR") {
+      navigation("/Students_SponserDashboard");
     }
-  }, [showModal, responseSubrole, role, navigation]);
+    if (userLoggedIN && responseSubrole === "STUDENT") {
+      navigation("/Students_profile");
+    }
+    if (userLoggedIN && responseSubrole === "TRAINER") {
+      navigation("/Trainer_batch");
+    }
+    if (userLoggedIN && role === "ADMIN") {
+      navigation("/");
+    }
+    if (userLoggedIN && responseSubrole === "RECRUITER") {
+      navigation("/ReadyToRecruitDashboard");
+    }
+    if (userLoggedIN && responseSubrole === "INTERVIEWEE") {
+      navigation("/Interviewee");
+    }
+    if (userLoggedIN && !role && !responseSubrole) {
+      navigation("/");
+    }
+  }, [userLoggedIN, responseSubrole, role, navigation]);
 
   return (
     <>
@@ -228,29 +223,6 @@ const Login3 = () => {
           </form>
         </div>
       </div>
-      {/* Modal */}
-      {showModal && (
-        <div
-          className="modal fade show"
-          style={{ display: "block", background: "rgba(0,0,0,0.5)" }}
-        >
-          <div className="modal-dialog modal-dialog-centered">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title">Welcome</h5>
-                <button
-                  type="button"
-                  className="btn-close"
-                  onClick={() => setShowModal(false)}
-                ></button>
-              </div>
-              <div className="modal-body">
-                <p>Login successful!<br/>Redirecting to your dashboard...</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </>
   );
 };

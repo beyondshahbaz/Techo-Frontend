@@ -2,12 +2,28 @@ import { useContext, useEffect, useState } from "react";
 import bgSponser from "../../assets/images/sponserDashboard/bgSponser.png";
 import { Student_Card } from "./Student_Card";
 import { SponsorContext } from "../../contexts/dashboard/sponsorDashboardContext";
+import { AuthContext } from "../../contexts/authContext";
 
 export const Students_SponserDashboard = () => {
+  const{loginSuccess, setLoginSuccess}=useContext(AuthContext)
+  const [showModal, setShowModal] = useState(false);
   const { usersDataToSponsor, batchName } = useContext(SponsorContext);
   const [searchStudent, setSearchStudent] = useState("");
   const [selectedBatch, setSelectedBatch] = useState("Filter Batch");
   const [selectAll, setSelectAll] = useState(false);
+
+  useEffect(() => {
+  if (loginSuccess) {
+    setShowModal(true);
+
+    const timeout = setTimeout(() => {
+      setShowModal(false);
+      setLoginSuccess(false);
+    }, 2000);
+
+    return () => clearTimeout(timeout);
+  }
+}, [loginSuccess]);
 
   const filterStudent = usersDataToSponsor.filter((student) => {
     const studentName = student.student_name
@@ -38,6 +54,7 @@ export const Students_SponserDashboard = () => {
 
 
   return (
+    <>
     <div className="row studentDashboardContainer mx-0">
       <div className="col-xxl-12 col-xl-12 col-md-12 bgSponserDashobard">
         <div className="innerContainerSponsor">
@@ -141,5 +158,40 @@ export const Students_SponserDashboard = () => {
         />
       </div>
     </div>
+    {showModal && (
+  <div
+    className="modal fade show"
+    style={{ display: "block", background: "rgba(0,0,0,0.5)" }}
+  >
+    <div className="modal-dialog modal-dialog-centered">
+      <div className="modal-content">
+        <div className="modal-header">
+          <h5 className="modal-title">Welcome</h5>
+          <button
+            type="button"
+            className="btn-close"
+            onClick={() => setShowModal(false)}
+          ></button>
+        </div>
+
+        <div className="modal-body">
+          <p>Login successful!</p>
+        </div>
+
+        <div className="modal-footer">
+          <button
+            type="button"
+            className="btn btn-primary"
+            onClick={() => setShowModal(false)}
+            data-bs-dismiss="modal"
+          >
+            Continue
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+)}
+    </>
   );
 };
