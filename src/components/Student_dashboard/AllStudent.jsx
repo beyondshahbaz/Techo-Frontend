@@ -43,7 +43,10 @@ const AllStudent = () => {
 
   return (
     <div className="student-info-containerS">
-      <h2 className="table-titleS uppercase">Student Information</h2>
+      {/* <h2 className="table-titleS uppercase">Student Information</h2> */}
+       <h2 className="sponsornowHeading pt-2 text-4xl  mb-4 uppercase text-center max-w-[95vw] sm:max-w-[800px] mx-auto">
+        Student Information
+      </h2>-+
       <div className="table-wrapperS">
         <table className="student-tableS">
           <thead>
@@ -73,3 +76,4 @@ const AllStudent = () => {
 };
 
 export default AllStudent;
+

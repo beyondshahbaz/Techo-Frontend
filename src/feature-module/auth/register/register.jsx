@@ -536,13 +536,27 @@ const Register = () => {
           <div className="row justify-content-center">
             <div className="col-xxl-5 col-xl-5 col-md-5">
               <div className="mb-3">
-                <button
+                {/* <button
                   type="submit"
                   className="btn btn-primary w-100 loginBtn"
                   disabled={loading}
                 >
                   Create Account
-                </button>
+                </button> */}
+                 <button
+                      type="submit"
+                      className="btn btn-primary w-100 loginBtn"
+                      >
+                       {loading ? (
+                         <>
+                           <i className="fas fa-spinner fa-spin me-2"></i> 
+                         </>
+                        ) : (
+                         <>
+                              Create Account
+                         </>
+                        )}
+                    </button>
               </div>
               <div className="text-center">
                 <h6 className="fw-normal text-dark mb-0">

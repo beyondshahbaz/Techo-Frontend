@@ -15,6 +15,7 @@ const ResetPassword = () => {
   const [isPasswordVisible, setPasswordVisible] = useState(false);
   const [newPassword, setNewPassword] = useState("");
   const [errorPassword, setErrorPassword] = useState("");
+  const [loading,setLoading]=useState(false)
   const navigate = useNavigate();
 
   const togglePasswordVisibility = () => {
@@ -28,6 +29,7 @@ const ResetPassword = () => {
 
   const handleResetPassword = async (e) => {
     e.preventDefault();
+    setLoading(true)
     let isValid = true;
     if (!newPassword) {
       setErrorPassword("Password is Required");
@@ -38,7 +40,10 @@ const ResetPassword = () => {
       );
       isValid = false;
     }
-    if (!isValid) return;
+    if (!isValid){
+      setLoading(false)
+      return;
+      }
 
     const payload = {
       "new_password": newPassword,
@@ -60,6 +65,8 @@ const ResetPassword = () => {
         error.response?.data?.message ||
           "Failed to reset password. Please try again."
       );
+    }finally{
+      setLoading(false)
     }
   };
 
@@ -112,9 +119,21 @@ const ResetPassword = () => {
                   )}
                 </div>
                 <div className="col-xxl-12 col-xl-12 col-md-12 mb-3">
-                  <button type="submit" className="btn btn-primary w-100">
+                  {/* <button type="submit" className="btn btn-primary w-100">
                     Reset Password
-                  </button>
+                  </button> */}
+                   <button type="submit"
+                     className="btn btn-primary w-100" >
+                      {loading ? (
+                         <>
+                           <i className="fas fa-spinner fa-spin me-2"></i> 
+                         </>
+                        ) : (
+                         <>
+                           Reset Password
+                         </>
+                        )}
+                      </button>
                 </div>
                 <div className="col-xxl-12 col-xl-12 col-md-12 mb-3">
                   <div className="text-center">

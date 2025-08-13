@@ -118,7 +118,7 @@ const AllIntervieweesInformation = () => {
                   {interviewees.map((interviewee) => (
                     <tr key={interviewee.id}>
                       <td>{interviewee.id}</td>
-                      <td>{interviewee.name}</td>
+                      <td className='text-nowrap'>{interviewee.name}</td>
                       <td>{interviewee.email}</td>
                       <td>{interviewee.mobile_no}</td>
                       <td>{interviewee.subrole}</td>

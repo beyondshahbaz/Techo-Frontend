@@ -107,9 +107,14 @@ const InterviewCandidate: React.FC = () => {
   return (
     <div className="card m-4">
       <div className="card-header">
-        <h1 className="card-title text-center mb-2 text-primary fs-3">
+        {/* <h1 className="card-title text-center mb-2 text-primary fs-3">
           CANDIDATE INFORMATION FOR INTERVIEW
-        </h1>
+        </h1> */}
+         <div className="header-containerH d-flex justify-center w-100 ">
+          <h2 className="sponsornowHeading pt-2 text-4xl  mb-4 uppercase text-center max-w-[95vw] sm:max-w-[800px] mx-auto">
+        CANDIDATE  INFORMATION  FOR  INTERVIEW
+      </h2>
+        </div>
       </div>
       <div className="card-body">
         <form onSubmit={handleSubmit(onSubmit)} className="row g-3">

@@ -113,6 +113,8 @@ const AssignBatch = () => {
       setShowDialog(false);
     } catch (err) {
       alert("Failed to assign batch: " + (err.response?.data?.detail || err.message));
+    }finally{
+      setLoading(false);
     }
   };
 
@@ -137,7 +139,13 @@ const AssignBatch = () => {
   return (
     <div className="assign-batch-container-with-bg">
       <div className="assign-batch-container">
-        <h2 className="text-center">Assign Batch to Students</h2>
+        {/* <h2 className="text-center">Assign Batch to Students</h2> */}
+         <div className="header-containerH d-flex justify-center w-100 ">
+          <h2 className="sponsornowHeading pt-2 text-4xl  mb-4 uppercase text-center max-w-[95vw] sm:max-w-[800px] mx-auto">
+        Assign  Batch  to  Students
+      </h2>
+        </div>
+        
 
         {learners.length === 0 ? (
           <div className="alert alert-info pt-3">

@@ -43,7 +43,10 @@ const StudentInformation = () => {
 
   return (
     <div className="student-info-containerS">
-      <h2 className="table-titleS uppercase">Student Information</h2>
+      {/* <h2 className="table-titleS uppercase">Student Information</h2> */}
+      <h1 className="sponsornowHeading header-titleH text-center flex flex-column absolute top-5 w-full">
+        Student Information
+      </h1><br/><br/><br/><br/>
       <div className="table-wrapperS">
         <table className="student-tableS">
           <thead>
@@ -57,10 +60,10 @@ const StudentInformation = () => {
           <tbody>
             {studentData.map((student) => (
               <tr key={student.id}>
-                <td className="student-nameS">{student.student_name}</td>
-                <td><span className="batch-tagS">{student.batch_name}</span></td>
-                <td>{student.center}</td>
-                <td>{student.selected_by_trainer}</td>
+                <td className="student-nameS text-nowrap">{student.student_name}</td>
+                <td><span className="batch-tagS text-nowrap">{student.batch_name}</span></td>
+                <td><span className='text-nowrap'>{student.center}</span></td>
+                <td><span className='text-nowrap'>{student.selected_by_trainer}</span></td>
               </tr>
             ))}
           </tbody>

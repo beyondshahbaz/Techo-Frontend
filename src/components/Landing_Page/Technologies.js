@@ -6,7 +6,7 @@ import aiml from "../../assets/images/coursesLogo/aiml.png";
 
 export const Technologies = () => {
   return (
-        <div className="col-xxl-12 col-xl-12 col-md-12 px-0">
+        <div className="col-xxl-12 col-xl-12 col-md-12 px-0"><br/>
           <div className="scrollbar-wrappercenter">
             <div className="row mx-0 flex-nowrap">
               <div className="col-xxl-3 col-xl-3 col-md-3">
