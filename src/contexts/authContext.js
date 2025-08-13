@@ -20,6 +20,7 @@ const AuthProvider = ({ children }) => {
   const [admin, setAdmin] = useState([]);
   const [allTrainer, setAllTrainer] = useState([]);
   const [batches, setBatches] = useState([]);
+  const [loginSuccess, setLoginSuccess] = useState(false);
 
 
 
@@ -360,6 +361,8 @@ const RegisterUser = async (userData) => {
     batches,
     admin,
     allTrainer,
+    loginSuccess,
+    setLoginSuccess,
   };
 
   return (
