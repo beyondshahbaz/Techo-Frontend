@@ -3,7 +3,8 @@ import axios from 'axios';
 
 // export const baseURL = "https://gl8tx74f-8000.inc1.devtunnels.ms/auth"
 
-export const baseURL = "https://9gqxjbjg-8000.inc1.devtunnels.ms/auth"//tahur
+// export const baseURL = "https://9gqxjbjg-8000.inc1.devtunnels.ms/auth"//tahur
+export const baseURL = "https://beyondshahbaz.pythonanywhere.com/auth/"// pythonanywhere
 
 // export const baseURL = "https://gl8tx74f-8000.inc1.devtunnels.ms/auth"//mam
 

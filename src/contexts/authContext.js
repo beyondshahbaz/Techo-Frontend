@@ -28,8 +28,9 @@ const AuthProvider = ({ children }) => {
   // const API_BASE_URL = "https://gl8tx74f-8000.inc1.devtunnels.ms/auth";
 
 
-  const API_BASE_URL = "https://9gqxjbjg-8000.inc1.devtunnels.ms/auth";//tahur
-
+  
+  // const API_BASE_URL = "https://9gqxjbjg-8000.inc1.devtunnels.ms/auth";//tahur
+  const API_BASE_URL = "https://beyondshahbaz.pythonanywhere.com";//pythonanywhere
 
   // const API_BASE_URL = "https://gl8tx74f-8000.inc1.devtunnels.ms/auth";//mam
 
