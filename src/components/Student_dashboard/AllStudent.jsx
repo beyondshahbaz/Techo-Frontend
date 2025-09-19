@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { baseURL } from '../../utils/axios';
+
 
 const AllStudent = () => {
   const [studentData, setStudentData] = useState([]);
@@ -11,7 +13,7 @@ const AllStudent = () => {
         const token = localStorage.getItem("accessToken");
       try {
         const response = await axios.get(
-          'https://gl8tx74f-8000.inc1.devtunnels.ms/auth/Learner/interviewee_student/?selected_status=Y' , {
+          `${baseURL}/auth/Learner/interviewee_student/?selected_status=Y` , {
             headers: {
               Authorization: `Bearer ${token}`,
             },
